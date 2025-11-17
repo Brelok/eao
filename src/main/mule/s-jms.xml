@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:oracle-ebs122="http://www.mulesoft.org/schema/mule/oracle-ebs122"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:oracle-ebs="http://www.mulesoft.org/schema/mule/oracle-ebs" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/oracle-ebs http://www.mulesoft.org/schema/mule/oracle-ebs/current/mule-oracle-ebs.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/oracle-ebs122 http://www.mulesoft.org/schema/mule/oracle-ebs122/current/mule-oracle-ebs122.xsd">
+	<sub-flow name="s-jms" doc:id="c9e72088-9d3c-4ddc-a7fd-d9df9046d8a5" >
+		<os:store doc:name="Log" doc:id="5f3e080c-b6c2-438b-ad32-662383b66a4e" key="#[now()]" objectStore="JMS_EVENT_LOG">
+			<os:value><![CDATA[#[write(payload, "application/json")]]]></os:value>
+		</os:store>
+		<choice doc:name="Choice" doc:id="a8698ef2-56c5-40c8-8c28-f29cdb178eab">
+			<when expression="#[payload.eventName == 'oracle.apps.ar.hz.OrgCustBO.update']">
+				<logger level="DEBUG" doc:name="DEBUG: Account update received" doc:id="81162b01-b27f-4a26-907d-f9e8eed0af64" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "messages recieved from jms",&#10;	"action": "account flow called",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]'/>
+				<!-- [STUDIO:"account update (s-oebs)"]<flow-ref doc:name="account update (s-oebs)" doc:id="dc4aba14-a6fc-4f6c-9671-8937cd94ca8e" name="s-oebs-aq-trigger" /> [STUDIO] -->
+			</when>
+			<when expression="#[payload.eventName == 'eao.salesforce.quote.update']">
+				<set-variable value="#[payload.eventKey]" doc:name="Set Variable" doc:id="c5e3133b-4265-4aed-9e29-65535cc71070" variableName="eventKey" />
+				<!-- [STUDIO:"quote update (s-quote-update)"]<flow-ref doc:name="quote update (s-quote-update)" doc:id="14e45b43-6280-4a41-aaf1-af2ecfb6248a" name="s-quote-update" /> [STUDIO] -->
+			</when>
+			<when expression="#[payload.eventName == 'eao.salesforce.quote.print']">
+				<set-variable value="#[payload.eventKey]" doc:name="Set Variable" doc:id="9e764bb3-f56e-4067-9591-be26acc22a34" variableName="eventKey" />
+				<!-- [STUDIO:"quote print (s-quote-print)"]<flow-ref doc:name="quote print (s-quote-print)" doc:id="3ce91b7c-0147-4d13-a74b-3b85b5dabac4" name="s-quote-print" /> [STUDIO] -->
+			</when>
+			
+			<when expression="#[payload.eventName == 'eao.formatwup.supplier']">
+				<logger level="DEBUG" doc:name="DEBUG: Supplier update received" doc:id="4de07565-6190-4b46-9e8a-7fa29d903029" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "messages recieved from jms",&#10;	"action": "supplier flow called",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]'/>
+				<!-- [STUDIO:"Get Supplier for Format WUP"]<flow-ref doc:name="Get Supplier for Format WUP" doc:id="5ca0598c-8f66-43c0-a667-c2162aa0e9f7" name="wup-Supplier"/> [STUDIO] -->
+			</when>
+			<when expression="payload.eventName == 'eao.formatwup.item'">
+				<logger level="INFO" doc:name="DEBUG: Item update recieved" doc:id="04c9357f-c5bf-4174-8a7b-e504303c6a03" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "messages recieved from jms",&#10;	"action": "Item flow called",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]'/>
+				<flow-ref doc:name="Get Item for Format WUP" doc:id="760ca094-c77a-4e43-b0ef-936eec47c68e" name="wup-Item"/>
+			</when>
+			<when expression="#[payload.eventName == 'eao.formatwup.wup_receiving']">
+				<logger level="INFO" doc:name="DEBUG: Maririal Invoice update recieved" doc:id="08e0cd99-764f-41ee-ba90-11f10b2b67ee" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "messages recieved from jms",&#10;	"action": "material flow called",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]'/>
+				<!-- [STUDIO:"Get Material Info for Format WUP"]<flow-ref doc:name="Get Material Info for Format WUP" doc:id="90af1e29-cad2-4807-8759-460a5b306bae" name="wup-Material-Info"/> [STUDIO] -->
+			</when>
+			<when expression="#[payload.eventName == 'eao.formatwup.customer']">
+				<logger level="INFO" doc:name="DEBUG: Customer update recieved" doc:id="d22c3c3c-b49b-40ed-89c5-5bf7fabc60ef" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "messages recieved from jms",&#10;	"action": "customer flow called",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]'/>
+				<!-- [STUDIO:"Get Customer for Format WUP"]<flow-ref doc:name="Get Customer for Format WUP" doc:id="31c8b9b5-d5cd-428f-850d-72296f7b8ce1" name="wup-Customer"/> [STUDIO] -->
+			</when>
+			<when expression="#[payload.eventName == 'eao.formatwup.customer_invoice']">
+				<logger level="INFO" doc:name="DEBUG: Sales-Position update recieved" doc:id="0291bfa1-81c0-4ba7-9a81-8969fb7c2037" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "messages recieved from jms",&#10;	"action": "Sales Position flow called",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]'/>
+				<!-- [STUDIO:"Get Sales Position for Format WUP"]<flow-ref doc:name="Get Sales Position for Format WUP" doc:id="f2f832b6-99e3-4bb0-996f-0b9847e5eaf6" name="wup-SalePosition"/> [STUDIO] -->
+			</when>
+			<otherwise>
+				<logger level="INFO" doc:name="DEBUG: not a known event" doc:id="3f8b2d43-a841-44bc-9458-faf0951afd0f" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "messages recieved from oracle jms",&#10;	"action": "message not processd",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]' />
+			</otherwise>
+		</choice>
+	</sub-flow>
+	<flow name="s-jmsFlow" doc:id="3118212f-2618-47a4-a9b3-243ee71eda57" maxConcurrency="1">
+		<oracle-ebs122:business-events-source doc:name="oebs 12.2 jms" doc:id="498c4ddc-7d1a-4ab4-8c31-da1e7b09c3d6" config-ref="Oracle_EBS_12_2_JMS" durableSubscription="true"/>
+		<ee:transform doc:name="Transform Message" doc:id="98bcabb0-7d47-4e91-a3f8-4baa89458d56">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="DEBUG" doc:name="DEBUG: message received from oebs jms" doc:id="5ac2f7f9-1945-48b3-aee8-54c39af37772" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "messages received from oracle jms",&#10;	"action": "message forwarded to routing",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]' />
+		<flow-ref doc:name="Flow Reference" doc:id="967aded6-02d3-40ea-8332-6c1912c721cf" name="s-jms" />
+	</flow>
+	<flow name="s-jms-manual-flow" doc:id="7848380e-6fa0-4958-82ac-c89fa9c1dd67" >
+		<http:listener doc:name="Listener" doc:id="2d715b31-ab13-4716-99a6-71ec1763bac7" config-ref="HTTP_Listener_config" path="/test"/>
+		<logger level="INFO" doc:name="DEBUG: message received from oebs listener" doc:id="44a33987-8f8f-4218-8e3c-7527bde34571" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "messages received from oracle listener",&#10;	"action": "message forwarded to routing",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]' />
+		<flow-ref doc:name="Flow Reference" doc:id="45905501-bfdb-43ac-b78e-927ced69a023" name="s-jms" />
+	</flow>
+</mule>

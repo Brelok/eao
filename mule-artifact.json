@@ -1,0 +1,5 @@
+{
+    "secureProperties": ["secureProperties.key"],
+    "minMuleVersion": "4.6.14",
+    "javaSpecificationVersions": ["17"]
+}

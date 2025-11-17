@@ -1,0 +1,48 @@
+INFO  2021-03-22 11:57:14,578 [[MuleRuntime].uber.10: [eao-oracle-salesforce].s-oebs-logBusinessEventsInFile.BLOCKING @2ad585c9] [processor: s-oebs-logBusinessEventsInFile/processors/2; event: 5c450c00-8afd-11eb-b26d-049226d3c315] org.mule.runtime.core.internal.processor.LoggerMessageProcessor: {
+  "BES_PRIORITY": 50,
+  "JMS_OracleDelay": 0,
+  "BES_SEND_DATE": "2021/03/22 11:10:00",
+  "#CURRENT_PHASE": "100",
+  "JMSXRcvTimestamp": 1616410634396,
+  "BES_EVENT_KEY": "oracle.apps.ar.hz.OrgBO.create66567",
+  "JMSXDeliveryCount": 1,
+  "JMSXState": 0,
+  "BES_ERROR_SUBSCRIPTION": "BA44BA695AE76EF9E054020820C8A69F",
+  "BES_EVENT_NAME": "oracle.apps.ar.hz.OrgBO.create",
+  "BES_RECEIVE_DATE": "2021/03/22 11:11:41",
+  "BES_FROM_AGENT": "WF_JMS_JMS_OUT@EAOT15.PRIMUS-SOLUTIONS.DE",
+  "CDH_EVENT_ID": "66567",
+  "Q_CORRELATION_ID": "oracle.apps.ar.hz.OrgBO.create"
+}
+INFO  2021-03-22 11:57:14,578 [[MuleRuntime].uber.01: [eao-oracle-salesforce].s-oebs-logBusinessEventsInFile.BLOCKING @2ad585c9] [processor: s-oebs-logBusinessEventsInFile/processors/2; event: 5c507db0-8afd-11eb-b26d-049226d3c315] org.mule.runtime.core.internal.processor.LoggerMessageProcessor: {
+  "BES_PRIORITY": 50,
+  "JMS_OracleDelay": 0,
+  "BES_SEND_DATE": "2021/03/22 11:30:02",
+  "#CURRENT_PHASE": "100",
+  "JMSXRcvTimestamp": 1616410634468,
+  "BES_EVENT_KEY": "oracle.apps.ar.hz.OrgBO.update66586",
+  "JMSXDeliveryCount": 1,
+  "JMSXState": 0,
+  "BES_ERROR_SUBSCRIPTION": "B9E019168E710EA9E054020820C8A69F",
+  "BES_EVENT_NAME": "oracle.apps.ar.hz.OrgBO.update",
+  "BES_RECEIVE_DATE": "2021/03/22 11:31:42",
+  "BES_FROM_AGENT": "WF_JMS_JMS_OUT@EAOT15.PRIMUS-SOLUTIONS.DE",
+  "CDH_EVENT_ID": "66586",
+  "Q_CORRELATION_ID": "oracle.apps.ar.hz.OrgBO.update"
+}
+INFO  2021-03-22 11:57:14,578 [[MuleRuntime].uber.11: [eao-oracle-salesforce].s-oebs-logBusinessEventsInFile.BLOCKING @2ad585c9] [processor: s-oebs-logBusinessEventsInFile/processors/2; event: 5c551190-8afd-11eb-b26d-049226d3c315] org.mule.runtime.core.internal.processor.LoggerMessageProcessor: {
+  "BES_PRIORITY": 50,
+  "JMS_OracleDelay": 0,
+  "BES_SEND_DATE": "2021/03/22 11:30:02",
+  "#CURRENT_PHASE": "100",
+  "JMSXRcvTimestamp": 1616410634522,
+  "BES_EVENT_KEY": "oracle.apps.ar.hz.OrgCustBO.update66592",
+  "JMSXDeliveryCount": 1,
+  "JMSXState": 0,
+  "BES_ERROR_SUBSCRIPTION": "B9E019168E940EA9E054020820C8A69F",
+  "BES_EVENT_NAME": "oracle.apps.ar.hz.OrgCustBO.update",
+  "BES_RECEIVE_DATE": "2021/03/22 11:31:42",
+  "BES_FROM_AGENT": "WF_JMS_JMS_OUT@EAOT15.PRIMUS-SOLUTIONS.DE",
+  "CDH_EVENT_ID": "66592",
+  "Q_CORRELATION_ID": "oracle.apps.ar.hz.OrgCustBO.update"
+}

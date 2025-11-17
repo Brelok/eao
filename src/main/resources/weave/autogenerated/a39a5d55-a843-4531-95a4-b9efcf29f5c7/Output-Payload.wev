@@ -1,0 +1,8 @@
+%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Payload = {|
+  ACE: Null, 
+  CPT: Null, 
+  CTO: Null
+|}
+

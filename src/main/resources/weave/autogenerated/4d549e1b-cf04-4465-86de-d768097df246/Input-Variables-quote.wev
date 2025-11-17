@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_4d549e1b_cf04_4465_86de_d768097df246_Input_Variables_quote = Any
+

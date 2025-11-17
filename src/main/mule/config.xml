@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:outlook365="http://www.mulesoft.org/schema/mule/outlook365"
+	xmlns:smb="http://www.mulesoft.org/schema/mule/smb"
+	xmlns:oracle-ebs122="http://www.mulesoft.org/schema/mule/oracle-ebs122" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:oracle-ebs="http://www.mulesoft.org/schema/mule/oracle-ebs" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/oracle-ebs http://www.mulesoft.org/schema/mule/oracle-ebs/current/mule-oracle-ebs.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/cloudhub http://www.mulesoft.org/schema/mule/cloudhub/current/mule-cloudhub.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/oracle-ebs122 http://www.mulesoft.org/schema/mule/oracle-ebs122/current/mule-oracle-ebs122.xsd
+http://www.mulesoft.org/schema/mule/smb http://www.mulesoft.org/schema/mule/smb/current/mule-smb.xsd
+http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mule/outlook365/current/mule-outlook365.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
+	<global-property doc:name="Global Property" doc:id="91c64748-fe73-43a4-9a1c-8ca07ea51de7" name="env" value="dev" doc:description="dev / prod"/>
+	<global-property doc:name="Global Property" doc:id="3f9f2e3a-ef7d-4428-95a1-f3cefbf3de85" name="secureProperties.key" value="provided-via-CloudHub-Properties" />
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="56f12c36-540d-420d-8958-96029fb9ee4c" file="properties/${env}.properties" key="${secureProperties.key}" />
+	<configuration-properties doc:name="Configuration properties" doc:id="a82e1f3d-7593-4304-9bc6-9e9ac7ec0bb5" file="properties/${env}.properties" />
+	<cloudhub:config name="CloudHub_Config" doc:name="CloudHub Config" doc:id="bd569519-cde6-4a48-b7af-d7cc544b5b41" >
+		<cloudhub:oauth-client-credentials-connection clientId="${notification.clientid}" clientSecret="${notification.clientsecret}" environment="${notification.environment}" />
+	</cloudhub:config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="292dc57f-2a15-48f3-b1f2-049425dabe1c" >
+		<http:listener-connection host="0.0.0.0" port="8081">
+		</http:listener-connection>
+	</http:listener-config>
+	<http:listener-config name="HTTPS_Listener_config" doc:name="HTTP Listener config" doc:id="c31a0393-c7cf-4ce9-ad2f-a6b618c5dfb9" >
+		<http:listener-connection protocol="HTTPS" host="0.0.0.0" port="8082" >
+			<tls:context >
+				<tls:key-store type="jks" path="eao-keystore.jks" alias="eao" keyPassword="@CYZ!!6YC@hcPgf3" password="@CYZ!!6YC@hcPgf3" />
+			</tls:context>
+		</http:listener-connection>
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_sendMail" doc:name="HTTP Request configuration" doc:id="58d400d9-fa90-4ce8-b0eb-270caecb04f5">
+		<http:request-connection protocol="HTTPS" host="prod-230.westeurope.logic.azure.com" port="443" />
+	</http:request-config>
+	<http:request-config name="HTTP_Request_configuration_OEBS_WUP" doc:name="HTTP Request configuration" doc:id="a6493e45-5744-4523-803c-e67611dd22e7" responseTimeout="180000">
+		<http:request-connection protocol="HTTPS" host="${config.host}" port="${config.port}" connectionIdleTimeout="180000">
+			<http:authentication >
+				<http:basic-authentication username="${basicAuth.username}" password="${secure::basicAuth.password}"/>
+			</http:authentication>
+		</http:request-connection>
+	</http:request-config>
+	<http:request-config name="OEBS_REST_Request_configuration" doc:name="HTTP Request configuration" doc:id="8ebaceb2-d6fb-495f-80de-41267d6e0d54" responseTimeout="60000">
+		<http:request-connection host="${oebs122.request.host}" port="${oebs122.request.port}" protocol="HTTPS" connectionIdleTimeout="60000">
+			<http:authentication >
+				<http:basic-authentication username="${oebs122.request.username}" password="${secure::oebs122.request.password}" />
+			</http:authentication>
+		</http:request-connection>
+	</http:request-config>
+	<http:request-config name="HTTP_Request_config_aggregatedData" doc:name="HTTP Request configuration" doc:id="8f72375e-03df-4c38-81e8-90baca7bbaa8" >
+		<http:request-connection protocol="HTTPS" host="${aggregateddata.host}" port="${aggregateddata.port}" connectionIdleTimeout="60000">
+			<tls:context >
+				<tls:trust-store insecure="true" />
+				<tls:key-store type="jks" path="eao-keystore.jks" keyPassword="@CYZ!!6YC@hcPgf3" password="@CYZ!!6YC@hcPgf3" alias="eao"/>
+			</tls:context>
+		</http:request-connection>
+	</http:request-config>
+	<os:config name="ObjectStore_Config" doc:name="ObjectStore Config" doc:id="f81c6587-1901-4b25-8b39-bf71b15542dd" />
+	<os:object-store name="JMS_EVENT_LOG" doc:name="Object store" doc:id="b46ae013-b4c0-434f-a1c9-ddaa38d31120" />
+	<smb:config name="SMB_Connector_Config" doc:name="SMB Connector Config" doc:id="8af03b3c-7d9a-4051-8987-d3bca20b3736" >
+		<smb:connection host="${soap.host}" share="${soap.share}" username="${soap.username}" password="${secure::soap.password}" />
+	</smb:config>
+	<oracle-ebs122:jms-config name="Oracle_EBS_12_2_JMS" doc:name="Oracle EBS 12.2 JMS" doc:id="b842fdaa-a89b-4e9b-ac05-1ce01b9d28c9" >
+		<oracle-ebs122:jms-connection username="${oebs122.jms.username}" host="${oebs122.jms.host}" port="${oebs122.jms.port}" sid="${oebs122.jms.sid}" password="${secure::oebs122.jms.password}">
+			<reconnection >
+				<reconnect-forever frequency="60000" />
+			</reconnection>
+		</oracle-ebs122:jms-connection>
+	</oracle-ebs122:jms-config>
+	<outlook365:outlook365-config name="Outlook365_Outlook365_Config" doc:name="Outlook365 Outlook365 Config" doc:id="9235494c-b201-4864-8c9d-cd646f3bc777" >
+		<outlook365:oauth-client-credentials-connection >
+			<outlook365:oauth-client-credentials clientId="${m365.client-id}" clientSecret="${secure::m365.client-secret}" tokenUrl="${m365.token-url}" scopes="${m365.scopes}" />
+		</outlook365:oauth-client-credentials-connection>
+	</outlook365:outlook365-config>
+	</mule>

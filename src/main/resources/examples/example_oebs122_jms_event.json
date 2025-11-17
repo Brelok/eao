@@ -1,0 +1,22 @@
+{
+  "sendDate": "2022-03-30T17:30:02",
+  "errorMessage": null,
+  "receiveDate": "2022-03-30T17:31:25",
+  "toAgent": null,
+  "priority": 50,
+  "eventData": "<default><event_name>oracle.apps.ar.hz.OrgCustBO.update</event_name><event_key>oracle.apps.ar.hz.OrgCustBO.update271706</event_key></default>",
+  "errorSubscription": "\ufffd\u0000G\ufffd\ufffd \u0003\ufffd\ufffdT\u0000\u001b!\ufffd&\u0010",
+  "eventKey": "oracle.apps.ar.hz.OrgCustBO.update271706",
+  "eventName": "oracle.apps.ar.hz.OrgCustBO.update",
+  "fromAgent": {
+    "system": "EAOT16.PRIMUS-SOLUTIONS.DE",
+    "name": "WF_BPEL_QAGENT"
+  },
+  "parameterList": {
+    "CDH_EVENT_ID": "271706",
+    "Q_CORRELATION_ID": "oracle.apps.ar.hz.OrgCustBO.update",
+    "#CURRENT_PHASE": "100"
+  },
+  "correlationId": null,
+  "errorStack": null
+}

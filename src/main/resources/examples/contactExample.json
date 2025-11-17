@@ -1,0 +1,10 @@
+{
+	"firstname": "Max",
+	"lastname": "Muster",
+	"address": "Musterstrasse 123",
+	"zip": 1234,
+	"city": "Musterstadt",
+	"country": "Switzerland",
+	"phone": "0761234567",
+	"email": "max@muster.ch"
+}

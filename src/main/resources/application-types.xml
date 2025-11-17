@@ -1,0 +1,1200 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="example_organisation_service" format="xml">
+      <types:example format="xml" element="{http://xmlns.oracle.com/apps/ar/hz/service/party}OrganizationService_GetOrganizationsUpdated_Response" location="examples/org-1.xml"/>
+    </types:type>
+    <types:type name="obj_to_iterate" format="json">
+      <types:shape format="weave" example="examples/example-1.json"><![CDATA[%dw 2.0
+
+type obj_to_iterate = {|
+  SiteUseType: String, 
+  PrimaryPerType: String, 
+  Status: String
+|} {"example": "{\\\"SiteUseType\\\":\\\"SHIP_TO\\\",\\\"PrimaryPerType\\\":\\\"N\\\",\\\"Status\\\":\\\"A\\\"}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="obj" format="json">
+      <types:shape format="weave" example="examples/example.json"><![CDATA[%dw 2.0
+
+type obj = {|
+  SiteUseType: String, 
+  PrimaryPerType: String, 
+  Status: String
+|} {"example": "{\\\"SiteUseType\\\":\\\"SHIP_TO\\\",\\\"PrimaryPerType\\\":\\\"N\\\",\\\"Status\\\":\\\"A\\\"}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="exampleJson" format="json">
+      <types:shape format="weave" example="examples/getOrgUpdatedResponse.json"><![CDATA[%dw 2.0
+
+type exampleJson = {|
+  Envelope: {|
+    Header: Null, 
+    Body: {|
+      OrganizationService_GetOrganizationsUpdated_Response: {|
+        organization: {|
+          ActionType: String, 
+          OrganizationId: String, 
+          OrigSystem: Null, 
+          OrigSystemReference: Null, 
+          PartyNumber: String, 
+          ValidatedFlag: String, 
+          Status: String, 
+          CategoryCode: Null, 
+          Salutation: Null, 
+          OrganizationName: String, 
+          DunsNumberC: Null, 
+          EnquiryDuns: Null, 
+          CeoName: Null, 
+          CeoTitle: Null, 
+          PrincipalName: Null, 
+          PrincipalTitle: Null, 
+          LegalStatus: Null, 
+          ControlYr: Null, 
+          EmployeesTotal: Null, 
+          HqBranchInd: Null, 
+          BranchFlag: Null, 
+          OobInd: Null, 
+          LineOfBusiness: Null, 
+          CongDistCode: Null, 
+          SicCode: Null, 
+          ImportInd: Null, 
+          ExportInd: Null, 
+          LaborSurplusInd: Null, 
+          DebarmentInd: Null, 
+          MinorityOwnedInd: Null, 
+          MinorityOwnedType: Null, 
+          WomanOwnedInd: Null, 
+          Disadv8aInd: Null, 
+          SmallBusInd: Null, 
+          RentOwnInd: Null, 
+          DebarmentsCount: Null, 
+          DebarmentsDate: Null, 
+          FailureScore: Null, 
+          FailureScoreNatnlPer: Null, 
+          FailureScoreOverrideCode: Null, 
+          FailureScoreCommentary: Null, 
+          GlobalFailureScore: Null, 
+          DbRating: Null, 
+          CreditScore: Null, 
+          CreditScoreCommentary: Null, 
+          PaydexScore: Null, 
+          PaydexThreeMonthsAgo: Null, 
+          PaydexNorm: Null, 
+          BestTimeContactBegin: Null, 
+          BestTimeContactEnd: Null, 
+          OrganizationNamePhonetic: String, 
+          TaxReference: Null, 
+          GsaIndicatorFlag: String, 
+          JgzzFiscalCode: Null, 
+          AnalysisFy: Null, 
+          FiscalYearendMonth: Null, 
+          CurrFyPotentialRevenue: Null, 
+          NextFyPotentialRevenue: Null, 
+          YearEstablished: Null, 
+          MissionStatement: Null, 
+          OrganizationType: String, 
+          BusinessScope: Null, 
+          CorporationClass: Null, 
+          KnownAs: Null, 
+          KnownAs2: Null, 
+          KnownAs3: Null, 
+          KnownAs4: Null, 
+          KnownAs5: Null, 
+          LocalBusIdenType: Null, 
+          LocalBusIdentifier: Null, 
+          PrefFunctionalCurrency: Null, 
+          RegistrationType: Null, 
+          TotalEmployeesText: Null, 
+          TotalEmployeesInd: Null, 
+          TotalEmpEstInd: Null, 
+          TotalEmpMinInd: Null, 
+          ParentSubInd: Null, 
+          IncorpYear: Null, 
+          SicCodeType: Null, 
+          PublicPrivateOwnerFlag: Null, 
+          InternalFlag: String, 
+          LocalActivityCodeType: Null, 
+          LocalActivityCode: Null, 
+          EmpAtPrimaryAdr: Null, 
+          EmpAtPrimaryAdrText: Null, 
+          EmpAtPrimaryAdrEstInd: Null, 
+          EmpAtPrimaryAdrMinInd: Null, 
+          HighCredit: Null, 
+          AvgHighCredit: Null, 
+          TotalPayments: Null, 
+          CreditScoreClass: Null, 
+          CreditScoreNatlPercentile: Null, 
+          CreditScoreIncdDefault: Null, 
+          CreditScoreAge: Null, 
+          CreditScoreDate: Null, 
+          CreditScoreCommentary2: Null, 
+          CreditScoreCommentary3: Null, 
+          CreditScoreCommentary4: Null, 
+          CreditScoreCommentary5: Null, 
+          CreditScoreCommentary6: Null, 
+          CreditScoreCommentary7: Null, 
+          CreditScoreCommentary8: Null, 
+          CreditScoreCommentary9: Null, 
+          CreditScoreCommentary10: Null, 
+          FailureScoreClass: Null, 
+          FailureScoreIncdDefault: Null, 
+          FailureScoreAge: Null, 
+          FailureScoreDate: Null, 
+          FailureScoreCommentary2: Null, 
+          FailureScoreCommentary3: Null, 
+          FailureScoreCommentary4: Null, 
+          FailureScoreCommentary5: Null, 
+          FailureScoreCommentary6: Null, 
+          FailureScoreCommentary7: Null, 
+          FailureScoreCommentary8: Null, 
+          FailureScoreCommentary9: Null, 
+          FailureScoreCommentary10: Null, 
+          MaximumCreditRecommend: Null, 
+          MaximumCreditCurrencyCode: Null, 
+          DisplayedDunsPartyId: Null, 
+          ProgramUpdateDate: Null, 
+          CreatedByModule: String, 
+          CreatedByName: String, 
+          CreationDate: String, 
+          LastUpdateDate: String, 
+          LastUpdatedByName: String, 
+          DoNotConfuseWith: Null, 
+          ActualContentSource: String, 
+          CommonObjId: Null, 
+          EmailObjs: {|
+            ActionType: String, 
+            EmailId: String, 
+            OrigSystem: Null, 
+            OrigSystemReference: Null, 
+            Status: String, 
+            ParentObjectType: String, 
+            ParentObjectId: String, 
+            PrimaryFlag: String, 
+            ContactPointPurpose: String, 
+            PrimaryByPurpose: String, 
+            ProgramUpdateDate: Null, 
+            CreatedByModule: String, 
+            CreatedByName: String, 
+            CreationDate: String, 
+            LastUpdateDate: String, 
+            LastUpdatedByName: String, 
+            ActualContentSource: String, 
+            EmailFormat: String, 
+            EmailAddress: String, 
+            CommonObjId: Null
+          |}, 
+          ContactObjs: Array<{|            ActionType: String,             OrgContactId: String,             OrganizationId: String,             OrigSystem: Null,             OrigSystemReference: Null,             Comments: String,             ContactNumber: String,             DepartmentCode: Null,             Department: Null,             Title: Null,             JobTitle: String,             DecisionMakerFlag: String,             JobTitleCode: String,             ReferenceUseFlag: String,             Rank: Null,             PartySiteId: Null,             ProgramUpdateDate: Null,             CreatedByModule: String,             CreatedByName: String,             CreationDate: String,             LastUpdateDate: String,             LastUpdatedByName: String,             RelationshipCode: String,             RelationshipType: String,             RelationshipComments: Null,             StartDate: String,             EndDate: String,             Status: String,             CommonObjId: Null,             PersonProfileObj: {|              ActionType: String,               PersonId: String,               OrigSystem: Null,               OrigSystemReference: Null,               PartyNumber: String,               ValidatedFlag: String,               Status: String,               CategoryCode: Null,               Salutation: Null,               PersonPreNameAdjunct: String,               PersonFirstName: String,               PersonMiddleName: Null,               PersonLastName: String,               PersonNameSuffix: Null,               PersonTitle: Null,               PersonAcademicTitle: Null,               PersonPreviousLastName: Null,               PersonInitials: Null,               KnownAs: Null,               KnownAs2: Null,               KnownAs3: Null,               KnownAs4: Null,               KnownAs5: Null,               PersonNamePhonetic: Null,               PersonFirstNamePhonetic: Null,               PersonLastNamePhonetic: Null,               MiddleNamePhonetic: Null,               TaxReference: Null,               JgzzFiscalCode: Null,               PersonIdenType: Null,               PersonIdentifier: Null,               DateOfBirth: Null,               PlaceOfBirth: Null,               DateOfDeath: Null,               DeceasedFlag: String,               Gender: Null,               DeclaredEthnicity: Null,               MaritalStatus: Null,               MaritalStatusEffDate: Null,               PersonalIncome: Null,               HeadOfHouseholdFlag: String,               HouseholdIncome: Null,               HouseholdSize: Null,               RentOwnInd: Null,               LastKnownGps: Null,               InternalFlag: Null,               ProgramUpdateDate: Null,               CreatedByModule: String,               CreatedByName: String,               CreationDate: String,               LastUpdateDate: String,               LastUpdatedByName: String,               ActualContentSource: String,               CommonObjId: Null            |},             EmailObjs: {|              ActionType: String,               EmailId: String,               OrigSystem: Null,               OrigSystemReference: Null,               Status: String,               ParentObjectType: String,               ParentObjectId: String,               PrimaryFlag: String,               ContactPointPurpose: Null,               PrimaryByPurpose: String,               ProgramUpdateDate: Null,               CreatedByModule: String,               CreatedByName: String,               CreationDate: String,               LastUpdateDate: String,               LastUpdatedByName: String,               ActualContentSource: String,               EmailFormat: String,               EmailAddress: String,               CommonObjId: Null            |},             PhoneObjs: {|              ActionType: String,               PhoneId: String,               OrigSystem: Null,               OrigSystemReference: Null,               Status: String,               ParentObjectType: String,               ParentObjectId: String,               PrimaryFlag: String,               ContactPointPurpose: String,               PrimaryByPurpose: String,               ProgramUpdateDate: Null,               CreatedByModule: String,               CreatedByName: String,               CreationDate: String,               LastUpdateDate: String,               LastUpdatedByName: String,               ActualContentSource: String,               PhoneCallingCalendar: Null,               LastContactDtTime: Null,               TimezoneId: Null,               PhoneAreaCode: String,               PhoneCountryCode: String,               PhoneNumber: String,               PhoneExtension: Null,               PhoneLineType: String,               RawPhoneNumber: String,               CommonObjId: Null            |}          |}>, 
+          PartySiteObjs: Array<{|            ActionType: String,             PartySiteId: String,             OrigSystem: Null,             OrigSystemReference: Null,             ParentObjectType: String,             ParentObjectId: String,             PartySiteNumber: String,             Mailstop: Null,             IdentifyingAddressFlag: String,             Status: String,             PartySiteName: Null,             Language: Null,             Addressee: Null,             ProgramUpdateDate: Null,             CreatedByModule: String,             CreatedByName: String,             CreationDate: String,             LastUpdateDate: String,             LastUpdatedByName: String,             ActualContentSource: String,             GlobalLocationNumber: Null,             CommonObjId: Null,             LocationObj: {|              ActionType: String,               LocationId: String,               OrigSystem: Null,               OrigSystemReference: Null,               Country: String,               Address1: String,               Address2: String,               Address3: Null,               Address4: String,               City: String,               PostalCode: String,               State: Null,               Province: Null,               County: Null,               AddressKey: String,               AddressStyle: String,               ValidatedFlag: String,               AddressLinesPhonetic: Null,               PostalPlus4Code: Null,               Position: Null,               LocationDirections: Null,               AddressEffectiveDate: Null,               AddressExpirationDate: Null,               ClliCode: Null,               Language: Null,               ShortDescription: Null,               Description: Null,               LocHierarchyId: Null,               SalesTaxGeocode: Null,               SalesTaxInsideCityLimits: String,               FaLocationId: Null,               TimezoneId: String,               ProgramUpdateDate: Null,               CreatedByModule: String,               CreatedByName: String,               CreationDate: String,               LastUpdateDate: String,               LastUpdatedByName: String,               ActualContentSource: String,               DeliveryPointCode: Null,               GeometryStatusCode: String,               CommonObjId: Null,               Geometry: Null            |},             PartySiteUseObjs: {|              ActionType: String,               PartySiteUseId: String,               Comments: Null,               SiteUseType: String,               PartySiteId: String,               PrimaryPerType: String,               Status: String,               ProgramUpdateDate: Null,               CreatedByModule: String,               CreatedByName: String,               CreationDate: String,               LastUpdateDate: String,               LastUpdatedByName: String,               CommonObjId: Null            |},             EmailObjs: Array<{|              ActionType: String,               EmailId: String,               OrigSystem: Null,               OrigSystemReference: Null,               Status: String,               ParentObjectType: String,               ParentObjectId: String,               PrimaryFlag: String,               ContactPointPurpose: String,               PrimaryByPurpose: String,               ProgramUpdateDate: Null,               CreatedByModule: String,               CreatedByName: String,               CreationDate: String,               LastUpdateDate: String,               LastUpdatedByName: String,               ActualContentSource: String,               EmailFormat: String,               EmailAddress: String,               CommonObjId: Null            |}>
+          |}>, 
+          RelationshipObjs: Array<{|            ActionType: String,             RelationshipId: String,             ParentObjectType: String,             ParentObjectId: String,             RelatedObjectId: String,             RelatedObjectType: String,             RelatedObjectOsr: Null,             RelatedObjectOs: Null,             RelationshipCode: String,             RelationshipType: String,             Comments: Null,             StartDate: String,             EndDate: String,             Status: String,             ProgramUpdateDate: Null,             CreatedByModule: String,             CreatedByName: String,             CreationDate: String,             LastUpdateDate: String,             LastUpdatedByName: String,             AdditionalInformation1: Null,             AdditionalInformation2: Null,             AdditionalInformation3: Null,             AdditionalInformation4: Null,             AdditionalInformation5: Null,             AdditionalInformation6: Null,             AdditionalInformation7: Null,             AdditionalInformation8: Null,             AdditionalInformation9: Null,             AdditionalInformation10: Null,             AdditionalInformation11: Null,             AdditionalInformation12: Null,             AdditionalInformation13: Null,             AdditionalInformation14: Null,             AdditionalInformation15: Null,             AdditionalInformation16: Null,             AdditionalInformation17: Null,             AdditionalInformation18: Null,             AdditionalInformation19: Null,             AdditionalInformation20: Null,             AdditionalInformation21: Null,             AdditionalInformation22: Null,             AdditionalInformation23: Null,             AdditionalInformation24: Null,             AdditionalInformation25: Null,             AdditionalInformation26: Null,             AdditionalInformation27: Null,             AdditionalInformation28: Null,             AdditionalInformation29: Null,             AdditionalInformation30: Null,             PercentageOwnership: Null,             ActualContentSource: String,             CommonObjId: Null          |}>, 
+          PartyUsageObjs: {|
+            PartyUsgAssignmentId: String, 
+            ActionType: Null, 
+            ParentObjectType: String, 
+            ParentObjectId: String, 
+            PartyUsageCode: String, 
+            EffectiveStartDate: String, 
+            EffectiveEndDate: String, 
+            Comments: Null, 
+            Status: String, 
+            CreatedByName: String, 
+            CreationDate: String, 
+            LastUpdateDate: String, 
+            LastUpdatedByName: String, 
+            CommonObjId: String
+          |}
+        |}
+      |}
+    |}
+  |}
+|} {"example": "{\\\"Envelope\\\":{\\\"Header\\\":null,\\\"Body\\\":{\\\"OrganizationService_GetOrganizationsUpdated_Response\\\":{\\\"organization\\\":{\\\"ActionType\\\":\\\"UPDATED\\\",\\\"OrganizationId\\\":\\\"41895\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"PartyNumber\\\":\\\"30341\\\",\\\"ValidatedFlag\\\":\\\"N\\\",\\\"Status\\\":\\\"A\\\",\\\"CategoryCode\\\":null,\\\"Salutation\\\":null,\\\"OrganizationName\\\":\\\"EHQ-Elion S.A.\\\",\\\"DunsNumberC\\\":null,\\\"EnquiryDuns\\\":null,\\\"CeoName\\\":null,\\\"CeoTitle\\\":null,\\\"PrincipalName\\\":null,\\\"PrincipalTitle\\\":null,\\\"LegalStatus\\\":null,\\\"ControlYr\\\":null,\\\"EmployeesTotal\\\":null,\\\"HqBranchInd\\\":null,\\\"BranchFlag\\\":null,\\\"OobInd\\\":null,\\\"LineOfBusiness\\\":null,\\\"CongDistCode\\\":null,\\\"SicCode\\\":null,\\\"ImportInd\\\":null,\\\"ExportInd\\\":null,\\\"LaborSurplusInd\\\":null,\\\"DebarmentInd\\\":null,\\\"MinorityOwnedInd\\\":null,\\\"MinorityOwnedType\\\":null,\\\"WomanOwnedInd\\\":null,\\\"Disadv8aInd\\\":null,\\\"SmallBusInd\\\":null,\\\"RentOwnInd\\\":null,\\\"DebarmentsCount\\\":null,\\\"DebarmentsDate\\\":null,\\\"FailureScore\\\":null,\\\"FailureScoreNatnlPer\\\":null,\\\"FailureScoreOverrideCode\\\":null,\\\"FailureScoreCommentary\\\":null,\\\"GlobalFailureScore\\\":null,\\\"DbRating\\\":null,\\\"CreditScore\\\":null,\\\"CreditScoreCommentary\\\":null,\\\"PaydexScore\\\":null,\\\"PaydexThreeMonthsAgo\\\":null,\\\"PaydexNorm\\\":null,\\\"BestTimeContactBegin\\\":null,\\\"BestTimeContactEnd\\\":null,\\\"OrganizationNamePhonetic\\\":\\\"test-20210202-0937\\\",\\\"TaxReference\\\":null,\\\"GsaIndicatorFlag\\\":\\\"N\\\",\\\"JgzzFiscalCode\\\":null,\\\"AnalysisFy\\\":null,\\\"FiscalYearendMonth\\\":null,\\\"CurrFyPotentialRevenue\\\":null,\\\"NextFyPotentialRevenue\\\":null,\\\"YearEstablished\\\":null,\\\"MissionStatement\\\":null,\\\"OrganizationType\\\":\\\"R\\\",\\\"BusinessScope\\\":null,\\\"CorporationClass\\\":null,\\\"KnownAs\\\":null,\\\"KnownAs2\\\":null,\\\"KnownAs3\\\":null,\\\"KnownAs4\\\":null,\\\"KnownAs5\\\":null,\\\"LocalBusIdenType\\\":null,\\\"LocalBusIdentifier\\\":null,\\\"PrefFunctionalCurrency\\\":null,\\\"RegistrationType\\\":null,\\\"TotalEmployeesText\\\":null,\\\"TotalEmployeesInd\\\":null,\\\"TotalEmpEstInd\\\":null,\\\"TotalEmpMinInd\\\":null,\\\"ParentSubInd\\\":null,\\\"IncorpYear\\\":null,\\\"SicCodeType\\\":null,\\\"PublicPrivateOwnerFlag\\\":null,\\\"InternalFlag\\\":\\\"N\\\",\\\"LocalActivityCodeType\\\":null,\\\"LocalActivityCode\\\":null,\\\"EmpAtPrimaryAdr\\\":null,\\\"EmpAtPrimaryAdrText\\\":null,\\\"EmpAtPrimaryAdrEstInd\\\":null,\\\"EmpAtPrimaryAdrMinInd\\\":null,\\\"HighCredit\\\":null,\\\"AvgHighCredit\\\":null,\\\"TotalPayments\\\":null,\\\"CreditScoreClass\\\":null,\\\"CreditScoreNatlPercentile\\\":null,\\\"CreditScoreIncdDefault\\\":null,\\\"CreditScoreAge\\\":null,\\\"CreditScoreDate\\\":null,\\\"CreditScoreCommentary2\\\":null,\\\"CreditScoreCommentary3\\\":null,\\\"CreditScoreCommentary4\\\":null,\\\"CreditScoreCommentary5\\\":null,\\\"CreditScoreCommentary6\\\":null,\\\"CreditScoreCommentary7\\\":null,\\\"CreditScoreCommentary8\\\":null,\\\"CreditScoreCommentary9\\\":null,\\\"CreditScoreCommentary10\\\":null,\\\"FailureScoreClass\\\":null,\\\"FailureScoreIncdDefault\\\":null,\\\"FailureScoreAge\\\":null,\\\"FailureScoreDate\\\":null,\\\"FailureScoreCommentary2\\\":null,\\\"FailureScoreCommentary3\\\":null,\\\"FailureScoreCommentary4\\\":null,\\\"FailureScoreCommentary5\\\":null,\\\"FailureScoreCommentary6\\\":null,\\\"FailureScoreCommentary7\\\":null,\\\"FailureScoreCommentary8\\\":null,\\\"FailureScoreCommentary9\\\":null,\\\"FailureScoreCommentary10\\\":null,\\\"MaximumCreditRecommend\\\":null,\\\"MaximumCreditCurrencyCode\\\":null,\\\"DisplayedDunsPartyId\\\":null,\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"TCA_V2_API\\\",\\\"CreatedByName\\\":\\\"SYSADMIN\\\",\\\"CreationDate\\\":\\\"2021-02-02T08:24:57.0\\\",\\\"LastUpdateDate\\\":\\\"2021-02-02T09:37:14.0\\\",\\\"LastUpdatedByName\\\":\\\"SYSADMIN\\\",\\\"DoNotConfuseWith\\\":null,\\\"ActualContentSource\\\":\\\"SST\\\",\\\"CommonObjId\\\":null,\\\"EmailObjs\\\":{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"EmailId\\\":\\\"41731\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Status\\\":\\\"A\\\",\\\"ParentObjectType\\\":\\\"ORG\\\",\\\"ParentObjectId\\\":\\\"41895\\\",\\\"PrimaryFlag\\\":\\\"Y\\\",\\\"ContactPointPurpose\\\":\\\"XXPDM_MAIL_RECHN\\\",\\\"PrimaryByPurpose\\\":\\\"N\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"TCA_V2_API\\\",\\\"CreatedByName\\\":\\\"ANONYMOUS\\\",\\\"CreationDate\\\":\\\"2014-12-18T17:13:43.0\\\",\\\"LastUpdateDate\\\":\\\"2014-12-18T17:13:43.0\\\",\\\"LastUpdatedByName\\\":\\\"ANONYMOUS\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"EmailFormat\\\":\\\"MAILHTML\\\",\\\"EmailAddress\\\":\\\"mvidal@elion.es\\\",\\\"CommonObjId\\\":null},\\\"ContactObjs\\\":[{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"OrgContactId\\\":\\\"748832\\\",\\\"OrganizationId\\\":\\\"41895\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Comments\\\":\\\"test2\\\",\\\"ContactNumber\\\":\\\"31958\\\",\\\"DepartmentCode\\\":null,\\\"Department\\\":null,\\\"Title\\\":null,\\\"JobTitle\\\":\\\"710-project manager\\\",\\\"DecisionMakerFlag\\\":\\\"N\\\",\\\"JobTitleCode\\\":\\\"710\\\",\\\"ReferenceUseFlag\\\":\\\"N\\\",\\\"Rank\\\":null,\\\"PartySiteId\\\":null,\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"BO_API\\\",\\\"CreatedByName\\\":\\\"ASADMIN\\\",\\\"CreationDate\\\":\\\"2020-12-21T10:27:14.0\\\",\\\"LastUpdateDate\\\":\\\"2020-12-21T10:27:14.0\\\",\\\"LastUpdatedByName\\\":\\\"ASADMIN\\\",\\\"RelationshipCode\\\":\\\"CONTACT\\\",\\\"RelationshipType\\\":\\\"CONTACT\\\",\\\"RelationshipComments\\\":null,\\\"StartDate\\\":\\\"2020-12-21T10:27:13.0\\\",\\\"EndDate\\\":\\\"4712-12-31T00:00:01.0\\\",\\\"Status\\\":\\\"A\\\",\\\"CommonObjId\\\":null,\\\"PersonProfileObj\\\":{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PersonId\\\":\\\"727142\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"PartyNumber\\\":\\\"127826\\\",\\\"ValidatedFlag\\\":\\\"N\\\",\\\"Status\\\":\\\"A\\\",\\\"CategoryCode\\\":null,\\\"Salutation\\\":null,\\\"PersonPreNameAdjunct\\\":\\\"MR\\\",\\\"PersonFirstName\\\":\\\"First2\\\",\\\"PersonMiddleName\\\":null,\\\"PersonLastName\\\":\\\"Last2\\\",\\\"PersonNameSuffix\\\":null,\\\"PersonTitle\\\":null,\\\"PersonAcademicTitle\\\":null,\\\"PersonPreviousLastName\\\":null,\\\"PersonInitials\\\":null,\\\"KnownAs\\\":null,\\\"KnownAs2\\\":null,\\\"KnownAs3\\\":null,\\\"KnownAs4\\\":null,\\\"KnownAs5\\\":null,\\\"PersonNamePhonetic\\\":null,\\\"PersonFirstNamePhonetic\\\":null,\\\"PersonLastNamePhonetic\\\":null,\\\"MiddleNamePhonetic\\\":null,\\\"TaxReference\\\":null,\\\"JgzzFiscalCode\\\":null,\\\"PersonIdenType\\\":null,\\\"PersonIdentifier\\\":null,\\\"DateOfBirth\\\":null,\\\"PlaceOfBirth\\\":null,\\\"DateOfDeath\\\":null,\\\"DeceasedFlag\\\":\\\"N\\\",\\\"Gender\\\":null,\\\"DeclaredEthnicity\\\":null,\\\"MaritalStatus\\\":null,\\\"MaritalStatusEffDate\\\":null,\\\"PersonalIncome\\\":null,\\\"HeadOfHouseholdFlag\\\":\\\"N\\\",\\\"HouseholdIncome\\\":null,\\\"HouseholdSize\\\":null,\\\"RentOwnInd\\\":null,\\\"LastKnownGps\\\":null,\\\"InternalFlag\\\":null,\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"BO_API\\\",\\\"CreatedByName\\\":\\\"ASADMIN\\\",\\\"CreationDate\\\":\\\"2020-12-21T10:27:12.0\\\",\\\"LastUpdateDate\\\":\\\"2020-12-21T10:27:12.0\\\",\\\"LastUpdatedByName\\\":\\\"ASADMIN\\\",\\\"ActualContentSource\\\":\\\"SST\\\",\\\"CommonObjId\\\":null}},{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"OrgContactId\\\":\\\"749832\\\",\\\"OrganizationId\\\":\\\"41895\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Comments\\\":null,\\\"ContactNumber\\\":\\\"31972\\\",\\\"DepartmentCode\\\":null,\\\"Department\\\":null,\\\"Title\\\":null,\\\"JobTitle\\\":null,\\\"DecisionMakerFlag\\\":\\\"N\\\",\\\"JobTitleCode\\\":null,\\\"ReferenceUseFlag\\\":\\\"N\\\",\\\"Rank\\\":null,\\\"PartySiteId\\\":null,\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"SYSADMIN\\\",\\\"CreationDate\\\":\\\"2021-01-07T08:43:47.0\\\",\\\"LastUpdateDate\\\":\\\"2021-01-07T08:43:47.0\\\",\\\"LastUpdatedByName\\\":\\\"SYSADMIN\\\",\\\"RelationshipCode\\\":\\\"CONTACT\\\",\\\"RelationshipType\\\":\\\"CONTACT\\\",\\\"RelationshipComments\\\":null,\\\"StartDate\\\":\\\"2021-01-07T00:00:00.0\\\",\\\"EndDate\\\":\\\"4712-12-31T00:00:01.0\\\",\\\"Status\\\":\\\"A\\\",\\\"CommonObjId\\\":null,\\\"PersonProfileObj\\\":{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PersonId\\\":\\\"728132\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"PartyNumber\\\":\\\"127838\\\",\\\"ValidatedFlag\\\":\\\"N\\\",\\\"Status\\\":\\\"A\\\",\\\"CategoryCode\\\":null,\\\"Salutation\\\":null,\\\"PersonPreNameAdjunct\\\":\\\"MR\\\",\\\"PersonFirstName\\\":\\\"First3\\\",\\\"PersonMiddleName\\\":null,\\\"PersonLastName\\\":\\\"Last3\\\",\\\"PersonNameSuffix\\\":null,\\\"PersonTitle\\\":null,\\\"PersonAcademicTitle\\\":null,\\\"PersonPreviousLastName\\\":null,\\\"PersonInitials\\\":null,\\\"KnownAs\\\":null,\\\"KnownAs2\\\":null,\\\"KnownAs3\\\":null,\\\"KnownAs4\\\":null,\\\"KnownAs5\\\":null,\\\"PersonNamePhonetic\\\":null,\\\"PersonFirstNamePhonetic\\\":null,\\\"PersonLastNamePhonetic\\\":null,\\\"MiddleNamePhonetic\\\":null,\\\"TaxReference\\\":null,\\\"JgzzFiscalCode\\\":null,\\\"PersonIdenType\\\":null,\\\"PersonIdentifier\\\":null,\\\"DateOfBirth\\\":null,\\\"PlaceOfBirth\\\":null,\\\"DateOfDeath\\\":null,\\\"DeceasedFlag\\\":\\\"N\\\",\\\"Gender\\\":null,\\\"DeclaredEthnicity\\\":null,\\\"MaritalStatus\\\":null,\\\"MaritalStatusEffDate\\\":null,\\\"PersonalIncome\\\":null,\\\"HeadOfHouseholdFlag\\\":\\\"N\\\",\\\"HouseholdIncome\\\":null,\\\"HouseholdSize\\\":null,\\\"RentOwnInd\\\":null,\\\"LastKnownGps\\\":null,\\\"InternalFlag\\\":null,\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"SYSADMIN\\\",\\\"CreationDate\\\":\\\"2021-01-07T08:43:43.0\\\",\\\"LastUpdateDate\\\":\\\"2021-01-07T08:43:43.0\\\",\\\"LastUpdatedByName\\\":\\\"SYSADMIN\\\",\\\"ActualContentSource\\\":\\\"SST\\\",\\\"CommonObjId\\\":null}},{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"OrgContactId\\\":\\\"747833\\\",\\\"OrganizationId\\\":\\\"41895\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Comments\\\":null,\\\"ContactNumber\\\":\\\"31932\\\",\\\"DepartmentCode\\\":null,\\\"Department\\\":null,\\\"Title\\\":null,\\\"JobTitle\\\":\\\"710-project manager\\\",\\\"DecisionMakerFlag\\\":\\\"N\\\",\\\"JobTitleCode\\\":\\\"710\\\",\\\"ReferenceUseFlag\\\":\\\"N\\\",\\\"Rank\\\":null,\\\"PartySiteId\\\":null,\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"SYSADMIN\\\",\\\"CreationDate\\\":\\\"2020-12-10T11:54:04.0\\\",\\\"LastUpdateDate\\\":\\\"2020-12-10T11:54:04.0\\\",\\\"LastUpdatedByName\\\":\\\"SYSADMIN\\\",\\\"RelationshipCode\\\":\\\"CONTACT\\\",\\\"RelationshipType\\\":\\\"CONTACT\\\",\\\"RelationshipComments\\\":null,\\\"StartDate\\\":\\\"2020-12-10T00:00:00.0\\\",\\\"EndDate\\\":\\\"4712-12-31T00:00:01.0\\\",\\\"Status\\\":\\\"A\\\",\\\"CommonObjId\\\":null,\\\"EmailObjs\\\":{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"EmailId\\\":\\\"659768\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Status\\\":\\\"A\\\",\\\"ParentObjectType\\\":\\\"ORG_CONTACT\\\",\\\"ParentObjectId\\\":\\\"727135\\\",\\\"PrimaryFlag\\\":\\\"Y\\\",\\\"ContactPointPurpose\\\":null,\\\"PrimaryByPurpose\\\":\\\"N\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"SYSADMIN\\\",\\\"CreationDate\\\":\\\"2020-12-10T11:54:06.0\\\",\\\"LastUpdateDate\\\":\\\"2020-12-10T11:54:06.0\\\",\\\"LastUpdatedByName\\\":\\\"SYSADMIN\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"EmailFormat\\\":\\\"MAILTEXT\\\",\\\"EmailAddress\\\":\\\"test@eao.com\\\",\\\"CommonObjId\\\":null},\\\"PersonProfileObj\\\":{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PersonId\\\":\\\"727134\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"PartyNumber\\\":\\\"127818\\\",\\\"ValidatedFlag\\\":\\\"N\\\",\\\"Status\\\":\\\"A\\\",\\\"CategoryCode\\\":null,\\\"Salutation\\\":null,\\\"PersonPreNameAdjunct\\\":\\\"MR\\\",\\\"PersonFirstName\\\":\\\"First\\\",\\\"PersonMiddleName\\\":null,\\\"PersonLastName\\\":\\\"Last\\\",\\\"PersonNameSuffix\\\":null,\\\"PersonTitle\\\":null,\\\"PersonAcademicTitle\\\":null,\\\"PersonPreviousLastName\\\":null,\\\"PersonInitials\\\":null,\\\"KnownAs\\\":null,\\\"KnownAs2\\\":null,\\\"KnownAs3\\\":null,\\\"KnownAs4\\\":null,\\\"KnownAs5\\\":null,\\\"PersonNamePhonetic\\\":null,\\\"PersonFirstNamePhonetic\\\":null,\\\"PersonLastNamePhonetic\\\":null,\\\"MiddleNamePhonetic\\\":null,\\\"TaxReference\\\":null,\\\"JgzzFiscalCode\\\":null,\\\"PersonIdenType\\\":null,\\\"PersonIdentifier\\\":null,\\\"DateOfBirth\\\":null,\\\"PlaceOfBirth\\\":null,\\\"DateOfDeath\\\":null,\\\"DeceasedFlag\\\":\\\"N\\\",\\\"Gender\\\":null,\\\"DeclaredEthnicity\\\":null,\\\"MaritalStatus\\\":null,\\\"MaritalStatusEffDate\\\":null,\\\"PersonalIncome\\\":null,\\\"HeadOfHouseholdFlag\\\":\\\"N\\\",\\\"HouseholdIncome\\\":null,\\\"HouseholdSize\\\":null,\\\"RentOwnInd\\\":null,\\\"LastKnownGps\\\":null,\\\"InternalFlag\\\":null,\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"SYSADMIN\\\",\\\"CreationDate\\\":\\\"2020-12-16T16:01:24.0\\\",\\\"LastUpdateDate\\\":\\\"2020-12-16T16:01:24.0\\\",\\\"LastUpdatedByName\\\":\\\"SYSADMIN\\\",\\\"ActualContentSource\\\":\\\"SST\\\",\\\"CommonObjId\\\":null},\\\"PhoneObjs\\\":{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PhoneId\\\":\\\"659769\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Status\\\":\\\"A\\\",\\\"ParentObjectType\\\":\\\"ORG_CONTACT\\\",\\\"ParentObjectId\\\":\\\"727135\\\",\\\"PrimaryFlag\\\":\\\"Y\\\",\\\"ContactPointPurpose\\\":\\\"BUSINESS\\\",\\\"PrimaryByPurpose\\\":\\\"N\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"SYSADMIN\\\",\\\"CreationDate\\\":\\\"2020-12-10T11:54:08.0\\\",\\\"LastUpdateDate\\\":\\\"2020-12-10T11:54:08.0\\\",\\\"LastUpdatedByName\\\":\\\"SYSADMIN\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"PhoneCallingCalendar\\\":null,\\\"LastContactDtTime\\\":null,\\\"TimezoneId\\\":null,\\\"PhoneAreaCode\\\":\\\"62\\\",\\\"PhoneCountryCode\\\":\\\"41\\\",\\\"PhoneNumber\\\":\\\"2869111\\\",\\\"PhoneExtension\\\":null,\\\"PhoneLineType\\\":\\\"GEN\\\",\\\"RawPhoneNumber\\\":\\\"62-2869111\\\",\\\"CommonObjId\\\":null}},{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"OrgContactId\\\":\\\"747835\\\",\\\"OrganizationId\\\":\\\"41895\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Comments\\\":\\\"test\\\",\\\"ContactNumber\\\":\\\"31957\\\",\\\"DepartmentCode\\\":null,\\\"Department\\\":null,\\\"Title\\\":null,\\\"JobTitle\\\":null,\\\"DecisionMakerFlag\\\":\\\"N\\\",\\\"JobTitleCode\\\":\\\"710\\\",\\\"ReferenceUseFlag\\\":\\\"N\\\",\\\"Rank\\\":null,\\\"PartySiteId\\\":\\\"12716\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"BO_API\\\",\\\"CreatedByName\\\":\\\"ASADMIN\\\",\\\"CreationDate\\\":\\\"2020-12-16T15:23:40.0\\\",\\\"LastUpdateDate\\\":\\\"2020-12-16T16:07:35.0\\\",\\\"LastUpdatedByName\\\":\\\"ASADMIN\\\",\\\"RelationshipCode\\\":\\\"CONTACT\\\",\\\"RelationshipType\\\":\\\"CONTACT\\\",\\\"RelationshipComments\\\":null,\\\"StartDate\\\":\\\"2020-12-16T15:23:39.0\\\",\\\"EndDate\\\":\\\"4712-12-31T00:00:01.0\\\",\\\"Status\\\":\\\"A\\\",\\\"CommonObjId\\\":null,\\\"PersonProfileObj\\\":{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PersonId\\\":\\\"727139\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"PartyNumber\\\":\\\"127823\\\",\\\"ValidatedFlag\\\":\\\"N\\\",\\\"Status\\\":\\\"A\\\",\\\"CategoryCode\\\":null,\\\"Salutation\\\":null,\\\"PersonPreNameAdjunct\\\":\\\"MR\\\",\\\"PersonFirstName\\\":\\\"First1\\\",\\\"PersonMiddleName\\\":null,\\\"PersonLastName\\\":\\\"Last1\\\",\\\"PersonNameSuffix\\\":null,\\\"PersonTitle\\\":\\\"MR\\\",\\\"PersonAcademicTitle\\\":null,\\\"PersonPreviousLastName\\\":null,\\\"PersonInitials\\\":null,\\\"KnownAs\\\":null,\\\"KnownAs2\\\":null,\\\"KnownAs3\\\":null,\\\"KnownAs4\\\":null,\\\"KnownAs5\\\":null,\\\"PersonNamePhonetic\\\":null,\\\"PersonFirstNamePhonetic\\\":null,\\\"PersonLastNamePhonetic\\\":null,\\\"MiddleNamePhonetic\\\":null,\\\"TaxReference\\\":null,\\\"JgzzFiscalCode\\\":null,\\\"PersonIdenType\\\":null,\\\"PersonIdentifier\\\":null,\\\"DateOfBirth\\\":null,\\\"PlaceOfBirth\\\":null,\\\"DateOfDeath\\\":null,\\\"DeceasedFlag\\\":\\\"N\\\",\\\"Gender\\\":null,\\\"DeclaredEthnicity\\\":null,\\\"MaritalStatus\\\":null,\\\"MaritalStatusEffDate\\\":null,\\\"PersonalIncome\\\":null,\\\"HeadOfHouseholdFlag\\\":\\\"N\\\",\\\"HouseholdIncome\\\":null,\\\"HouseholdSize\\\":null,\\\"RentOwnInd\\\":null,\\\"LastKnownGps\\\":null,\\\"InternalFlag\\\":null,\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"BO_API\\\",\\\"CreatedByName\\\":\\\"ASADMIN\\\",\\\"CreationDate\\\":\\\"2020-12-16T15:23:38.0\\\",\\\"LastUpdateDate\\\":\\\"2020-12-16T15:23:38.0\\\",\\\"LastUpdatedByName\\\":\\\"ASADMIN\\\",\\\"ActualContentSource\\\":\\\"SST\\\",\\\"CommonObjId\\\":null}}],\\\"PartySiteObjs\\\":[{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PartySiteId\\\":\\\"158692\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"ParentObjectType\\\":\\\"ORG\\\",\\\"ParentObjectId\\\":\\\"41895\\\",\\\"PartySiteNumber\\\":\\\"279616\\\",\\\"Mailstop\\\":null,\\\"IdentifyingAddressFlag\\\":\\\"N\\\",\\\"Status\\\":\\\"A\\\",\\\"PartySiteName\\\":null,\\\"Language\\\":null,\\\"Addressee\\\":null,\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"EHQ-HUM\\\",\\\"CreationDate\\\":\\\"2016-09-26T13:59:54.0\\\",\\\"LastUpdateDate\\\":\\\"2016-09-26T13:59:54.0\\\",\\\"LastUpdatedByName\\\":\\\"EHQ-HUM\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"GlobalLocationNumber\\\":null,\\\"CommonObjId\\\":null,\\\"LocationObj\\\":{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"LocationId\\\":\\\"52577\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Country\\\":\\\"ES\\\",\\\"Address1\\\":\\\"Elion S.A.U.\\\",\\\"Address2\\\":\\\"test1\\\",\\\"Address3\\\":null,\\\"Address4\\\":\\\"Avenida De Burgos, 28-8B\\\",\\\"City\\\":\\\"Madrid\\\",\\\"PostalCode\\\":\\\"28036\\\",\\\"State\\\":null,\\\"Province\\\":null,\\\"County\\\":null,\\\"AddressKey\\\":\\\"ELNS.28036\\\",\\\"AddressStyle\\\":\\\"SE\\\",\\\"ValidatedFlag\\\":\\\"N\\\",\\\"AddressLinesPhonetic\\\":null,\\\"PostalPlus4Code\\\":null,\\\"Position\\\":null,\\\"LocationDirections\\\":null,\\\"AddressEffectiveDate\\\":null,\\\"AddressExpirationDate\\\":null,\\\"ClliCode\\\":null,\\\"Language\\\":null,\\\"ShortDescription\\\":null,\\\"Description\\\":null,\\\"LocHierarchyId\\\":null,\\\"SalesTaxGeocode\\\":null,\\\"SalesTaxInsideCityLimits\\\":\\\"1\\\",\\\"FaLocationId\\\":null,\\\"TimezoneId\\\":\\\"312\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"EHQ-HUM\\\",\\\"CreationDate\\\":\\\"2016-09-26T13:59:54.0\\\",\\\"LastUpdateDate\\\":\\\"2021-01-25T09:19:07.0\\\",\\\"LastUpdatedByName\\\":\\\"SYSADMIN\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"DeliveryPointCode\\\":null,\\\"GeometryStatusCode\\\":\\\"DIRTY\\\",\\\"CommonObjId\\\":null,\\\"Geometry\\\":null},\\\"PartySiteUseObjs\\\":{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PartySiteUseId\\\":\\\"197579\\\",\\\"Comments\\\":null,\\\"SiteUseType\\\":\\\"SHIP_TO\\\",\\\"PartySiteId\\\":\\\"158692\\\",\\\"PrimaryPerType\\\":\\\"N\\\",\\\"Status\\\":\\\"A\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"EHQ-HUM\\\",\\\"CreationDate\\\":\\\"2016-09-26T13:59:54.0\\\",\\\"LastUpdateDate\\\":\\\"2016-09-26T13:59:54.0\\\",\\\"LastUpdatedByName\\\":\\\"EHQ-HUM\\\",\\\"CommonObjId\\\":null}},{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PartySiteId\\\":\\\"214877\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"ParentObjectType\\\":\\\"ORG\\\",\\\"ParentObjectId\\\":\\\"41895\\\",\\\"PartySiteNumber\\\":\\\"283362\\\",\\\"Mailstop\\\":null,\\\"IdentifyingAddressFlag\\\":\\\"N\\\",\\\"Status\\\":\\\"I\\\",\\\"PartySiteName\\\":null,\\\"Language\\\":null,\\\"Addressee\\\":null,\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"EHQ-HUM\\\",\\\"CreationDate\\\":\\\"2017-11-23T14:19:38.0\\\",\\\"LastUpdateDate\\\":\\\"2017-11-23T14:29:11.0\\\",\\\"LastUpdatedByName\\\":\\\"EHQ-HUM\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"GlobalLocationNumber\\\":null,\\\"CommonObjId\\\":null,\\\"LocationObj\\\":{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"LocationId\\\":\\\"59748\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Country\\\":\\\"ES\\\",\\\"Address1\\\":\\\"Ingenieria de Aplicaciones S.A.U.\\\",\\\"Address2\\\":\\\"Attn. Lluc Valerio\\\",\\\"Address3\\\":\\\"C\\/Joseph Cuatrcasas I Arumi, 10\\\",\\\"Address4\\\":null,\\\"City\\\":\\\"Sant Quirze Del Valles\\/Barcelona\\\",\\\"PostalCode\\\":\\\"08192\\\",\\\"State\\\":null,\\\"Province\\\":null,\\\"County\\\":null,\\\"AddressKey\\\":\\\"INGNRDAPLCCNSS.08192\\\",\\\"AddressStyle\\\":\\\"SE\\\",\\\"ValidatedFlag\\\":\\\"N\\\",\\\"AddressLinesPhonetic\\\":null,\\\"PostalPlus4Code\\\":null,\\\"Position\\\":null,\\\"LocationDirections\\\":null,\\\"AddressEffectiveDate\\\":null,\\\"AddressExpirationDate\\\":null,\\\"ClliCode\\\":null,\\\"Language\\\":\\\"US\\\",\\\"ShortDescription\\\":null,\\\"Description\\\":null,\\\"LocHierarchyId\\\":null,\\\"SalesTaxGeocode\\\":null,\\\"SalesTaxInsideCityLimits\\\":\\\"1\\\",\\\"FaLocationId\\\":null,\\\"TimezoneId\\\":\\\"312\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"EHQ-HUM\\\",\\\"CreationDate\\\":\\\"2017-11-23T14:19:38.0\\\",\\\"LastUpdateDate\\\":\\\"2017-11-23T14:26:02.0\\\",\\\"LastUpdatedByName\\\":\\\"EHQ-HUM\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"DeliveryPointCode\\\":null,\\\"GeometryStatusCode\\\":\\\"DIRTY\\\",\\\"CommonObjId\\\":null,\\\"Geometry\\\":null},\\\"PartySiteUseObjs\\\":{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PartySiteUseId\\\":\\\"234622\\\",\\\"Comments\\\":null,\\\"SiteUseType\\\":\\\"DELIVER_TO\\\",\\\"PartySiteId\\\":\\\"214877\\\",\\\"PrimaryPerType\\\":\\\"N\\\",\\\"Status\\\":\\\"I\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"EHQ-HUM\\\",\\\"CreationDate\\\":\\\"2017-11-23T14:19:38.0\\\",\\\"LastUpdateDate\\\":\\\"2017-11-23T14:29:11.0\\\",\\\"LastUpdatedByName\\\":\\\"EHQ-HUM\\\",\\\"CommonObjId\\\":null}},{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PartySiteId\\\":\\\"214881\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"ParentObjectType\\\":\\\"ORG\\\",\\\"ParentObjectId\\\":\\\"41895\\\",\\\"PartySiteNumber\\\":\\\"283364\\\",\\\"Mailstop\\\":null,\\\"IdentifyingAddressFlag\\\":\\\"N\\\",\\\"Status\\\":\\\"I\\\",\\\"PartySiteName\\\":null,\\\"Language\\\":null,\\\"Addressee\\\":null,\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"EHQ-HUM\\\",\\\"CreationDate\\\":\\\"2017-11-23T14:36:16.0\\\",\\\"LastUpdateDate\\\":\\\"2019-08-28T17:45:57.0\\\",\\\"LastUpdatedByName\\\":\\\"EHQ-KEP\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"GlobalLocationNumber\\\":null,\\\"CommonObjId\\\":null,\\\"LocationObj\\\":{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"LocationId\\\":\\\"59752\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Country\\\":\\\"ES\\\",\\\"Address1\\\":\\\"Ingenieria de Aplicaciones S.A.U.\\\",\\\"Address2\\\":\\\"Attn. Lluc Valerio\\\",\\\"Address3\\\":\\\"C\\/Joseph Cuatrcasas I Arumi, 10\\\",\\\"Address4\\\":\\\"Saint Quirze Del Valles\\\",\\\"City\\\":\\\"Barcelona\\\",\\\"PostalCode\\\":\\\"08192\\\",\\\"State\\\":null,\\\"Province\\\":null,\\\"County\\\":null,\\\"AddressKey\\\":\\\"INGNRDAPLCCNSS.08192\\\",\\\"AddressStyle\\\":\\\"SE\\\",\\\"ValidatedFlag\\\":\\\"N\\\",\\\"AddressLinesPhonetic\\\":null,\\\"PostalPlus4Code\\\":null,\\\"Position\\\":null,\\\"LocationDirections\\\":null,\\\"AddressEffectiveDate\\\":null,\\\"AddressExpirationDate\\\":null,\\\"ClliCode\\\":null,\\\"Language\\\":null,\\\"ShortDescription\\\":null,\\\"Description\\\":null,\\\"LocHierarchyId\\\":null,\\\"SalesTaxGeocode\\\":null,\\\"SalesTaxInsideCityLimits\\\":\\\"1\\\",\\\"FaLocationId\\\":null,\\\"TimezoneId\\\":\\\"312\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"EHQ-HUM\\\",\\\"CreationDate\\\":\\\"2017-11-23T14:36:16.0\\\",\\\"LastUpdateDate\\\":\\\"2017-11-23T14:36:16.0\\\",\\\"LastUpdatedByName\\\":\\\"EHQ-HUM\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"DeliveryPointCode\\\":null,\\\"GeometryStatusCode\\\":\\\"DIRTY\\\",\\\"CommonObjId\\\":null,\\\"Geometry\\\":null},\\\"PartySiteUseObjs\\\":{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PartySiteUseId\\\":\\\"234625\\\",\\\"Comments\\\":null,\\\"SiteUseType\\\":\\\"SHIP_TO\\\",\\\"PartySiteId\\\":\\\"214881\\\",\\\"PrimaryPerType\\\":\\\"N\\\",\\\"Status\\\":\\\"I\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"EHQ-HUM\\\",\\\"CreationDate\\\":\\\"2017-11-23T14:36:16.0\\\",\\\"LastUpdateDate\\\":\\\"2019-08-28T17:45:57.0\\\",\\\"LastUpdatedByName\\\":\\\"EHQ-KEP\\\",\\\"CommonObjId\\\":null}},{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PartySiteId\\\":\\\"12716\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"ParentObjectType\\\":\\\"ORG\\\",\\\"ParentObjectId\\\":\\\"41895\\\",\\\"PartySiteNumber\\\":\\\"9412\\\",\\\"Mailstop\\\":null,\\\"IdentifyingAddressFlag\\\":\\\"Y\\\",\\\"Status\\\":\\\"A\\\",\\\"PartySiteName\\\":null,\\\"Language\\\":null,\\\"Addressee\\\":null,\\\"ProgramUpdateDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"CreatedByModule\\\":\\\"TCA_V2_API\\\",\\\"CreatedByName\\\":\\\"PDG-MB\\\",\\\"CreationDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"LastUpdateDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"LastUpdatedByName\\\":\\\"PDG-MB\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"GlobalLocationNumber\\\":null,\\\"CommonObjId\\\":null,\\\"EmailObjs\\\":[{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"EmailId\\\":\\\"655764\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Status\\\":\\\"A\\\",\\\"ParentObjectType\\\":\\\"PARTY_SITE\\\",\\\"ParentObjectId\\\":\\\"12716\\\",\\\"PrimaryFlag\\\":\\\"N\\\",\\\"ContactPointPurpose\\\":\\\"XXPDM_MAIL_RECHN\\\",\\\"PrimaryByPurpose\\\":\\\"N\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"EHQ-HOB\\\",\\\"CreationDate\\\":\\\"2020-09-09T15:08:26.0\\\",\\\"LastUpdateDate\\\":\\\"2020-09-09T15:08:26.0\\\",\\\"LastUpdatedByName\\\":\\\"EHQ-HOB\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"EmailFormat\\\":\\\"MAILHTML\\\",\\\"EmailAddress\\\":\\\"bettina.horzytz@eao.com\\\",\\\"CommonObjId\\\":null},{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"EmailId\\\":\\\"22573\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Status\\\":\\\"A\\\",\\\"ParentObjectType\\\":\\\"PARTY_SITE\\\",\\\"ParentObjectId\\\":\\\"12716\\\",\\\"PrimaryFlag\\\":\\\"Y\\\",\\\"ContactPointPurpose\\\":\\\"XXPDM_MAIL_AUFTR\\\",\\\"PrimaryByPurpose\\\":\\\"N\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"TCA_V2_API\\\",\\\"CreatedByName\\\":\\\"ANONYMOUS\\\",\\\"CreationDate\\\":\\\"2014-12-18T15:38:28.0\\\",\\\"LastUpdateDate\\\":\\\"2020-09-09T15:07:20.0\\\",\\\"LastUpdatedByName\\\":\\\"EHQ-HOB\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"EmailFormat\\\":\\\"MAILHTML\\\",\\\"EmailAddress\\\":\\\"mvidal@elion.es,bettina.horzytz@eao.com\\\",\\\"CommonObjId\\\":null}],\\\"LocationObj\\\":{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"LocationId\\\":\\\"7719\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Country\\\":\\\"ES\\\",\\\"Address1\\\":\\\"Elion S.A.\\\",\\\"Address2\\\":\\\"Farell 5\\\",\\\"Address3\\\":null,\\\"Address4\\\":null,\\\"City\\\":\\\"Barcelona\\\",\\\"PostalCode\\\":\\\"08014\\\",\\\"State\\\":null,\\\"Province\\\":null,\\\"County\\\":null,\\\"AddressKey\\\":\\\"ELNS.08014\\\",\\\"AddressStyle\\\":\\\"SE\\\",\\\"ValidatedFlag\\\":\\\"N\\\",\\\"AddressLinesPhonetic\\\":null,\\\"PostalPlus4Code\\\":null,\\\"Position\\\":null,\\\"LocationDirections\\\":null,\\\"AddressEffectiveDate\\\":null,\\\"AddressExpirationDate\\\":null,\\\"ClliCode\\\":null,\\\"Language\\\":\\\"US\\\",\\\"ShortDescription\\\":null,\\\"Description\\\":null,\\\"LocHierarchyId\\\":null,\\\"SalesTaxGeocode\\\":null,\\\"SalesTaxInsideCityLimits\\\":\\\"1\\\",\\\"FaLocationId\\\":null,\\\"TimezoneId\\\":\\\"312\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"TCA_V2_API\\\",\\\"CreatedByName\\\":\\\"PDG-MB\\\",\\\"CreationDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"LastUpdateDate\\\":\\\"2016-11-29T15:31:40.0\\\",\\\"LastUpdatedByName\\\":\\\"EHQ-HUM\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"DeliveryPointCode\\\":null,\\\"GeometryStatusCode\\\":\\\"DIRTY\\\",\\\"CommonObjId\\\":null,\\\"Geometry\\\":null},\\\"PartySiteUseObjs\\\":[{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PartySiteUseId\\\":\\\"14803\\\",\\\"Comments\\\":null,\\\"SiteUseType\\\":\\\"BILL_TO\\\",\\\"PartySiteId\\\":\\\"12716\\\",\\\"PrimaryPerType\\\":\\\"Y\\\",\\\"Status\\\":\\\"A\\\",\\\"ProgramUpdateDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"CreatedByModule\\\":\\\"TCA_V2_API\\\",\\\"CreatedByName\\\":\\\"PDG-MB\\\",\\\"CreationDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"LastUpdateDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"LastUpdatedByName\\\":\\\"PDG-MB\\\",\\\"CommonObjId\\\":null},{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PartySiteUseId\\\":\\\"14802\\\",\\\"Comments\\\":null,\\\"SiteUseType\\\":\\\"SHIP_TO\\\",\\\"PartySiteId\\\":\\\"12716\\\",\\\"PrimaryPerType\\\":\\\"Y\\\",\\\"Status\\\":\\\"A\\\",\\\"ProgramUpdateDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"CreatedByModule\\\":\\\"TCA_V2_API\\\",\\\"CreatedByName\\\":\\\"PDG-MB\\\",\\\"CreationDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"LastUpdateDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"LastUpdatedByName\\\":\\\"PDG-MB\\\",\\\"CommonObjId\\\":null}]}],\\\"RelationshipObjs\\\":[{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"RelationshipId\\\":\\\"670968\\\",\\\"ParentObjectType\\\":\\\"ORG\\\",\\\"ParentObjectId\\\":\\\"41895\\\",\\\"RelatedObjectId\\\":\\\"727142\\\",\\\"RelatedObjectType\\\":\\\"PERSON\\\",\\\"RelatedObjectOsr\\\":null,\\\"RelatedObjectOs\\\":null,\\\"RelationshipCode\\\":\\\"CONTACT\\\",\\\"RelationshipType\\\":\\\"CONTACT\\\",\\\"Comments\\\":null,\\\"StartDate\\\":\\\"2020-12-21T10:27:13.0\\\",\\\"EndDate\\\":\\\"4712-12-31T00:00:01.0\\\",\\\"Status\\\":\\\"A\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"BO_API\\\",\\\"CreatedByName\\\":\\\"ASADMIN\\\",\\\"CreationDate\\\":\\\"2020-12-21T10:27:13.0\\\",\\\"LastUpdateDate\\\":\\\"2020-12-21T10:27:13.0\\\",\\\"LastUpdatedByName\\\":\\\"ASADMIN\\\",\\\"AdditionalInformation1\\\":null,\\\"AdditionalInformation2\\\":null,\\\"AdditionalInformation3\\\":null,\\\"AdditionalInformation4\\\":null,\\\"AdditionalInformation5\\\":null,\\\"AdditionalInformation6\\\":null,\\\"AdditionalInformation7\\\":null,\\\"AdditionalInformation8\\\":null,\\\"AdditionalInformation9\\\":null,\\\"AdditionalInformation10\\\":null,\\\"AdditionalInformation11\\\":null,\\\"AdditionalInformation12\\\":null,\\\"AdditionalInformation13\\\":null,\\\"AdditionalInformation14\\\":null,\\\"AdditionalInformation15\\\":null,\\\"AdditionalInformation16\\\":null,\\\"AdditionalInformation17\\\":null,\\\"AdditionalInformation18\\\":null,\\\"AdditionalInformation19\\\":null,\\\"AdditionalInformation20\\\":null,\\\"AdditionalInformation21\\\":null,\\\"AdditionalInformation22\\\":null,\\\"AdditionalInformation23\\\":null,\\\"AdditionalInformation24\\\":null,\\\"AdditionalInformation25\\\":null,\\\"AdditionalInformation26\\\":null,\\\"AdditionalInformation27\\\":null,\\\"AdditionalInformation28\\\":null,\\\"AdditionalInformation29\\\":null,\\\"AdditionalInformation30\\\":null,\\\"PercentageOwnership\\\":null,\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"CommonObjId\\\":null},{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"RelationshipId\\\":\\\"671964\\\",\\\"ParentObjectType\\\":\\\"ORG\\\",\\\"ParentObjectId\\\":\\\"41895\\\",\\\"RelatedObjectId\\\":\\\"728132\\\",\\\"RelatedObjectType\\\":\\\"PERSON\\\",\\\"RelatedObjectOsr\\\":null,\\\"RelatedObjectOs\\\":null,\\\"RelationshipCode\\\":\\\"CONTACT\\\",\\\"RelationshipType\\\":\\\"CONTACT\\\",\\\"Comments\\\":null,\\\"StartDate\\\":\\\"2021-01-07T00:00:00.0\\\",\\\"EndDate\\\":\\\"4712-12-31T00:00:01.0\\\",\\\"Status\\\":\\\"A\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"SYSADMIN\\\",\\\"CreationDate\\\":\\\"2021-01-07T08:43:46.0\\\",\\\"LastUpdateDate\\\":\\\"2021-01-07T08:43:46.0\\\",\\\"LastUpdatedByName\\\":\\\"SYSADMIN\\\",\\\"AdditionalInformation1\\\":null,\\\"AdditionalInformation2\\\":null,\\\"AdditionalInformation3\\\":null,\\\"AdditionalInformation4\\\":null,\\\"AdditionalInformation5\\\":null,\\\"AdditionalInformation6\\\":null,\\\"AdditionalInformation7\\\":null,\\\"AdditionalInformation8\\\":null,\\\"AdditionalInformation9\\\":null,\\\"AdditionalInformation10\\\":null,\\\"AdditionalInformation11\\\":null,\\\"AdditionalInformation12\\\":null,\\\"AdditionalInformation13\\\":null,\\\"AdditionalInformation14\\\":null,\\\"AdditionalInformation15\\\":null,\\\"AdditionalInformation16\\\":null,\\\"AdditionalInformation17\\\":null,\\\"AdditionalInformation18\\\":null,\\\"AdditionalInformation19\\\":null,\\\"AdditionalInformation20\\\":null,\\\"AdditionalInformation21\\\":null,\\\"AdditionalInformation22\\\":null,\\\"AdditionalInformation23\\\":null,\\\"AdditionalInformation24\\\":null,\\\"AdditionalInformation25\\\":null,\\\"AdditionalInformation26\\\":null,\\\"AdditionalInformation27\\\":null,\\\"AdditionalInformation28\\\":null,\\\"AdditionalInformation29\\\":null,\\\"AdditionalInformation30\\\":null,\\\"PercentageOwnership\\\":null,\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"CommonObjId\\\":null},{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"RelationshipId\\\":\\\"669965\\\",\\\"ParentObjectType\\\":\\\"ORG\\\",\\\"ParentObjectId\\\":\\\"41895\\\",\\\"RelatedObjectId\\\":\\\"727134\\\",\\\"RelatedObjectType\\\":\\\"PERSON\\\",\\\"RelatedObjectOsr\\\":null,\\\"RelatedObjectOs\\\":null,\\\"RelationshipCode\\\":\\\"CONTACT\\\",\\\"RelationshipType\\\":\\\"CONTACT\\\",\\\"Comments\\\":null,\\\"StartDate\\\":\\\"2020-12-10T00:00:00.0\\\",\\\"EndDate\\\":\\\"4712-12-31T00:00:01.0\\\",\\\"Status\\\":\\\"A\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"SYSADMIN\\\",\\\"CreationDate\\\":\\\"2020-12-10T11:54:03.0\\\",\\\"LastUpdateDate\\\":\\\"2020-12-10T11:54:03.0\\\",\\\"LastUpdatedByName\\\":\\\"SYSADMIN\\\",\\\"AdditionalInformation1\\\":null,\\\"AdditionalInformation2\\\":null,\\\"AdditionalInformation3\\\":null,\\\"AdditionalInformation4\\\":null,\\\"AdditionalInformation5\\\":null,\\\"AdditionalInformation6\\\":null,\\\"AdditionalInformation7\\\":null,\\\"AdditionalInformation8\\\":null,\\\"AdditionalInformation9\\\":null,\\\"AdditionalInformation10\\\":null,\\\"AdditionalInformation11\\\":null,\\\"AdditionalInformation12\\\":null,\\\"AdditionalInformation13\\\":null,\\\"AdditionalInformation14\\\":null,\\\"AdditionalInformation15\\\":null,\\\"AdditionalInformation16\\\":null,\\\"AdditionalInformation17\\\":null,\\\"AdditionalInformation18\\\":null,\\\"AdditionalInformation19\\\":null,\\\"AdditionalInformation20\\\":null,\\\"AdditionalInformation21\\\":null,\\\"AdditionalInformation22\\\":null,\\\"AdditionalInformation23\\\":null,\\\"AdditionalInformation24\\\":null,\\\"AdditionalInformation25\\\":null,\\\"AdditionalInformation26\\\":null,\\\"AdditionalInformation27\\\":null,\\\"AdditionalInformation28\\\":null,\\\"AdditionalInformation29\\\":null,\\\"AdditionalInformation30\\\":null,\\\"PercentageOwnership\\\":null,\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"CommonObjId\\\":null},{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"RelationshipId\\\":\\\"670967\\\",\\\"ParentObjectType\\\":\\\"ORG\\\",\\\"ParentObjectId\\\":\\\"41895\\\",\\\"RelatedObjectId\\\":\\\"727139\\\",\\\"RelatedObjectType\\\":\\\"PERSON\\\",\\\"RelatedObjectOsr\\\":null,\\\"RelatedObjectOs\\\":null,\\\"RelationshipCode\\\":\\\"CONTACT\\\",\\\"RelationshipType\\\":\\\"CONTACT\\\",\\\"Comments\\\":null,\\\"StartDate\\\":\\\"2020-12-16T15:23:39.0\\\",\\\"EndDate\\\":\\\"4712-12-31T00:00:01.0\\\",\\\"Status\\\":\\\"A\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"BO_API\\\",\\\"CreatedByName\\\":\\\"ASADMIN\\\",\\\"CreationDate\\\":\\\"2020-12-16T15:23:39.0\\\",\\\"LastUpdateDate\\\":\\\"2020-12-16T15:23:39.0\\\",\\\"LastUpdatedByName\\\":\\\"ASADMIN\\\",\\\"AdditionalInformation1\\\":null,\\\"AdditionalInformation2\\\":null,\\\"AdditionalInformation3\\\":null,\\\"AdditionalInformation4\\\":null,\\\"AdditionalInformation5\\\":null,\\\"AdditionalInformation6\\\":null,\\\"AdditionalInformation7\\\":null,\\\"AdditionalInformation8\\\":null,\\\"AdditionalInformation9\\\":null,\\\"AdditionalInformation10\\\":null,\\\"AdditionalInformation11\\\":null,\\\"AdditionalInformation12\\\":null,\\\"AdditionalInformation13\\\":null,\\\"AdditionalInformation14\\\":null,\\\"AdditionalInformation15\\\":null,\\\"AdditionalInformation16\\\":null,\\\"AdditionalInformation17\\\":null,\\\"AdditionalInformation18\\\":null,\\\"AdditionalInformation19\\\":null,\\\"AdditionalInformation20\\\":null,\\\"AdditionalInformation21\\\":null,\\\"AdditionalInformation22\\\":null,\\\"AdditionalInformation23\\\":null,\\\"AdditionalInformation24\\\":null,\\\"AdditionalInformation25\\\":null,\\\"AdditionalInformation26\\\":null,\\\"AdditionalInformation27\\\":null,\\\"AdditionalInformation28\\\":null,\\\"AdditionalInformation29\\\":null,\\\"AdditionalInformation30\\\":null,\\\"PercentageOwnership\\\":null,\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"CommonObjId\\\":null}],\\\"PartyUsageObjs\\\":{\\\"PartyUsgAssignmentId\\\":\\\"35885\\\",\\\"ActionType\\\":null,\\\"ParentObjectType\\\":\\\"ORG\\\",\\\"ParentObjectId\\\":\\\"41895\\\",\\\"PartyUsageCode\\\":\\\"CUSTOMER\\\",\\\"EffectiveStartDate\\\":\\\"2014-12-18T00:00:00.0\\\",\\\"EffectiveEndDate\\\":\\\"4712-12-31T00:00:00.0\\\",\\\"Comments\\\":null,\\\"Status\\\":\\\"A\\\",\\\"CreatedByName\\\":\\\"PDG-MB\\\",\\\"CreationDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"LastUpdateDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"LastUpdatedByName\\\":\\\"PDG-MB\\\",\\\"CommonObjId\\\":\\\"UNCHANGED\\\"}}}}}}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="forEachExample" format="json">
+      <types:shape format="weave" example="examples/forEachExample.json"><![CDATA[%dw 2.0
+
+type forEachExample = {|
+  ActionType: String, 
+  PartySiteId: String, 
+  OrigSystem: Null, 
+  OrigSystemReference: Null, 
+  ParentObjectType: String, 
+  ParentObjectId: String, 
+  PartySiteNumber: String, 
+  Mailstop: Null, 
+  IdentifyingAddressFlag: String, 
+  Status: String, 
+  PartySiteName: Null, 
+  Language: Null, 
+  Addressee: Null, 
+  ProgramUpdateDate: String, 
+  CreatedByModule: String, 
+  CreatedByName: String, 
+  CreationDate: String, 
+  LastUpdateDate: String, 
+  LastUpdatedByName: String, 
+  ActualContentSource: String, 
+  GlobalLocationNumber: Null, 
+  CommonObjId: Null, 
+  EmailObjs: Array<{|    ActionType: String,     EmailId: String,     OrigSystem: Null,     OrigSystemReference: Null,     Status: String,     ParentObjectType: String,     ParentObjectId: String,     PrimaryFlag: String,     ContactPointPurpose: String,     PrimaryByPurpose: String,     ProgramUpdateDate: Null,     CreatedByModule: String,     CreatedByName: String,     CreationDate: String,     LastUpdateDate: String,     LastUpdatedByName: String,     ActualContentSource: String,     EmailFormat: String,     EmailAddress: String,     CommonObjId: Null  |}>, 
+  LocationObj: {|
+    ActionType: String, 
+    LocationId: String, 
+    OrigSystem: Null, 
+    OrigSystemReference: Null, 
+    Country: String, 
+    Address1: String, 
+    Address2: String, 
+    Address3: Null, 
+    Address4: Null, 
+    City: String, 
+    PostalCode: String, 
+    State: Null, 
+    Province: Null, 
+    County: Null, 
+    AddressKey: String, 
+    AddressStyle: String, 
+    ValidatedFlag: String, 
+    AddressLinesPhonetic: Null, 
+    PostalPlus4Code: Null, 
+    Position: Null, 
+    LocationDirections: Null, 
+    AddressEffectiveDate: Null, 
+    AddressExpirationDate: Null, 
+    ClliCode: Null, 
+    Language: String, 
+    ShortDescription: Null, 
+    Description: Null, 
+    LocHierarchyId: Null, 
+    SalesTaxGeocode: Null, 
+    SalesTaxInsideCityLimits: String, 
+    FaLocationId: Null, 
+    TimezoneId: String, 
+    ProgramUpdateDate: Null, 
+    CreatedByModule: String, 
+    CreatedByName: String, 
+    CreationDate: String, 
+    LastUpdateDate: String, 
+    LastUpdatedByName: String, 
+    ActualContentSource: String, 
+    DeliveryPointCode: Null, 
+    GeometryStatusCode: String, 
+    CommonObjId: Null, 
+    Geometry: Null
+  |}, 
+  PartySiteUseObjs: Array<{|    ActionType: String,     PartySiteUseId: String,     Comments: Null,     SiteUseType: String,     PartySiteId: String,     PrimaryPerType: String,     Status: String,     ProgramUpdateDate: String,     CreatedByModule: String,     CreatedByName: String,     CreationDate: String,     LastUpdateDate: String,     LastUpdatedByName: String,     CommonObjId: Null  |}>
+|} {"example": "{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PartySiteId\\\":\\\"12716\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"ParentObjectType\\\":\\\"ORG\\\",\\\"ParentObjectId\\\":\\\"41895\\\",\\\"PartySiteNumber\\\":\\\"9412\\\",\\\"Mailstop\\\":null,\\\"IdentifyingAddressFlag\\\":\\\"Y\\\",\\\"Status\\\":\\\"A\\\",\\\"PartySiteName\\\":null,\\\"Language\\\":null,\\\"Addressee\\\":null,\\\"ProgramUpdateDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"CreatedByModule\\\":\\\"TCA_V2_API\\\",\\\"CreatedByName\\\":\\\"PDG-MB\\\",\\\"CreationDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"LastUpdateDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"LastUpdatedByName\\\":\\\"PDG-MB\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"GlobalLocationNumber\\\":null,\\\"CommonObjId\\\":null,\\\"EmailObjs\\\":[{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"EmailId\\\":\\\"655764\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Status\\\":\\\"A\\\",\\\"ParentObjectType\\\":\\\"PARTY_SITE\\\",\\\"ParentObjectId\\\":\\\"12716\\\",\\\"PrimaryFlag\\\":\\\"N\\\",\\\"ContactPointPurpose\\\":\\\"XXPDM_MAIL_RECHN\\\",\\\"PrimaryByPurpose\\\":\\\"N\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"HZ_CPUI\\\",\\\"CreatedByName\\\":\\\"EHQ-HOB\\\",\\\"CreationDate\\\":\\\"2020-09-09T15:08:26.0\\\",\\\"LastUpdateDate\\\":\\\"2020-09-09T15:08:26.0\\\",\\\"LastUpdatedByName\\\":\\\"EHQ-HOB\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"EmailFormat\\\":\\\"MAILHTML\\\",\\\"EmailAddress\\\":\\\"bettina.horzytz@eao.com\\\",\\\"CommonObjId\\\":null},{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"EmailId\\\":\\\"22573\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Status\\\":\\\"A\\\",\\\"ParentObjectType\\\":\\\"PARTY_SITE\\\",\\\"ParentObjectId\\\":\\\"12716\\\",\\\"PrimaryFlag\\\":\\\"Y\\\",\\\"ContactPointPurpose\\\":\\\"XXPDM_MAIL_AUFTR\\\",\\\"PrimaryByPurpose\\\":\\\"N\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"TCA_V2_API\\\",\\\"CreatedByName\\\":\\\"ANONYMOUS\\\",\\\"CreationDate\\\":\\\"2014-12-18T15:38:28.0\\\",\\\"LastUpdateDate\\\":\\\"2020-09-09T15:07:20.0\\\",\\\"LastUpdatedByName\\\":\\\"EHQ-HOB\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"EmailFormat\\\":\\\"MAILHTML\\\",\\\"EmailAddress\\\":\\\"mvidal@elion.es,bettina.horzytz@eao.com\\\",\\\"CommonObjId\\\":null}],\\\"LocationObj\\\":{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"LocationId\\\":\\\"7719\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Country\\\":\\\"ES\\\",\\\"Address1\\\":\\\"Elion S.A.\\\",\\\"Address2\\\":\\\"Farell 5\\\",\\\"Address3\\\":null,\\\"Address4\\\":null,\\\"City\\\":\\\"Barcelona\\\",\\\"PostalCode\\\":\\\"08014\\\",\\\"State\\\":null,\\\"Province\\\":null,\\\"County\\\":null,\\\"AddressKey\\\":\\\"ELNS.08014\\\",\\\"AddressStyle\\\":\\\"SE\\\",\\\"ValidatedFlag\\\":\\\"N\\\",\\\"AddressLinesPhonetic\\\":null,\\\"PostalPlus4Code\\\":null,\\\"Position\\\":null,\\\"LocationDirections\\\":null,\\\"AddressEffectiveDate\\\":null,\\\"AddressExpirationDate\\\":null,\\\"ClliCode\\\":null,\\\"Language\\\":\\\"US\\\",\\\"ShortDescription\\\":null,\\\"Description\\\":null,\\\"LocHierarchyId\\\":null,\\\"SalesTaxGeocode\\\":null,\\\"SalesTaxInsideCityLimits\\\":\\\"1\\\",\\\"FaLocationId\\\":null,\\\"TimezoneId\\\":\\\"312\\\",\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"TCA_V2_API\\\",\\\"CreatedByName\\\":\\\"PDG-MB\\\",\\\"CreationDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"LastUpdateDate\\\":\\\"2016-11-29T15:31:40.0\\\",\\\"LastUpdatedByName\\\":\\\"EHQ-HUM\\\",\\\"ActualContentSource\\\":\\\"USER_ENTERED\\\",\\\"DeliveryPointCode\\\":null,\\\"GeometryStatusCode\\\":\\\"DIRTY\\\",\\\"CommonObjId\\\":null,\\\"Geometry\\\":null},\\\"PartySiteUseObjs\\\":[{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PartySiteUseId\\\":\\\"14803\\\",\\\"Comments\\\":null,\\\"SiteUseType\\\":\\\"BILL_TO\\\",\\\"PartySiteId\\\":\\\"12716\\\",\\\"PrimaryPerType\\\":\\\"Y\\\",\\\"Status\\\":\\\"A\\\",\\\"ProgramUpdateDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"CreatedByModule\\\":\\\"TCA_V2_API\\\",\\\"CreatedByName\\\":\\\"PDG-MB\\\",\\\"CreationDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"LastUpdateDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"LastUpdatedByName\\\":\\\"PDG-MB\\\",\\\"CommonObjId\\\":null},{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PartySiteUseId\\\":\\\"14802\\\",\\\"Comments\\\":null,\\\"SiteUseType\\\":\\\"SHIP_TO\\\",\\\"PartySiteId\\\":\\\"12716\\\",\\\"PrimaryPerType\\\":\\\"Y\\\",\\\"Status\\\":\\\"A\\\",\\\"ProgramUpdateDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"CreatedByModule\\\":\\\"TCA_V2_API\\\",\\\"CreatedByName\\\":\\\"PDG-MB\\\",\\\"CreationDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"LastUpdateDate\\\":\\\"2014-12-18T13:30:16.0\\\",\\\"LastUpdatedByName\\\":\\\"PDG-MB\\\",\\\"CommonObjId\\\":null}]}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="contactJson" format="json">
+      <types:shape format="weave" example="examples/contactExample-1.json"><![CDATA[%dw 2.0
+
+type contactJson = {|
+  salutation: String, 
+  firstname: String, 
+  lastname: String, 
+  phone: String, 
+  email: String, 
+  functioncode: String
+|} {"example": "{\\\"salutation\\\":\\\"Mr.\\\",\\\"firstname\\\":\\\"Max\\\",\\\"lastname\\\":\\\"Muster\\\",\\\"phone\\\":\\\"0761234567\\\",\\\"email\\\":\\\"max@muster.ch\\\",\\\"functioncode\\\":\\\"Engineer\\\"}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="contactObjJson" format="json">
+      <types:shape format="weave" example="examples/contactObjExample.json"><![CDATA[%dw 2.0
+
+type contactObjJson = {|
+  ActionType: String, 
+  OrgContactId: String, 
+  OrganizationId: String, 
+  OrigSystem: Null, 
+  OrigSystemReference: Null, 
+  Comments: String, 
+  ContactNumber: String, 
+  DepartmentCode: Null, 
+  Department: Null, 
+  Title: Null, 
+  JobTitle: String, 
+  DecisionMakerFlag: String, 
+  JobTitleCode: String, 
+  ReferenceUseFlag: String, 
+  Rank: Null, 
+  PartySiteId: Null, 
+  ProgramUpdateDate: Null, 
+  CreatedByModule: String, 
+  CreatedByName: String, 
+  CreationDate: String, 
+  LastUpdateDate: String, 
+  LastUpdatedByName: String, 
+  RelationshipCode: String, 
+  RelationshipType: String, 
+  RelationshipComments: Null, 
+  StartDate: String, 
+  EndDate: String, 
+  Status: String, 
+  CommonObjId: Null, 
+  PersonProfileObj: {|
+    ActionType: String, 
+    PersonId: String, 
+    OrigSystem: Null, 
+    OrigSystemReference: Null, 
+    PartyNumber: String, 
+    ValidatedFlag: String, 
+    Status: String, 
+    CategoryCode: Null, 
+    Salutation: Null, 
+    PersonPreNameAdjunct: String, 
+    PersonFirstName: String, 
+    PersonMiddleName: Null, 
+    PersonLastName: String, 
+    PersonNameSuffix: Null, 
+    PersonTitle: Null, 
+    PersonAcademicTitle: Null, 
+    PersonPreviousLastName: Null, 
+    PersonInitials: Null, 
+    KnownAs: Null, 
+    KnownAs2: Null, 
+    KnownAs3: Null, 
+    KnownAs4: Null, 
+    KnownAs5: Null, 
+    PersonNamePhonetic: Null, 
+    PersonFirstNamePhonetic: Null, 
+    PersonLastNamePhonetic: Null, 
+    MiddleNamePhonetic: Null, 
+    TaxReference: Null, 
+    JgzzFiscalCode: Null, 
+    PersonIdenType: Null, 
+    PersonIdentifier: Null, 
+    DateOfBirth: Null, 
+    PlaceOfBirth: Null, 
+    DateOfDeath: Null, 
+    DeceasedFlag: String, 
+    Gender: Null, 
+    DeclaredEthnicity: Null, 
+    MaritalStatus: Null, 
+    MaritalStatusEffDate: Null, 
+    PersonalIncome: Null, 
+    HeadOfHouseholdFlag: String, 
+    HouseholdIncome: Null, 
+    HouseholdSize: Null, 
+    RentOwnInd: Null, 
+    LastKnownGps: Null, 
+    InternalFlag: Null, 
+    ProgramUpdateDate: Null, 
+    CreatedByModule: String, 
+    CreatedByName: String, 
+    CreationDate: String, 
+    LastUpdateDate: String, 
+    LastUpdatedByName: String, 
+    ActualContentSource: String, 
+    CommonObjId: Null
+  |}
+|} {"example": "{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"OrgContactId\\\":\\\"748832\\\",\\\"OrganizationId\\\":\\\"41895\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"Comments\\\":\\\"test2\\\",\\\"ContactNumber\\\":\\\"31958\\\",\\\"DepartmentCode\\\":null,\\\"Department\\\":null,\\\"Title\\\":null,\\\"JobTitle\\\":\\\"710-project manager\\\",\\\"DecisionMakerFlag\\\":\\\"N\\\",\\\"JobTitleCode\\\":\\\"710\\\",\\\"ReferenceUseFlag\\\":\\\"N\\\",\\\"Rank\\\":null,\\\"PartySiteId\\\":null,\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"BO_API\\\",\\\"CreatedByName\\\":\\\"ASADMIN\\\",\\\"CreationDate\\\":\\\"2020-12-21T10:27:14.0\\\",\\\"LastUpdateDate\\\":\\\"2020-12-21T10:27:14.0\\\",\\\"LastUpdatedByName\\\":\\\"ASADMIN\\\",\\\"RelationshipCode\\\":\\\"CONTACT\\\",\\\"RelationshipType\\\":\\\"CONTACT\\\",\\\"RelationshipComments\\\":null,\\\"StartDate\\\":\\\"2020-12-21T10:27:13.0\\\",\\\"EndDate\\\":\\\"4712-12-31T00:00:01.0\\\",\\\"Status\\\":\\\"A\\\",\\\"CommonObjId\\\":null,\\\"PersonProfileObj\\\":{\\\"ActionType\\\":\\\"UNCHANGED\\\",\\\"PersonId\\\":\\\"727142\\\",\\\"OrigSystem\\\":null,\\\"OrigSystemReference\\\":null,\\\"PartyNumber\\\":\\\"127826\\\",\\\"ValidatedFlag\\\":\\\"N\\\",\\\"Status\\\":\\\"A\\\",\\\"CategoryCode\\\":null,\\\"Salutation\\\":null,\\\"PersonPreNameAdjunct\\\":\\\"MR\\\",\\\"PersonFirstName\\\":\\\"First2\\\",\\\"PersonMiddleName\\\":null,\\\"PersonLastName\\\":\\\"Last2\\\",\\\"PersonNameSuffix\\\":null,\\\"PersonTitle\\\":null,\\\"PersonAcademicTitle\\\":null,\\\"PersonPreviousLastName\\\":null,\\\"PersonInitials\\\":null,\\\"KnownAs\\\":null,\\\"KnownAs2\\\":null,\\\"KnownAs3\\\":null,\\\"KnownAs4\\\":null,\\\"KnownAs5\\\":null,\\\"PersonNamePhonetic\\\":null,\\\"PersonFirstNamePhonetic\\\":null,\\\"PersonLastNamePhonetic\\\":null,\\\"MiddleNamePhonetic\\\":null,\\\"TaxReference\\\":null,\\\"JgzzFiscalCode\\\":null,\\\"PersonIdenType\\\":null,\\\"PersonIdentifier\\\":null,\\\"DateOfBirth\\\":null,\\\"PlaceOfBirth\\\":null,\\\"DateOfDeath\\\":null,\\\"DeceasedFlag\\\":\\\"N\\\",\\\"Gender\\\":null,\\\"DeclaredEthnicity\\\":null,\\\"MaritalStatus\\\":null,\\\"MaritalStatusEffDate\\\":null,\\\"PersonalIncome\\\":null,\\\"HeadOfHouseholdFlag\\\":\\\"N\\\",\\\"HouseholdIncome\\\":null,\\\"HouseholdSize\\\":null,\\\"RentOwnInd\\\":null,\\\"LastKnownGps\\\":null,\\\"InternalFlag\\\":null,\\\"ProgramUpdateDate\\\":null,\\\"CreatedByModule\\\":\\\"BO_API\\\",\\\"CreatedByName\\\":\\\"ASADMIN\\\",\\\"CreationDate\\\":\\\"2020-12-21T10:27:12.0\\\",\\\"LastUpdateDate\\\":\\\"2020-12-21T10:27:12.0\\\",\\\"LastUpdatedByName\\\":\\\"ASADMIN\\\",\\\"ActualContentSource\\\":\\\"SST\\\",\\\"CommonObjId\\\":null}}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_c9e72088-9d3c-4ddc-a7fd-d9df9046d8a5_Input-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/c9e72088-9d3c-4ddc-a7fd-d9df9046d8a5/Input-Attributes.wev" autogeneratedOrigin="967aded6-02d3-40ea-8332-6c1912c721cf"><![CDATA[%dw 2.0
+
+type auto_c9e72088_9d3c_4ddc_a7fd_d9df9046d8a5_Input_Attributes = Any {"typeAlias": "Serializable",
+"typeId": "java.io.Serializable"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_4d549e1b-cf04-4465-86de-d768097df246_Input-Payload" format="json">
+      <types:shape format="weave" example="weave/autogenerated/4d549e1b-cf04-4465-86de-d768097df246/Input-Payload.wev" autogeneratedOrigin="31970117-fddf-4d4a-bce4-f6f486ec8f97"><![CDATA[%dw 2.0
+
+type auto_4d549e1b_cf04_4465_86de_d768097df246_Input_Payload = {|
+  createQuote: Any, 
+  oebsQuoteNumber: Any, 
+  oebsQuoteUrl: Any, 
+  oebsErrorMessage: Any, 
+  oebsErpAccountNum: Any
+|}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_4d549e1b-cf04-4465-86de-d768097df246_Input-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/4d549e1b-cf04-4465-86de-d768097df246/Input-Attributes.wev" autogeneratedOrigin="31970117-fddf-4d4a-bce4-f6f486ec8f97"><![CDATA[%dw 2.0
+
+type auto_4d549e1b_cf04_4465_86de_d768097df246_Input_Attributes = {|
+  statusCode: Number, 
+  reasonPhrase: String, 
+  headers: { _?: String }
+|} {"typeAlias": "HttpResponseAttributes",
+"typeId": "org.mule.extension.http.api.HttpResponseAttributes"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_4d549e1b-cf04-4465-86de-d768097df246_Input-Variables-quote" format="java">
+      <types:shape format="weave" example="weave/autogenerated/4d549e1b-cf04-4465-86de-d768097df246/Input-Variables-quote.wev" autogeneratedOrigin="31970117-fddf-4d4a-bce4-f6f486ec8f97"><![CDATA[%dw 2.0
+
+type auto_4d549e1b_cf04_4465_86de_d768097df246_Input_Variables_quote = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_4d549e1b-cf04-4465-86de-d768097df246_Output-Payload" format="json">
+      <types:shape format="weave" example="weave/autogenerated/4d549e1b-cf04-4465-86de-d768097df246/Output-Payload.wev" autogeneratedOrigin="31970117-fddf-4d4a-bce4-f6f486ec8f97"><![CDATA[%dw 2.0
+
+type auto_4d549e1b_cf04_4465_86de_d768097df246_Output_Payload = {|
+  createQuote: Any, 
+  oebsQuoteNumber: Any, 
+  oebsQuoteUrl: Any, 
+  oebsErrorMessage: Any, 
+  oebsErpAccountNum: Any
+|}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_4d549e1b-cf04-4465-86de-d768097df246_Output-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/4d549e1b-cf04-4465-86de-d768097df246/Output-Attributes.wev" autogeneratedOrigin="31970117-fddf-4d4a-bce4-f6f486ec8f97"><![CDATA[%dw 2.0
+
+type auto_4d549e1b_cf04_4465_86de_d768097df246_Output_Attributes = {|
+  statusCode: Number, 
+  reasonPhrase: String, 
+  headers: { _?: String }
+|} {"typeAlias": "HttpResponseAttributes",
+"typeId": "org.mule.extension.http.api.HttpResponseAttributes"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_4d549e1b-cf04-4465-86de-d768097df246_Output-Variables-quote" format="java">
+      <types:shape format="weave" example="weave/autogenerated/4d549e1b-cf04-4465-86de-d768097df246/Output-Variables-quote.wev" autogeneratedOrigin="31970117-fddf-4d4a-bce4-f6f486ec8f97"><![CDATA[%dw 2.0
+
+type auto_4d549e1b_cf04_4465_86de_d768097df246_Output_Variables_quote = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Payload" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Payload.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Payload = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Attributes.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Attributes = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-primaryBillToCustAcctSiteUseObj" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Variables-primaryBillToCustAcctSiteUseObj.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Variables_primaryBillToCustAcctSiteUseObj = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-CustomerCategoryCode" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Variables-CustomerCategoryCode.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Variables_CustomerCategoryCode = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-incoTerms" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Variables-incoTerms.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Variables_incoTerms = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-PaymentTermId" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Variables-PaymentTermId.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Variables_PaymentTermId = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-rootMessage" format="java">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Variables-rootMessage.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Variables_rootMessage = {|  |} {"typeId": "org.mule.runtime.api.message.Message"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-raTerms" format="java">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Variables-raTerms.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Variables_raTerms = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-primaryShipToCustAcctSiteUseObj" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Variables-primaryShipToCustAcctSiteUseObj.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Variables_primaryShipToCustAcctSiteUseObj = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-counter" format="java">
+      <types:shape format="raml" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[#%RAML 1.0 DataType
+type: number]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-AccountObjs" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Variables-AccountObjs.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Variables_AccountObjs = Null | Array<Null>
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-creditHold" format="java">
+      <types:shape format="raml" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[#%RAML 1.0 DataType
+type: boolean]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-priceList" format="java">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Variables-priceList.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Variables_priceList = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-primaryAccountObj" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Variables-primaryAccountObj.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Variables_primaryAccountObj = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-PartySiteId" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Variables-PartySiteId.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Variables_PartySiteId = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-creditLimit" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Variables-creditLimit.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Variables_creditLimit = {|
+  creditLimit: Null, 
+  lastUpdateDate: Null
+|}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-primaryBillToCustAcctSiteObj" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Variables-primaryBillToCustAcctSiteObj.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Variables_primaryBillToCustAcctSiteObj = Null | Array<Null>
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-primaryAddress" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Variables-primaryAddress.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Variables_primaryAddress = {|
+  account_name: String, 
+  street: String, 
+  city: Any, 
+  state: Any, 
+  postalCode: Any, 
+  country: Any, 
+  PartySiteId: Null
+|}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-orgString" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Variables-orgString.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Variables_orgString = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-paymentTerms" format="java">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Input-Variables-paymentTerms.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Input_Variables_paymentTerms = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Payload" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Payload.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Payload = {|
+  ACE: Null, 
+  CPT: Null, 
+  CTO: Null
+|}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Attributes.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Attributes = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-primaryBillToCustAcctSiteUseObj" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-primaryBillToCustAcctSiteUseObj.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_primaryBillToCustAcctSiteUseObj = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-dynamicAttributes" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-dynamicAttributes.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_dynamicAttributes = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-CustomerCategoryCode" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-CustomerCategoryCode.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_CustomerCategoryCode = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-rootMessage" format="java">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-rootMessage.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_rootMessage = {|  |} {"typeId": "org.mule.runtime.api.message.Message"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-raTerms" format="java">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-raTerms.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_raTerms = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-CPT" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-CPT.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_CPT = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-primaryShipToCustAcctSiteUseObj" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-primaryShipToCustAcctSiteUseObj.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_primaryShipToCustAcctSiteUseObj = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-AccountObjs" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-AccountObjs.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_AccountObjs = Null | Array<Null>
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-creditHold" format="java">
+      <types:shape format="raml" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[#%RAML 1.0 DataType
+type: boolean]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-priceList" format="java">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-priceList.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_priceList = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-primaryAccountObj" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-primaryAccountObj.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_primaryAccountObj = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-PartySiteId" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-PartySiteId.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_PartySiteId = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-creditLimit" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-creditLimit.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_creditLimit = {|
+  creditLimit: Null, 
+  lastUpdateDate: Null
+|}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-orgString" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-orgString.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_orgString = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-paymentTerms" format="java">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-paymentTerms.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_paymentTerms = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-incoTerms" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-incoTerms.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_incoTerms = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-PaymentTermId" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-PaymentTermId.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_PaymentTermId = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-ACE" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-ACE.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_ACE = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-counter" format="java">
+      <types:shape format="raml" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[#%RAML 1.0 DataType
+type: number]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-primaryBillToCustAcctSiteObj" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-primaryBillToCustAcctSiteObj.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_primaryBillToCustAcctSiteObj = Null | Array<Null>
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-primaryAddress" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-primaryAddress.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_primaryAddress = {|
+  account_name: String, 
+  street: String, 
+  city: Any, 
+  state: Any, 
+  postalCode: Any, 
+  country: Any, 
+  PartySiteId: Null
+|}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-CTO" format="json">
+      <types:shape format="weave" example="weave/autogenerated/a39a5d55-a843-4531-95a4-b9efcf29f5c7/Output-Variables-CTO.wev" autogeneratedOrigin="08fabe2c-5d50-42ef-91cd-e38c22d15e39"><![CDATA[%dw 2.0
+
+type auto_a39a5d55_a843_4531_95a4_b9efcf29f5c7_Output_Variables_CTO = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_efc4d397-030f-4a1f-80d8-666312594b9d_Input-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/efc4d397-030f-4a1f-80d8-666312594b9d/Input-Attributes.wev" autogeneratedOrigin="5ca0598c-8f66-43c0-a667-c2162aa0e9f7"><![CDATA[%dw 2.0
+
+type auto_efc4d397_030f_4a1f_80d8_666312594b9d_Input_Attributes = Any {"typeAlias": "Serializable",
+"typeId": "java.io.Serializable"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_efc4d397-030f-4a1f-80d8-666312594b9d_Output-Payload" format="java">
+      <types:shape format="raml" autogeneratedOrigin="5ca0598c-8f66-43c0-a667-c2162aa0e9f7"><![CDATA[#%RAML 1.0 DataType
+type: boolean]]></types:shape>
+    </types:type>
+    <types:type name="auto_efc4d397-030f-4a1f-80d8-666312594b9d_Output-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/efc4d397-030f-4a1f-80d8-666312594b9d/Output-Attributes.wev" autogeneratedOrigin="5ca0598c-8f66-43c0-a667-c2162aa0e9f7"><![CDATA[%dw 2.0
+
+type auto_efc4d397_030f_4a1f_80d8_666312594b9d_Output_Attributes = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_efc4d397-030f-4a1f-80d8-666312594b9d_Output-Variables-uuid" format="java">
+      <types:shape format="raml" autogeneratedOrigin="5ca0598c-8f66-43c0-a667-c2162aa0e9f7"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="auto_bfba0c70-d621-4465-90ea-72a4ae73ab7f_Input-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/bfba0c70-d621-4465-90ea-72a4ae73ab7f/Input-Attributes.wev" autogeneratedOrigin="760ca094-c77a-4e43-b0ef-936eec47c68e"><![CDATA[%dw 2.0
+
+type auto_bfba0c70_d621_4465_90ea_72a4ae73ab7f_Input_Attributes = Any {"typeAlias": "Serializable",
+"typeId": "java.io.Serializable"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_bfba0c70-d621-4465-90ea-72a4ae73ab7f_Output-Payload" format="java">
+      <types:shape format="raml" autogeneratedOrigin="760ca094-c77a-4e43-b0ef-936eec47c68e"><![CDATA[#%RAML 1.0 DataType
+type: boolean]]></types:shape>
+    </types:type>
+    <types:type name="auto_bfba0c70-d621-4465-90ea-72a4ae73ab7f_Output-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/bfba0c70-d621-4465-90ea-72a4ae73ab7f/Output-Attributes.wev" autogeneratedOrigin="760ca094-c77a-4e43-b0ef-936eec47c68e"><![CDATA[%dw 2.0
+
+type auto_bfba0c70_d621_4465_90ea_72a4ae73ab7f_Output_Attributes = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_bfba0c70-d621-4465-90ea-72a4ae73ab7f_Output-Variables-ArticleItem" format="java">
+      <types:shape format="weave" example="weave/autogenerated/bfba0c70-d621-4465-90ea-72a4ae73ab7f/Output-Variables-ArticleItem.wev" autogeneratedOrigin="760ca094-c77a-4e43-b0ef-936eec47c68e"><![CDATA[%dw 2.0
+
+type auto_bfba0c70_d621_4465_90ea_72a4ae73ab7f_Output_Variables_ArticleItem = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_bfba0c70-d621-4465-90ea-72a4ae73ab7f_Output-Variables-bom_enabled_flag" format="json">
+      <types:shape format="weave" example="weave/autogenerated/bfba0c70-d621-4465-90ea-72a4ae73ab7f/flag.wev" autogeneratedOrigin="760ca094-c77a-4e43-b0ef-936eec47c68e"><![CDATA[%dw 2.0
+
+type auto_bfba0c70_d621_4465_90ea_72a4ae73ab7f_Output_Variables_bom_enabled_flag = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_bfba0c70-d621-4465-90ea-72a4ae73ab7f_Output-Variables-uuid" format="java">
+      <types:shape format="raml" autogeneratedOrigin="760ca094-c77a-4e43-b0ef-936eec47c68e"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="auto_bfba0c70-d621-4465-90ea-72a4ae73ab7f_Output-Variables-bomArticleItem" format="java">
+      <types:shape format="weave" example="weave/autogenerated/bfba0c70-d621-4465-90ea-72a4ae73ab7f/Output-Variables-bomArticleItem.wev" autogeneratedOrigin="760ca094-c77a-4e43-b0ef-936eec47c68e"><![CDATA[%dw 2.0
+
+type auto_bfba0c70_d621_4465_90ea_72a4ae73ab7f_Output_Variables_bomArticleItem = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_643ef6b0-7523-4d50-941a-5521f3c94c7a_Input-Payload" format="java">
+      <types:shape format="weave" example="weave/autogenerated/643ef6b0-7523-4d50-941a-5521f3c94c7a/Input-Payload.wev" autogeneratedOrigin="d0904e16-ab2c-4e68-9bb0-0e94f2056c2a"><![CDATA[%dw 2.0
+
+type auto_643ef6b0_7523_4d50_941a_5521f3c94c7a_Input_Payload = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_643ef6b0-7523-4d50-941a-5521f3c94c7a_Output-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/643ef6b0-7523-4d50-941a-5521f3c94c7a/Output-Attributes.wev" autogeneratedOrigin="d0904e16-ab2c-4e68-9bb0-0e94f2056c2a"><![CDATA[%dw 2.0
+
+type auto_643ef6b0_7523_4d50_941a_5521f3c94c7a_Output_Attributes = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_8f12f0f6-1219-4da6-afd6-7af0f2de431a_Input-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/8f12f0f6-1219-4da6-afd6-7af0f2de431a/Input-Attributes.wev" autogeneratedOrigin="90af1e29-cad2-4807-8759-460a5b306bae"><![CDATA[%dw 2.0
+
+type auto_8f12f0f6_1219_4da6_afd6_7af0f2de431a_Input_Attributes = Any {"typeAlias": "Serializable",
+"typeId": "java.io.Serializable"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_8f12f0f6-1219-4da6-afd6-7af0f2de431a_Output-Payload" format="java">
+      <types:shape format="raml" autogeneratedOrigin="90af1e29-cad2-4807-8759-460a5b306bae"><![CDATA[#%RAML 1.0 DataType
+type: boolean]]></types:shape>
+    </types:type>
+    <types:type name="auto_8f12f0f6-1219-4da6-afd6-7af0f2de431a_Output-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/8f12f0f6-1219-4da6-afd6-7af0f2de431a/Output-Attributes.wev" autogeneratedOrigin="90af1e29-cad2-4807-8759-460a5b306bae"><![CDATA[%dw 2.0
+
+type auto_8f12f0f6_1219_4da6_afd6_7af0f2de431a_Output_Attributes = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_8f12f0f6-1219-4da6-afd6-7af0f2de431a_Output-Variables-uuid" format="java">
+      <types:shape format="raml" autogeneratedOrigin="90af1e29-cad2-4807-8759-460a5b306bae"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="auto_ff6144c3-9ec5-4cdc-abba-6d941c6400d0_Input-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/ff6144c3-9ec5-4cdc-abba-6d941c6400d0/Input-Attributes.wev" autogeneratedOrigin="f2f832b6-99e3-4bb0-996f-0b9847e5eaf6"><![CDATA[%dw 2.0
+
+type auto_ff6144c3_9ec5_4cdc_abba_6d941c6400d0_Input_Attributes = Any {"typeAlias": "Serializable",
+"typeId": "java.io.Serializable"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_ff6144c3-9ec5-4cdc-abba-6d941c6400d0_Output-Payload" format="java">
+      <types:shape format="raml" autogeneratedOrigin="f2f832b6-99e3-4bb0-996f-0b9847e5eaf6"><![CDATA[#%RAML 1.0 DataType
+type: boolean]]></types:shape>
+    </types:type>
+    <types:type name="auto_ff6144c3-9ec5-4cdc-abba-6d941c6400d0_Output-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/ff6144c3-9ec5-4cdc-abba-6d941c6400d0/Output-Attributes.wev" autogeneratedOrigin="f2f832b6-99e3-4bb0-996f-0b9847e5eaf6"><![CDATA[%dw 2.0
+
+type auto_ff6144c3_9ec5_4cdc_abba_6d941c6400d0_Output_Attributes = Null
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_ff6144c3-9ec5-4cdc-abba-6d941c6400d0_Output-Variables-uuid" format="java">
+      <types:shape format="raml" autogeneratedOrigin="f2f832b6-99e3-4bb0-996f-0b9847e5eaf6"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+    <types:type name="auto_1909a9ab-d44d-43da-bd95-c7dc7725bffc_Input-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/1909a9ab-d44d-43da-bd95-c7dc7725bffc/Input-Attributes.wev" autogeneratedOrigin="31c8b9b5-d5cd-428f-850d-72296f7b8ce1"><![CDATA[%dw 2.0
+
+type auto_1909a9ab_d44d_43da_bd95_c7dc7725bffc_Input_Attributes = Any {"typeAlias": "Serializable",
+"typeId": "java.io.Serializable"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_1909a9ab-d44d-43da-bd95-c7dc7725bffc_Output-Payload" format="java">
+      <types:shape format="weave" example="weave/autogenerated/1909a9ab-d44d-43da-bd95-c7dc7725bffc/Output-Payload.wev" autogeneratedOrigin="31c8b9b5-d5cd-428f-850d-72296f7b8ce1"><![CDATA[%dw 2.0
+
+type auto_1909a9ab_d44d_43da_bd95_c7dc7725bffc_Output_Payload = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_1909a9ab-d44d-43da-bd95-c7dc7725bffc_Output-Attributes" format="java">
+      <types:shape format="weave" example="weave/autogenerated/1909a9ab-d44d-43da-bd95-c7dc7725bffc/Output-Attributes.wev" autogeneratedOrigin="31c8b9b5-d5cd-428f-850d-72296f7b8ce1"><![CDATA[%dw 2.0
+
+type auto_1909a9ab_d44d_43da_bd95_c7dc7725bffc_Output_Attributes = Null | org_mule_extension_http_api_HttpResponseAttributes
+type org_mule_extension_http_api_HttpResponseAttributes = {|
+  statusCode: Number, 
+  reasonPhrase: String, 
+  headers: { _?: String }
+|} {"typeAlias": "HttpResponseAttributes",
+"typeId": "org.mule.extension.http.api.HttpResponseAttributes"}
+
+
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_1909a9ab-d44d-43da-bd95-c7dc7725bffc_Output-Variables-bill_to" format="json">
+      <types:shape format="weave" example="weave/autogenerated/1909a9ab-d44d-43da-bd95-c7dc7725bffc/to.wev" autogeneratedOrigin="31c8b9b5-d5cd-428f-850d-72296f7b8ce1"><![CDATA[%dw 2.0
+
+type auto_1909a9ab_d44d_43da_bd95_c7dc7725bffc_Output_Variables_bill_to = Any
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_1909a9ab-d44d-43da-bd95-c7dc7725bffc_Output-Variables-uuid" format="java">
+      <types:shape format="raml" autogeneratedOrigin="31c8b9b5-d5cd-428f-850d-72296f7b8ce1"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#3e6d6aa9-6e6a-4814-8974-8c5757884fc9">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="example_organisation_service"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="input" type="example_organisation_service"/>
+        </types:variables>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#3f722426-53b1-4350-914d-d1e14e74e56a">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="forEachExample"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#4b947fdc-d12d-498b-905c-90171d26a098">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="contactObjJson"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="contactJson"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#c9e72088-9d3c-4ddc-a7fd-d9df9046d8a5">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:attributes type="auto_c9e72088-9d3c-4ddc-a7fd-d9df9046d8a5_Input-Attributes"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#4d549e1b-cf04-4465-86de-d768097df246">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="auto_4d549e1b-cf04-4465-86de-d768097df246_Input-Payload"/>
+          <types:attributes type="auto_4d549e1b-cf04-4465-86de-d768097df246_Input-Attributes"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="quote" type="auto_4d549e1b-cf04-4465-86de-d768097df246_Input-Variables-quote"/>
+        </types:variables>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="auto_4d549e1b-cf04-4465-86de-d768097df246_Output-Payload"/>
+          <types:attributes type="auto_4d549e1b-cf04-4465-86de-d768097df246_Output-Attributes"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="quote" type="auto_4d549e1b-cf04-4465-86de-d768097df246_Output-Variables-quote"/>
+        </types:variables>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#a39a5d55-a843-4531-95a4-b9efcf29f5c7">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Payload"/>
+          <types:attributes type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Attributes"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="primaryBillToCustAcctSiteUseObj" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-primaryBillToCustAcctSiteUseObj"/>
+          <types:variable name="CustomerCategoryCode" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-CustomerCategoryCode"/>
+          <types:variable name="incoTerms" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-incoTerms"/>
+          <types:variable name="PaymentTermId" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-PaymentTermId"/>
+          <types:variable name="rootMessage" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-rootMessage"/>
+          <types:variable name="raTerms" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-raTerms"/>
+          <types:variable name="primaryShipToCustAcctSiteUseObj" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-primaryShipToCustAcctSiteUseObj"/>
+          <types:variable name="counter" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-counter"/>
+          <types:variable name="AccountObjs" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-AccountObjs"/>
+          <types:variable name="creditHold" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-creditHold"/>
+          <types:variable name="priceList" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-priceList"/>
+          <types:variable name="primaryAccountObj" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-primaryAccountObj"/>
+          <types:variable name="PartySiteId" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-PartySiteId"/>
+          <types:variable name="creditLimit" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-creditLimit"/>
+          <types:variable name="primaryBillToCustAcctSiteObj" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-primaryBillToCustAcctSiteObj"/>
+          <types:variable name="primaryAddress" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-primaryAddress"/>
+          <types:variable name="orgString" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-orgString"/>
+          <types:variable name="paymentTerms" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Input-Variables-paymentTerms"/>
+        </types:variables>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Payload"/>
+          <types:attributes type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Attributes"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="primaryBillToCustAcctSiteUseObj" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-primaryBillToCustAcctSiteUseObj"/>
+          <types:variable name="dynamicAttributes" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-dynamicAttributes"/>
+          <types:variable name="CustomerCategoryCode" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-CustomerCategoryCode"/>
+          <types:variable name="rootMessage" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-rootMessage"/>
+          <types:variable name="incoTerms" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-incoTerms"/>
+          <types:variable name="PaymentTermId" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-PaymentTermId"/>
+          <types:variable name="raTerms" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-raTerms"/>
+          <types:variable name="ACE" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-ACE"/>
+          <types:variable name="CPT" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-CPT"/>
+          <types:variable name="primaryShipToCustAcctSiteUseObj" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-primaryShipToCustAcctSiteUseObj"/>
+          <types:variable name="counter" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-counter"/>
+          <types:variable name="AccountObjs" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-AccountObjs"/>
+          <types:variable name="creditHold" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-creditHold"/>
+          <types:variable name="priceList" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-priceList"/>
+          <types:variable name="primaryAccountObj" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-primaryAccountObj"/>
+          <types:variable name="PartySiteId" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-PartySiteId"/>
+          <types:variable name="creditLimit" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-creditLimit"/>
+          <types:variable name="primaryBillToCustAcctSiteObj" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-primaryBillToCustAcctSiteObj"/>
+          <types:variable name="orgString" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-orgString"/>
+          <types:variable name="primaryAddress" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-primaryAddress"/>
+          <types:variable name="paymentTerms" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-paymentTerms"/>
+          <types:variable name="CTO" type="auto_a39a5d55-a843-4531-95a4-b9efcf29f5c7_Output-Variables-CTO"/>
+        </types:variables>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#efc4d397-030f-4a1f-80d8-666312594b9d">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:attributes type="auto_efc4d397-030f-4a1f-80d8-666312594b9d_Input-Attributes"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="auto_efc4d397-030f-4a1f-80d8-666312594b9d_Output-Payload"/>
+          <types:attributes type="auto_efc4d397-030f-4a1f-80d8-666312594b9d_Output-Attributes"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="uuid" type="auto_efc4d397-030f-4a1f-80d8-666312594b9d_Output-Variables-uuid"/>
+        </types:variables>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#bfba0c70-d621-4465-90ea-72a4ae73ab7f">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:attributes type="auto_bfba0c70-d621-4465-90ea-72a4ae73ab7f_Input-Attributes"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="auto_bfba0c70-d621-4465-90ea-72a4ae73ab7f_Output-Payload"/>
+          <types:attributes type="auto_bfba0c70-d621-4465-90ea-72a4ae73ab7f_Output-Attributes"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="ArticleItem" type="auto_bfba0c70-d621-4465-90ea-72a4ae73ab7f_Output-Variables-ArticleItem"/>
+          <types:variable name="bom_enabled_flag" type="auto_bfba0c70-d621-4465-90ea-72a4ae73ab7f_Output-Variables-bom_enabled_flag"/>
+          <types:variable name="uuid" type="auto_bfba0c70-d621-4465-90ea-72a4ae73ab7f_Output-Variables-uuid"/>
+          <types:variable name="bomArticleItem" type="auto_bfba0c70-d621-4465-90ea-72a4ae73ab7f_Output-Variables-bomArticleItem"/>
+        </types:variables>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#643ef6b0-7523-4d50-941a-5521f3c94c7a">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="auto_643ef6b0-7523-4d50-941a-5521f3c94c7a_Input-Payload"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:attributes type="auto_643ef6b0-7523-4d50-941a-5521f3c94c7a_Output-Attributes"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#8f12f0f6-1219-4da6-afd6-7af0f2de431a">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:attributes type="auto_8f12f0f6-1219-4da6-afd6-7af0f2de431a_Input-Attributes"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="auto_8f12f0f6-1219-4da6-afd6-7af0f2de431a_Output-Payload"/>
+          <types:attributes type="auto_8f12f0f6-1219-4da6-afd6-7af0f2de431a_Output-Attributes"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="uuid" type="auto_8f12f0f6-1219-4da6-afd6-7af0f2de431a_Output-Variables-uuid"/>
+        </types:variables>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#ff6144c3-9ec5-4cdc-abba-6d941c6400d0">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:attributes type="auto_ff6144c3-9ec5-4cdc-abba-6d941c6400d0_Input-Attributes"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="auto_ff6144c3-9ec5-4cdc-abba-6d941c6400d0_Output-Payload"/>
+          <types:attributes type="auto_ff6144c3-9ec5-4cdc-abba-6d941c6400d0_Output-Attributes"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="uuid" type="auto_ff6144c3-9ec5-4cdc-abba-6d941c6400d0_Output-Variables-uuid"/>
+        </types:variables>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#1909a9ab-d44d-43da-bd95-c7dc7725bffc">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:attributes type="auto_1909a9ab-d44d-43da-bd95-c7dc7725bffc_Input-Attributes"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="auto_1909a9ab-d44d-43da-bd95-c7dc7725bffc_Output-Payload"/>
+          <types:attributes type="auto_1909a9ab-d44d-43da-bd95-c7dc7725bffc_Output-Attributes"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="bill_to" type="auto_1909a9ab-d44d-43da-bd95-c7dc7725bffc_Output-Variables-bill_to"/>
+          <types:variable name="uuid" type="auto_1909a9ab-d44d-43da-bd95-c7dc7725bffc_Output-Variables-uuid"/>
+        </types:variables>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#a0794b98-8e67-4688-842c-9b73ef699bec"/>
+  <types:enrichment select="#82c10b19-826f-4168-baff-b3f7b82e4640"/>
+</types:mule>
