@@ -11,136 +11,92 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
 	<flow name="wup-Item" doc:id="bfba0c70-d621-4465-90ea-72a4ae73ab7f" initialState="started">
 		<logger level="INFO" doc:name="Flow is started" doc:id="83df690e-02c0-4f35-b374-ac703cd38d92" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "item request started",&#10;	"action": "item request",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]'/>
 		<until-successful maxRetries="3" doc:name="Until Successful" doc:id="fb6c46a3-9d6d-4a3c-af92-c7fdf5b8e3b5" millisBetweenRetries="30000">
+			<ee:transform doc:name="set query params" doc:id="b6b99a38-3a52-45ed-a010-3a0230a3f890" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable resource="dwl/wup_query_params_for_article_item.dwl" variableName="queryParams" />
+				</ee:variables>
+			</ee:transform>
 			<http:request method="GET" doc:name="Request for Item" doc:id="e4e07381-c497-4bac-9c7f-3e9be94d2726" config-ref="HTTP_Request_configuration_OEBS_WUP" path="${config.path_item}" target="ArticleItem">
 			<http:body><![CDATA[#[{}]]]></http:body>
-			<http:query-params><![CDATA[#[%dw 2.0
-output application/json skipNullOn = "everywhere"
-var erpId = payload.parameterList.ERP_ID
-var erpNumber = payload.parameterList.ERP_NUMBER
-var erpInventoryOrgId = payload.parameterList.ERP_INVENTORY_ORG_ID
-var erpInventoryOrgCode = payload.parameterList.ERP_INVENTORY_ORG_CODE
----
-{
-    (ERP_ITEM_ID: erpId) if !(erpId == null or (erpId is String and erpId == "")),
-    (ERP_ITEM_NUMBER: erpNumber) if !(erpNumber == null or (erpNumber is String and erpNumber == "")),
-    (ERP_INVENTORY_ORG_ID: erpInventoryOrgId) if !(erpInventoryOrgId == null or (erpInventoryOrgId is String and erpInventoryOrgId == "")),
-    (ERP_INVENTORY_ORG_CODE: erpInventoryOrgCode) if !(erpInventoryOrgCode == null or (erpInventoryOrgCode is String and erpInventoryOrgCode == ""))
-}]]]></http:query-params>
+			<http:query-params><![CDATA[#[vars.queryParams]]]></http:query-params>
 		</http:request>
 		</until-successful>
 		<ee:transform doc:name="value from bom_enabled_flag" doc:id="ac6bef93-6670-4304-83ad-7db9127f5027" >
 			<ee:message >
 			</ee:message>
 			<ee:variables >
-				<ee:set-variable variableName="bom_enabled_flag" ><![CDATA[%dw 2.0
-output application/json
----
-vars.ArticleItem.item[0].bom_enabled_flag]]></ee:set-variable>
+				<ee:set-variable resource="dwl/wup_bom_enabled_flag.dwl" variableName="bom_enabled_flag" />
 			</ee:variables>
 		</ee:transform>
 		<ee:transform doc:name="value from planning_make_buy_code" doc:id="b3354e21-9442-4fed-b50a-e68ce04b1504">
 			<ee:message />
 			<ee:variables>
-				<ee:set-variable variableName="planning_make_buy_code"><![CDATA[%dw 2.0
-output application/json
----
-vars.ArticleItem.item[0].planning_make_buy_code default ""]]></ee:set-variable>
+				<ee:set-variable resource="dwl/wup_planning_make_buy_code.dwl" variableName="planning_make_buy_code" />
 			</ee:variables>
 		</ee:transform>
 		<ee:transform doc:name="prepare filterOrgCode" doc:id="f1102d4f-5018-4012-a9b5-a53af537b58d" >
 			<ee:message >
 			</ee:message>
 			<ee:variables >
-				<ee:set-variable variableName="filterOrgCode" ><![CDATA[%dw 2.0
-output application/json
----
-
-sizeOf(vars.ArticleItem.item filter ($.inventory_org_code == "EHQ" ))]]></ee:set-variable>
+				<ee:set-variable resource="dwl/wup_filter_org_code.dwl" variableName="filterOrgCode" />
 			</ee:variables>
 		</ee:transform>
-		<scatter-gather doc:name="Scatter-Gather" doc:id="ceb8c772-d2f5-4044-8001-9c8ba7259ce1" maxConcurrency="1">
-			<route >
-			<choice doc:name="Choice" doc:id="789b046d-2a09-4c5d-9c10-0f077b5831ca" >
-				<when expression="#[vars.filterOrgCode &gt; 0]">
-				<choice doc:name="bom_enabled_flag" doc:id="cf859572-e31e-4663-b0a4-a7c9671c2ed9">
-				<when expression='#[vars.bom_enabled_flag == "Y" and vars.planning_make_buy_code != "Buy"]'>
-					<logger level="DEBUG" doc:name="With BOM_debug" doc:id="922290d3-3dd8-4a79-bbd0-0e1280b2f7e2" message="With BOM" />
+		    <flow-ref doc:name="wup-send-to-aggregated-data" doc:id="42f26383-97f5-4ca4-8bda-7b2720555b36" name="wup-send-to-aggregated-data"/>
+		<flow-ref doc:name="wup-determine-processing-case" doc:id="a7110583-af8e-419f-a8c3-e5088853e566" name="wup-determine-processing-case"/>
+		<choice>
+        <when expression="#[vars.processingCase == 'WITH_BOM']">
+            <flow-ref name="wup-process-with-bom" doc:name="wup-process-with-bom"/>
+        </when>
+        <when expression="#[vars.processingCase == 'BUY']">
+            <flow-ref name="wup-process-buy" doc:name="wup-process-buy"/>
+        </when>
+        <when expression="#[vars.processingCase == 'WITHOUT_BOM']">
+            <flow-ref name="wup-process-without-bom" doc:name="wup-process-without-bom"/>
+        </when>
+        <otherwise>
+            <logger level="INFO" message='[wup-Item] Skipping processing for item: #[payload.parameterList.ERP_ID], case: #[vars.processingCase]' />
+        </otherwise>
+    </choice>
+		<logger level="INFO" doc:name="Item finished" doc:id="d3a6b2e7-bdc4-4417-aab2-cbf3de56f30e" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "item request finished",&#10;	"action": "item request",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]' />
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="b5974ff5-fbce-4ddd-a042-69d04a412271" >
+				<logger level="ERROR" doc:name="ERROR: item request has error" doc:id="e7d7bd09-8185-4357-bffe-44b88378f293" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "item request has error",&#10;	"action": "item request to oebs",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]' />
+				<cloudhub:create-notification domain="eao-oracle-salesforce-prod" doc:name="Create Notification" doc:id="9ec398f0-8da0-494c-841d-e57844876d0f" priority="INFO" config-ref="CloudHub_Config"/>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+	<sub-flow name="wup-determine-processing-case" doc:id="f52b9878-4ce7-4711-aeb1-9c66c66aca26">
+	  <!-- Przykład – na razie tylko EHQ, później rozbudujesz o ESY -->
+    <set-variable  value='#[if (vars.filterOrgCode default 0 == 0 )&#10;"SKIP"&#10; else if (vars.planning_make_buy_code == "Buy")&#10;"BUY"&#10; else if (vars.bom_enabled_flag == "Y")&#10;"WITH_BOM"&#10;else&#10;"WITHOUT_BOM"]' doc:name="set processingCase" variableName="processingCase"/>
+
+    <!-- Tu docelowo możesz też ustawić:
+         vars.orgToUse (EHQ/ESY)
+         vars.isDualBom (true/false) po analizie obu orgów -->
+		<logger level="INFO" doc:name="TODO choice EHQ/ESY" doc:id="7fabd71e-c1e2-4e78-86fc-5ccba44d3b66" />
+		<logger level="INFO" doc:name="TODO flag isDualBom" doc:id="7aab23d5-3863-4637-86a0-f443206411c0" />
+	</sub-flow>
+	<sub-flow name="wup-process-with-bom" doc:id="5056f21b-cf31-4c56-8ca1-5a959a96737d" >
+						<logger level="DEBUG" doc:name="With BOM_debug" doc:id="922290d3-3dd8-4a79-bbd0-0e1280b2f7e2" message="With BOM" />
 					<until-successful maxRetries="3" doc:name="Until Successful" doc:id="2c9c4ab5-744a-42db-b34a-9af26312b3c5" millisBetweenRetries="30000">
-							<http:request method="GET" doc:name="Request for BOM Item" doc:id="48077f20-89a2-4838-80b4-8b97355bd32d" config-ref="HTTP_Request_configuration_OEBS_WUP" path="${config.path_itemBom}" target="bomArticleItem">
+							<ee:transform doc:name="set query params" doc:id="a00ad7a0-bc90-42c0-a2b5-4b80d464b723" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable resource="dwl/wup_query_params_for_bom-items.dwl" variableName="queryParams" />
+				</ee:variables>
+			</ee:transform>
+			<http:request method="GET" doc:name="Request for BOM Item" doc:id="48077f20-89a2-4838-80b4-8b97355bd32d" config-ref="HTTP_Request_configuration_OEBS_WUP" path="${config.path_itemBom}" target="bomArticleItem">
 								<http:body><![CDATA[#[{}]]]></http:body>
-								<http:query-params><![CDATA[#[%dw 2.0
-output application/json skipNullOn = "everywhere"
----
-{
-	"ERP_ITEM_ID": payload.parameterList.ERP_ID,
-	"ERP_ITEM_NUMBER" : payload.parameterList.ERP_NUMBER,
-	"ERP_INVENTORY_ORG_ID": payload.parameterList.ERP_INVENTORY_ORG_ID,
-	"ERP_INVENTORY_ORG_CODE": payload.parameterList.ERP_INVENTORY_ORG_CODE
-}]]]></http:query-params>
+								<http:query-params><![CDATA[#[vars.queryParams]]]></http:query-params>
 						</http:request>
 					</until-successful>
 						<ee:transform doc:name="Transform to XML with BOM" doc:id="b819eb42-4276-4c02-a2b8-bff16ec09d21">
 					<ee:message>
 					</ee:message>
 							<ee:variables >
-								<ee:set-variable variableName="preparedArticleWithBom" ><![CDATA[%dw 2.0
-output application/xml
-
-var itemTypeMappings = {
-    "P": "1",
-    "SA": "2",
-    "FG": "2",
-    "KIT": "3",
-    "PH": "4"
-}
-
-var filteredItem = vars.ArticleItem.item filter ($.inventory_org_code == "EHQ" and not (itemTypeMappings[$.item_type_code] == null))
-
-var assembly_item = vars.bomArticleItem.assembly_item filter ($.inventory_org_code == "EHQ")
-
-fun getLastProductionDate(statusCode) =
-    if (statusCode == "Inactive") "2000.01.01" else "2999.12.31"
-
-fun getComponents(record) =
-    if ((assembly_item filter ((aItem) -> aItem.assembly_item_id == record.item_id)) != []) 
-        (assembly_item[0].components 
-         filter ((item) -> ["P","SA","FG","KIT","PH"] contains item.component_item_type_code) 
-         filter ((item) -> item.component_item_status_code != "Inactive") 
-         map ((component) -> {
-             MaterialID: component.component_item_number,
-             Quantity: component.quantity,
-             Sequence: component.sequence_number
-         }))
-    else []
-
-fun transformRecord(record) = 
-    if (getComponents(record) != []) {
-        ({
-            Article: {
-                ArticleID: record.item_number,
-                Name: record.item_description,
-                Type: if (itemTypeMappings[record.item_type_code] != null) itemTypeMappings[record.item_type_code] else "0",
-                SubType: (
-                    if (record.item_type_code == "P") "" 
-                    else if (("SA" default []) ++ ("FG" default []) contains record.item_type_code) "1" 
-                    else if (record.item_type_code == "KIT") "3" 
-                    else if (record.item_type_code == "PH") "4" 
-                    else ""
-                ),
-                TariffNo: record.customs_tariff_number,
-                NonPrefOrigin: record.country_of_origin,
-                Unit: "",
-                LastProductionDate: getLastProductionDate(record.item_status_code),
-                Component: getComponents(record)
-            }
-        })
-    } else null
-
----
-{
-    root: (filteredItem map (record) -> 
-        transformRecord(record)) filter ($ != null)
-}]]></ee:set-variable>
+				<ee:set-variable resource="dwl/wup_prepared_article_with_bom.dwl" variableName="preparedArticleWithBom" />
 							</ee:variables>
 				</ee:transform>
 				<choice doc:name="Choice" doc:id="b135a445-dec1-4fcd-bc59-85f2e1305838">
@@ -148,21 +104,7 @@ fun transformRecord(record) =
 								<ee:transform doc:name="Get MaterialIDs from payload" doc:id="291c35a6-951b-4b5f-a197-7295f781890a" >
 									<ee:message />
 									<ee:variables >
-										<ee:set-variable variableName="materialIDs" ><![CDATA[%dw 2.0
-output application/json
-var validComponentTypes = ["P", "SA", "FG", "KIT", "PH"]
-var filteredComponents = (vars.bomArticleItem.assembly_item[0].components filter ((component) -> 
-    (validComponentTypes contains component.component_item_type_code) and (component.component_item_status_code != "Inactive"))
-) map {
-    MaterialID: $.component_item_number,
-    MaterialType: $.component_item_type_code
-}
----
-if (sizeOf(filteredComponents) > 0)
-    filteredComponents
-else
-    null
-]]></ee:set-variable>
+						<ee:set-variable resource="dwl/wup_material_ids.dwl" variableName="materialIDs" />
 									</ee:variables>
 								</ee:transform>
 								<choice doc:name="Choice" doc:id="776c8d25-faeb-4431-8840-412d32804695" >
@@ -174,45 +116,28 @@ else
 											<choice doc:name="Choice" doc:id="501b7b60-63b6-4c22-99a0-fbbe5f197ea6" >
 												<when expression='#[["SA", "FG"] contains payload.MaterialType]' >
 													<until-successful maxRetries="3" doc:name="Until Successful" doc:id="4ec61d4d-2346-4112-a688-875c8dc69984" millisBetweenRetries="30000">
-														<http:request method="GET" doc:name="Request for BOM Item" doc:id="a40fdd73-1da8-4954-a37b-d21afba53af2" config-ref="HTTP_Request_configuration_OEBS_WUP" path="${config.path_itemBom}" target="bomOfBomArticleItem">
+														<ee:transform doc:name="set query params" doc:id="49870952-108e-4d79-bd3e-4a327eaba569" >
+											<ee:message >
+											</ee:message>
+											<ee:variables >
+												<ee:set-variable resource="dwl/wup_query_params_for_bom-items_2.dwl" variableName="queryParams" />
+											</ee:variables>
+										</ee:transform>
+										<http:request method="GET" doc:name="Request for BOM Item" doc:id="a40fdd73-1da8-4954-a37b-d21afba53af2" config-ref="HTTP_Request_configuration_OEBS_WUP" path="${config.path_itemBom}" target="bomOfBomArticleItem">
 														<http:body><![CDATA[#[{}]]]></http:body>
-														<http:query-params><![CDATA[#[output application/json skipNullOn = "everywhere"
----
-{
-	"ERP_ITEM_NUMBER" : vars.currentMaterialID,
-	"ERP_INVENTORY_ORG_ID": vars.originalPayload.parameterList.ERP_INVENTORY_ORG_ID
-}]]]></http:query-params>
+														<http:query-params><![CDATA[#[vars.queryParams]]]></http:query-params>
 													</http:request>
 													</until-successful>
 													<ee:transform doc:name="Count BOM components" doc:id="00c5663e-39bd-4a80-8e66-5b7c3c788f3b" >
 														<ee:message >
-															<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
-var validComponentTypes = ["P", "SA", "FG", "KIT", "PH"]
----
-{
-    MaterialID: vars.currentMaterialID,
-    numberOfComponents: sizeOf(
-        vars.bomOfBomArticleItem.assembly_item[0].components filter ((component) -> 
-            (validComponentTypes contains component.component_item_type_code) and (component.component_item_status_code != "Inactive")
-        )
-    )
-}
-]]></ee:set-payload>
+											<ee:set-payload resource="dwl/wup_count_bom_components.dwl" />
 														</ee:message>
 													</ee:transform>
 												</when>
 												<otherwise >
 													<ee:transform doc:name="materialID without BOM" doc:id="572b06af-6916-4ef9-b39b-e024d53bb892" >
 														<ee:message >
-															<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
----
-{
-    MaterialID: vars.currentMaterialID,
-    numberOfComponents: "1"
-}
-]]></ee:set-payload>
+											<ee:set-payload resource="dwl/wup_material_without_bom.dwl" />
 														</ee:message>
 													</ee:transform>
 												</otherwise>
@@ -249,138 +174,54 @@ root: {
 									</otherwise>
 								</choice>
 							</when>
-							<otherwise >
-								<logger level="INFO" doc:name="Logger" doc:id="03f866ad-dfad-4437-a613-db562fe50460" message="#['Item number ' ++ vars.ArticleItem.item[0].item_number ++ ' not written into XML because BOM was empty!']" />
-							</otherwise>
-						</choice>
-			</when>
-			<when expression='#[vars.planning_make_buy_code == "Buy"]'>
-						<logger level="DEBUG" doc:name="BUY item" doc:id="02aecf70-6f60-4c1e-8f66-2880eca7b5bb" message="BUY item" />
+				</choice>
+	</sub-flow>
+	<sub-flow name="wup-process-buy" doc:id="93181171-6913-4588-a5e8-9256b9ccfc87" >
+	<logger level="DEBUG" doc:name="BUY item" doc:id="02aecf70-6f60-4c1e-8f66-2880eca7b5bb" message="BUY item" />
 						<ee:transform doc:name="Transform to XML without BOM" doc:id="511529b7-2c57-48f7-885d-2ab4f9aa89c2" >
 							<ee:message >
-								<ee:set-payload ><![CDATA[%dw 2.0
-output application/xml
-
-fun getLastProductionDate(statusCode) =
-    if (statusCode == "Inactive") "2000.01.01" else "2999.12.31"
-    
-var itemTypeMappings = {
-    "P": "1",
-    "SA": "1",
-    "FG": "1",
-    "KIT": "1",
-    "PH": "1"
-}
-
-var filteredItems = vars.ArticleItem.item filter ($.inventory_org_code == "EHQ" and itemTypeMappings[$.item_type_code] != null)
-
----
-{
-    root: {
-        (filteredItems map (item) -> {
-            Article: {
-                ArticleID: item.item_number,
-                Name: item.item_description,
-                Type: itemTypeMappings[item.item_type_code],
-                SubType: "",
-                TariffNo: item.customs_tariff_number,
-                NonPrefOrigin: item.country_of_origin,
-                Unit: item.primary_uom_code,
-                LastProductionDate: getLastProductionDate(item.item_status_code)
-            }
-        })
-    }
-}]]></ee:set-payload>
+				<ee:set-payload resource="dwl/wup_create_process_buy.dwl" />
 							</ee:message>
 						</ee:transform>
 						<set-variable value="#[uuid()]" doc:name="Generate UUID for foreignkey message into vars.uuid" doc:id="a110c83c-bb77-42f5-aeca-d24b37133b57" variableName="uuid" />
 						<smb:file-write doc:name="File Write" doc:id="58fd2b11-402d-494e-bfb0-80b222ead250" config-ref="SMB_Connector_Config" fileName='#[vars.uuid ++ ".xml"]' dirName="${soap.dmItem}" />
-					</when>
-					<otherwise>
-				<logger level="DEBUG" doc:name="Without BOM" doc:id="3d0d6e3e-b27d-4399-a4d1-40d0100811a0" message="without BOM" />
+		<logger level="INFO" doc:name="TODO logic" doc:id="cd07023e-25d0-4900-9e84-a0bf88ffd4ae" />
+					
+	</sub-flow>
+	<sub-flow name="wup-process-without-bom" doc:id="8d8d631b-547e-4923-853e-5eda4ef5a06c" >
+	<logger level="DEBUG" doc:name="Without BOM" doc:id="3d0d6e3e-b27d-4399-a4d1-40d0100811a0" message="without BOM" />
 						<ee:transform doc:name="Transform to xml without bom" doc:id="8c52e0f1-388d-49e0-a2b4-4b99344fb6e1">
 					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
-output application/xml
-
-fun getLastProductionDate(statusCode) =
-    if (statusCode == "Inactive") "2000.01.01" else "2999.12.31"
-var itemTypeMappings = {
-    "P": "1",
-    "SA": "2",
-    "FG": "2",
-    "KIT": "2",
-    "PH": "4"
-}
-var filteredItem = vars.ArticleItem.item filter ($.inventory_org_code == "EHQ" and not (itemTypeMappings[$.item_type_code] == null))
-
-fun mapItemType(itemType: String): String =
-    if (itemTypeMappings[itemType] != null) itemTypeMappings[itemType] else "0" 
----
-{
-    root: {
-        (filteredItem map ((record, index) -> {
-            Article: {
-                ArticleID: record.item_number,
-                Name: record.item_description,
-                Type: if (itemTypeMappings[record.item_type_code] != null) itemTypeMappings[record.item_type_code] else "0",
-               SubType: (
-                   if (record.item_type_code == "P") "" 
-                   else if (("SA" default [])  contains record.item_type_code) "1" 
-                   else if (record.item_type_code == "KIT") "3" 
-                    else if (record.item_type_code == "PH") "4" 
-                    else if (record.item_type_code == "FG") "1" 
-                    else ""
-                ),
-                TariffNo: record.customs_tariff_number,
-                NonPrefOrigin: record.country_of_origin,
-                Unit: record.primary_uom_code,
-                LastProductionDate: getLastProductionDate(record.item_status_code)
-            }
-        }))
-    }
-}]]></ee:set-payload>
+				<ee:set-payload resource="dwl/wup_create_process_without_bom.dwl" />
 					</ee:message>
 				</ee:transform>
 				<set-variable value="#[uuid()]" doc:name="Generate UUID for foreignkey message into vars.uuid" doc:id="39ba66f0-fde7-44f0-84b1-b0f4e6f58956" variableName="uuid" />
 				<smb:file-write doc:name="File Write" doc:id="b6595eed-9a48-4e5b-99c1-49393e7c849f" dirName="${soap.dmItem}" fileName='#[vars.uuid ++ ".xml"]' config-ref="SMB_Connector_Config" />
-			</otherwise>
-		</choice>
-			</when>
-			<otherwise >
-				<logger level="DEBUG" doc:name="Debug Logger" doc:id="d9ae8955-23ec-461e-a0c3-e42a146a5ff8" message="Invertory org_code is not correct"/>
-			</otherwise>
-		</choice>
-		</route>
-		<route >
-				<try doc:name="Try" doc:id="123adae6-63a1-424a-8f5d-5399b4652ef0" >
-					<http:request method="POST" doc:name="Request to eao-p-aggregated-data" doc:id="eb97c39d-5fbb-46ad-b259-9896bd6f5643" config-ref="HTTP_Request_config_aggregatedData" path="${aggregateddata.pathitem}" responseTimeout="60000">
+		<logger level="INFO" doc:name="TODO logic" doc:id="13585a43-12e2-4b8f-8b02-49c01698bc3a" />
+			
+	</sub-flow>
+	<sub-flow name="wup-send-to-aggregated-data" doc:id="68adb61f-dbc3-477d-85cf-b44e7e9d39f6" >
+	<try doc:name="Try" doc:id="123adae6-63a1-424a-8f5d-5399b4652ef0" >
+					<ee:transform doc:name="set headers" doc:id="8f7f2f2d-0d47-4cb5-b081-d1af21a7a13f" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable resource="dwl/wup_headers_eao_aggregated_data.dwl" variableName="headers" />
+				</ee:variables>
+			</ee:transform>
+			<http:request method="POST" doc:name="Request to eao-p-aggregated-data" doc:id="eb97c39d-5fbb-46ad-b259-9896bd6f5643" config-ref="HTTP_Request_config_aggregatedData" path="${aggregateddata.pathitem}" responseTimeout="60000">
 			<http:body><![CDATA[#[vars.ArticleItem.item]]]></http:body>
-			<http:headers><![CDATA[#[output application/java
----
-{
-	
-	"fromOracleContact" : "true",
-	"fromSf" : "true",
-	"client_Id": "b8bbbaad359c4dc986f272c4f61628fd",
-	"client_secret": "519bdFA88bbb452f942FAf1aB8eC473a"
-}]]]></http:headers>
+			<http:headers><![CDATA[#[vars.headers]]]></http:headers>
 		</http:request>
 					<logger level="INFO" doc:name="Request sent to aggregated data" doc:id="21bbe3aa-9423-4c25-873c-6ad4c1eff889" message="Item sent to aggregated data" />
 					<error-handler >
 						<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="28d63bfb-7cc0-4afb-8eca-f0e10d85abbf" >
-							<logger level="ERROR" doc:name="ERROR: item request has error" doc:id="ed1d9525-c5d3-43e9-bc98-50a9b02ed933" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "ERROR: Item NOT sent to aggregated data",&#10;	"action": "item request to oebs",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]' />
+							<logger level="ERROR" doc:name="ERROR: item request has error" doc:id="ed1d9525-c5d3-43e9-bc98-50a9b02ed933" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "ERROR: Item NOT sent to aggregated data",&#10;	"action": "item request to oebs", //ask, "item request to aggregated data"&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]' />
 						</on-error-continue>
 					</error-handler>
 				</try>
-			</route>
-		</scatter-gather>
-		<logger level="INFO" doc:name="Item finished" doc:id="d3a6b2e7-bdc4-4417-aab2-cbf3de56f30e" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "item request finished",&#10;	"action": "item request",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]'/>
-		<error-handler >
-			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="b5974ff5-fbce-4ddd-a042-69d04a412271" >
-				<logger level="ERROR" doc:name="ERROR: item request has error" doc:id="e7d7bd09-8185-4357-bffe-44b88378f293" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "item request has error",&#10;	"action": "item request to oebs",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]' />
-				<cloudhub:create-notification domain="eao-oracle-salesforce-prod" doc:name="Create Notification" doc:id="9ec398f0-8da0-494c-841d-e57844876d0f" priority="INFO" config-ref="CloudHub_Config"/>
-			</on-error-propagate>
-		</error-handler>
-	</flow>
+	</sub-flow>
+	<sub-flow name="wup-send-alert-email" doc:id="690cecee-6002-49f5-aeae-f1d6a34369d1" >
+		<logger level="INFO" doc:name="TODO send email " doc:id="c76ecc09-807e-4ac4-8019-92baf26b64c1" />
+	</sub-flow>
 </mule>
