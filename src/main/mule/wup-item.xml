@@ -23,23 +23,12 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
 			<http:query-params><![CDATA[#[vars.queryParams]]]></http:query-params>
 		</http:request>
 		</until-successful>
-		<ee:transform doc:name="value from bom_enabled_flag" doc:id="ac6bef93-6670-4304-83ad-7db9127f5027" >
+		<ee:transform doc:name="set flags" doc:id="ac6bef93-6670-4304-83ad-7db9127f5027" >
 			<ee:message >
 			</ee:message>
 			<ee:variables >
 				<ee:set-variable resource="dwl/wup_bom_enabled_flag.dwl" variableName="bom_enabled_flag" />
-			</ee:variables>
-		</ee:transform>
-		<ee:transform doc:name="value from planning_make_buy_code" doc:id="b3354e21-9442-4fed-b50a-e68ce04b1504">
-			<ee:message />
-			<ee:variables>
 				<ee:set-variable resource="dwl/wup_planning_make_buy_code.dwl" variableName="planning_make_buy_code" />
-			</ee:variables>
-		</ee:transform>
-		<ee:transform doc:name="prepare filterOrgCode" doc:id="f1102d4f-5018-4012-a9b5-a53af537b58d" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
 				<ee:set-variable resource="dwl/wup_filter_org_code.dwl" variableName="filterOrgCode" />
 			</ee:variables>
 		</ee:transform>
@@ -209,7 +198,7 @@ root: {
 					<ee:set-variable resource="dwl/wup_headers_eao_aggregated_data.dwl" variableName="headers" />
 				</ee:variables>
 			</ee:transform>
-			<http:request method="POST" doc:name="Request to eao-p-aggregated-data" doc:id="eb97c39d-5fbb-46ad-b259-9896bd6f5643" config-ref="HTTP_Request_config_aggregatedData" path="${aggregateddata.pathitem}" responseTimeout="60000">
+			<http:request method="POST" doc:name="Request to eao-p-aggregated-data" doc:id="eb97c39d-5fbb-46ad-b259-9896bd6f5643" config-ref="HTTP_Request_config_aggregatedData" path="${aggregateddata.pathitem}" responseTimeout="60000" target="eaoAggregatedData">
 			<http:body><![CDATA[#[vars.ArticleItem.item]]]></http:body>
 			<http:headers><![CDATA[#[vars.headers]]]></http:headers>
 		</http:request>
