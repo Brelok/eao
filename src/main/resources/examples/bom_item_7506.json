@@ -1,0 +1,208 @@
+{
+"assembly_item":[
+{
+"assembly_item_id":7506
+,"assembly_item_type_code":"SA"
+,"assembly_item_type":"Subassembly"
+,"assembly_item_number":"704.101.0"
+,"assembly_item_status_code":"Active"
+,"assembly_item_status_meaning":"All functions enabled"
+,"inventory_org_id":81
+,"inventory_org_code":"EHQ"
+,"operating_unit_org_id":81
+,"operating_unit_org_code":"EHQ"
+,"components":[
+{
+"component_item_id":44197
+,"component_item_type_code":"P"
+,"component_item_type":"Procured part"
+,"component_item_number":"0440.800.3"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":1
+,"quantity":1
+}
+,{
+"component_item_id":70043
+,"component_item_type_code":"P"
+,"component_item_type":"Procured part"
+,"component_item_number":"0512.110.6"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":2
+,"quantity":1
+}
+,{
+"component_item_id":32164
+,"component_item_type_code":"P"
+,"component_item_type":"Procured part"
+,"component_item_number":"0519.055.1"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":3
+,"quantity":1
+}
+,{
+"component_item_id":69802
+,"component_item_type_code":"SA"
+,"component_item_type":"Subassembly"
+,"component_item_number":"0519058.0"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":4
+,"quantity":1
+}
+,{
+"component_item_id":21777
+,"component_item_type_code":"P"
+,"component_item_type":"Procured part"
+,"component_item_number":"1900.1002519"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":5
+,"quantity":1
+}
+,{
+"component_item_id":57874
+,"component_item_type_code":"P"
+,"component_item_type":"Procured part"
+,"component_item_number":"1900.1003017"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":6
+,"quantity":1
+}
+,{
+"component_item_id":18240
+,"component_item_type_code":"P"
+,"component_item_type":"Procured part"
+,"component_item_number":"704.600.1"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":7
+,"quantity":1
+}
+,{
+"component_item_id":32835
+,"component_item_type_code":"P"
+,"component_item_type":"Procured part"
+,"component_item_number":"704.950.5"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":8
+,"quantity":1
+}
+,{
+"component_item_id":22276
+,"component_item_type_code":"DOC"
+,"component_item_type":"Document"
+,"component_item_number":"2-9026155"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":9
+,"quantity":1
+}
+,{
+"component_item_id":69585
+,"component_item_type_code":"DOC"
+,"component_item_type":"Document"
+,"component_item_number":"19003005752"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":10
+,"quantity":1
+}
+,{
+"component_item_id":70884
+,"component_item_type_code":"DOC"
+,"component_item_type":"Document"
+,"component_item_number":"X49031646"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":11
+,"quantity":1
+}
+,{
+"component_item_id":666911
+,"component_item_type_code":"EQ"
+,"component_item_type":"Equipment"
+,"component_item_number":"0460.0000"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":12
+,"quantity":1
+}
+,{
+"component_item_id":2157060
+,"component_item_type_code":"DOC"
+,"component_item_type":"Document"
+,"component_item_number":"19003080927"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":13
+,"quantity":1
+}
+,{
+"component_item_id":40915
+,"component_item_type_code":"EQ"
+,"component_item_type":"Equipment"
+,"component_item_number":"516930126"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":14
+,"quantity":1
+}
+,{
+"component_item_id":51342
+,"component_item_type_code":"EQ"
+,"component_item_type":"Equipment"
+,"component_item_number":"536930127"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":15
+,"quantity":1
+}
+,{
+"component_item_id":28775
+,"component_item_type_code":"EQ"
+,"component_item_type":"Equipment"
+,"component_item_number":"526926048.1"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":16
+,"quantity":1
+}
+,{
+"component_item_id":32908
+,"component_item_type_code":"EQ"
+,"component_item_type":"Equipment"
+,"component_item_number":"516928472.1"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":17
+,"quantity":1
+}
+,{
+"component_item_id":39952
+,"component_item_type_code":"EQ"
+,"component_item_type":"Equipment"
+,"component_item_number":"546926284.1"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":18
+,"quantity":1
+}
+,{
+"component_item_id":31369
+,"component_item_type_code":"DOC"
+,"component_item_type":"Document"
+,"component_item_number":"P41101851"
+,"component_item_status_code":"Active"
+,"component_item_status_meaning":"All functions enabled"
+,"sequence_number":19
+,"quantity":1
+}
+]
+}
+]
+}

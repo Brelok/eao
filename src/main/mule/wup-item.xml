@@ -30,9 +30,10 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
 				<ee:set-variable resource="dwl/wup_bom_enabled_flag.dwl" variableName="bom_enabled_flag" />
 				<ee:set-variable resource="dwl/wup_planning_make_buy_code.dwl" variableName="planning_make_buy_code" />
 				<ee:set-variable resource="dwl/wup_filter_org_code.dwl" variableName="filterOrgCode" />
+				<ee:set-variable resource="dwl/wup_has_any_item.dwl" variableName="hasAnyItem" />
 			</ee:variables>
 		</ee:transform>
-		    <flow-ref doc:name="wup-send-to-aggregated-data" doc:id="42f26383-97f5-4ca4-8bda-7b2720555b36" name="wup-send-to-aggregated-data"/>
+		    <!-- [STUDIO:"wup-send-to-aggregated-data"]<flow-ref doc:name="wup-send-to-aggregated-data" doc:id="42f26383-97f5-4ca4-8bda-7b2720555b36" name="wup-send-to-aggregated-data" target="eaoAggregatedOutput"/> [STUDIO] -->
 		<flow-ref doc:name="wup-determine-processing-case" doc:id="a7110583-af8e-419f-a8c3-e5088853e566" name="wup-determine-processing-case"/>
 		<choice>
         <when expression="#[vars.processingCase == 'WITH_BOM']">
@@ -58,11 +59,17 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
 	</flow>
 	<sub-flow name="wup-determine-processing-case" doc:id="f52b9878-4ce7-4711-aeb1-9c66c66aca26">
 	  <!-- Przykład – na razie tylko EHQ, później rozbudujesz o ESY -->
-    <set-variable  value='#[if (vars.filterOrgCode default 0 == 0 )&#10;"SKIP"&#10; else if (vars.planning_make_buy_code == "Buy")&#10;"BUY"&#10; else if (vars.bom_enabled_flag == "Y")&#10;"WITH_BOM"&#10;else&#10;"WITHOUT_BOM"]' doc:name="set processingCase" variableName="processingCase"/>
 
     <!-- Tu docelowo możesz też ustawić:
          vars.orgToUse (EHQ/ESY)
          vars.isDualBom (true/false) po analizie obu orgów -->
+		<ee:transform doc:name="Set processing case" doc:id="dba0e5af-91f1-4a99-b10e-6db186c3ddbb" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable resource="dwl/wup_processing_case.dwl" variableName="processingCase" />
+			</ee:variables>
+		</ee:transform>
 		<logger level="INFO" doc:name="TODO choice EHQ/ESY" doc:id="7fabd71e-c1e2-4e78-86fc-5ccba44d3b66" />
 		<logger level="INFO" doc:name="TODO flag isDualBom" doc:id="7aab23d5-3863-4637-86a0-f443206411c0" />
 	</sub-flow>
@@ -81,7 +88,20 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
 								<http:query-params><![CDATA[#[vars.queryParams]]]></http:query-params>
 						</http:request>
 					</until-successful>
-						<ee:transform doc:name="Transform to XML with BOM" doc:id="b819eb42-4276-4c02-a2b8-bff16ec09d21">
+<ee:transform doc:name="Decide orgToUse (EHQ/ESY)" doc:id="4d251901-0dc3-4ba3-b509-0a71306eb199">
+    <ee:message />
+    <ee:variables>
+				<ee:set-variable resource="dwl/wup_org_to_use.dwl" variableName="orgToUse" />
+				<ee:set-variable resource="dwl/wup_is_dual_bom.dwl" variableName="isDualBom" />
+    </ee:variables>
+</ee:transform>
+
+		<choice doc:name="Check send email" doc:id="bab108b2-e686-4464-97d5-10a8b9de9ae6" >
+			<when expression="#[vars.isDualBom]">
+				<flow-ref doc:name="wup-send-alert-email" doc:id="22c6b22c-c92a-40aa-9343-e366f13bbd05" name="wup-send-alert-email"/>
+			</when>
+		</choice>
+		<ee:transform doc:name="Transform to XML with BOM" doc:id="b819eb42-4276-4c02-a2b8-bff16ec09d21">
 					<ee:message>
 					</ee:message>
 							<ee:variables >
@@ -135,24 +155,7 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
 										</foreach>
 										<ee:transform doc:name="Generate Payload without empty components" doc:id="6af7cb7b-2261-4ab3-8900-5904654c907b">
 									<ee:message>
-										<ee:set-payload><![CDATA[%dw 2.0
-output application/xml
-
-var ignoreData = (vars.results default [] filter (!isEmpty($.numberOfComponents))).MaterialID default []
-
-fun removenull(data) = data default [] filter (
-  if (!isEmpty([$.MaterialID] -- vars.results.MaterialID)) true
-  else ignoreData contains $.MaterialID
-)
----
-root: {
-  Article: (vars.preparedArticleWithBom.root.*Article) map ((article) ->
-	if (!isEmpty(removenull(article.*Component)))
-	((article - "Component") ++ { Component: removenull(article.*Component) })
-	else
-	(article - "Component")
-  )
-}]]></ee:set-payload>
+								<ee:set-payload resource="dwl/wup_payload_without_empty_components.dwl" />
 									</ee:message>
 								</ee:transform>
 										<set-variable value="#[uuid()]" doc:name="Generate UUID for foreignkey message into vars.uuid" doc:id="b569dad8-6852-4be1-a754-027c905972a9" variableName="uuid" />

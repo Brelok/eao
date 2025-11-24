@@ -1062,6 +1062,83 @@ type auto_f52b9878_4ce7_4711_aeb1_9c66c66aca26_Output_Variables_bomArticleItem =
 
 ]]></types:shape>
     </types:type>
+    <types:type name="ebs_object" format="json">
+      <types:shape format="weave" example="examples/example_oebs122_jms_event.json"><![CDATA[%dw 2.0
+
+type ebs_object = {|
+  sendDate: String, 
+  errorMessage: String, 
+  receiveDate: String, 
+  toAgent: Null, 
+  priority: Number {"typeId": "int"}, 
+  eventData: String, 
+  eventKey: String, 
+  errorSubscription: String, 
+  fromAgent: {|
+    system: String, 
+    name: String
+  |}, 
+  parameterList: {|
+    ERP_ID: String, 
+    ERP_INVENTORY_ORG_ID: String, 
+    ERP_NUMBER: String, 
+    ERP_ORG_ID: String, 
+    "#CURRENT_PHASE": String
+  |}, 
+  eventName: String, 
+  correlationId: Null, 
+  errorStack: Null
+|} {"example": "{\\\"sendDate\\\":\\\" '2025-11-18 10:26:20.0'\\\",\\\"errorMessage\\\":\\\" APPS_NE.WF_PARAMETER_LIST_T(APPS_NE.WF_PARAMETER_T('ERP_ID'\\\",\\\"receiveDate\\\":\\\" '2025-11-18 10:26:48.0'\\\",\\\"toAgent\\\":null,\\\"priority\\\":50,\\\"eventData\\\":\\\"<default><event_name>eao.formatwup.customer<\\/event_name><event_key>8094609<\\/event_key><\\/default>\\\",\\\"eventKey\\\":\\\"8094612\\\",\\\"errorSubscription\\\":\\\"\\\u001d\\\u0007|\uFFFDx\uFFFD\\\u001e\\\u0012\uFFFDc(\\\u0001\uFFFD\\\\n\\\u001cF\\\",\\\"fromAgent\\\":{\\\"system\\\":\\\"EAOT16.PROD.IS.EAO.COM\\\",\\\"name\\\":\\\"WF_BPEL_QAGENT\\\"},\\\"parameterList\\\":{\\\"ERP_ID\\\":\\\"39898\\\",\\\"ERP_INVENTORY_ORG_ID\\\":\\\"86\\\",\\\"ERP_NUMBER\\\":\\\"129032113.1\\\",\\\"ERP_ORG_ID\\\":\\\"NULL\\\",\\\"#CURRENT_PHASE\\\":\\\"100\\\"},\\\"eventName\\\":\\\"eao.formatwup.item\\\",\\\"correlationId\\\":null,\\\"errorStack\\\":null}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="article_item" format="json">
+      <types:shape format="weave" example="examples/article_item-1.json"><![CDATA[%dw 2.0
+
+type article_item = {|
+  item: Array<{|    inventory_org_id: Number {"typeId": "int"},     inventory_org_code: String,     operating_unit_org_id: Number {"typeId": "int"},     operating_unit_org_code: String,     item_id: Number {"typeId": "int"},     item_number: String,     item_description: String,     item_type_code: String,     item_type: String,     customs_tariff_number: String,     shelf_life_days: Number {"typeId": "int"},     primary_uom_code: String,     item_status_code: String,     inventory_item_flag: String,     revision_qty_control_code: Number {"typeId": "int"},     revision_qty_control: String,     stock_enabled_flag: String,     reservable_type_code: Number {"typeId": "int"},     reservable_type: String,     mtl_transactions_enabled_flag: String,     lot_expiration_shelf_life_code: Number {"typeId": "int"},     lot_expiration_shelf_life: String,     lot_control_code: Number {"typeId": "int"},     lot_control: String,     locator_control_code: Number {"typeId": "int"},     locator_control: String,     serial_number_control_code: Number {"typeId": "int"},     serial_number_control: String,     bom_item_type_code: Number {"typeId": "int"},     bom_item_type: String,     purchasing_item_flag: String,     purchasing_enabled_flag: String,     bom_enabled_flag: String,     customer_order_flag: String,     internal_order_flag: String,     customer_order_enabled_flag: String,     internal_order_enabled_flag: String,     shippable_item_flag: String,     so_transactions_flag: String,     returnable_flag: String,     invoiceable_item_flag: String,     invoice_enabled_flag: String,     recipe_enabled_flag: String,     planning_make_buy_code: String,     product_type: String,     series: String,     function: String  |}>
+|} {"example": "{\\\"item\\\":[{\\\"inventory_org_id\\\":181,\\\"inventory_org_code\\\":\\\"ESC\\\",\\\"operating_unit_org_id\\\":86,\\\"operating_unit_org_code\\\":\\\"ESA\\\",\\\"item_id\\\":19005,\\\"item_number\\\":\\\"229032067.3\\\",\\\"item_description\\\":\\\"Vorsatzgehaeuse schwarz BR84\\\",\\\"item_type_code\\\":\\\"P\\\",\\\"item_type\\\":\\\"Procured part\\\",\\\"customs_tariff_number\\\":\\\"85389091\\\",\\\"shelf_life_days\\\":5000,\\\"primary_uom_code\\\":\\\"ea\\\",\\\"item_status_code\\\":\\\"Active\\\",\\\"inventory_item_flag\\\":\\\"Y\\\",\\\"revision_qty_control_code\\\":2,\\\"revision_qty_control\\\":\\\"Not Revision Controlled\\\",\\\"stock_enabled_flag\\\":\\\"Y\\\",\\\"reservable_type_code\\\":1,\\\"reservable_type\\\":\\\"Reservable\\\",\\\"mtl_transactions_enabled_flag\\\":\\\"Y\\\",\\\"lot_expiration_shelf_life_code\\\":2,\\\"lot_expiration_shelf_life\\\":\\\"Shelf Life Days\\\",\\\"lot_control_code\\\":2,\\\"lot_control\\\":\\\"Full Control\\\",\\\"locator_control_code\\\":1,\\\"locator_control\\\":\\\"No Control\\\",\\\"serial_number_control_code\\\":1,\\\"serial_number_control\\\":\\\"No Control\\\",\\\"bom_item_type_code\\\":4,\\\"bom_item_type\\\":\\\"Standard\\\",\\\"purchasing_item_flag\\\":\\\"Y\\\",\\\"purchasing_enabled_flag\\\":\\\"Y\\\",\\\"bom_enabled_flag\\\":\\\"Y\\\",\\\"customer_order_flag\\\":\\\"Y\\\",\\\"internal_order_flag\\\":\\\"Y\\\",\\\"customer_order_enabled_flag\\\":\\\"Y\\\",\\\"internal_order_enabled_flag\\\":\\\"Y\\\",\\\"shippable_item_flag\\\":\\\"Y\\\",\\\"so_transactions_flag\\\":\\\"Y\\\",\\\"returnable_flag\\\":\\\"Y\\\",\\\"invoiceable_item_flag\\\":\\\"Y\\\",\\\"invoice_enabled_flag\\\":\\\"Y\\\",\\\"recipe_enabled_flag\\\":\\\"Y\\\",\\\"planning_make_buy_code\\\":\\\"Buy\\\",\\\"product_type\\\":\\\"SC\\\",\\\"series\\\":\\\"184\\\",\\\"function\\\":\\\"-\\\"}]}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_690cecee-6002-49f5-aeae-f1d6a34369d1_Input-Variables-orgToUse" format="json">
+      <types:shape format="weave" example="weave/autogenerated/690cecee-6002-49f5-aeae-f1d6a34369d1/Input-Variables-orgToUse.wev" autogeneratedOrigin="22c6b22c-c92a-40aa-9343-e366f13bbd05"><![CDATA[%dw 2.0
+
+type auto_690cecee_6002_49f5_aeae_f1d6a34369d1_Input_Variables_orgToUse = String
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_690cecee-6002-49f5-aeae-f1d6a34369d1_Input-Variables-isDualBom" format="json">
+      <types:shape format="weave" example="weave/autogenerated/690cecee-6002-49f5-aeae-f1d6a34369d1/Input-Variables-isDualBom.wev" autogeneratedOrigin="22c6b22c-c92a-40aa-9343-e366f13bbd05"><![CDATA[%dw 2.0
+
+type auto_690cecee_6002_49f5_aeae_f1d6a34369d1_Input_Variables_isDualBom = Boolean
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_690cecee-6002-49f5-aeae-f1d6a34369d1_Output-Variables-orgToUse" format="json">
+      <types:shape format="weave" example="weave/autogenerated/690cecee-6002-49f5-aeae-f1d6a34369d1/Output-Variables-orgToUse.wev" autogeneratedOrigin="22c6b22c-c92a-40aa-9343-e366f13bbd05"><![CDATA[%dw 2.0
+
+type auto_690cecee_6002_49f5_aeae_f1d6a34369d1_Output_Variables_orgToUse = String
+
+]]></types:shape>
+    </types:type>
+    <types:type name="auto_690cecee-6002-49f5-aeae-f1d6a34369d1_Output-Variables-isDualBom" format="json">
+      <types:shape format="weave" example="weave/autogenerated/690cecee-6002-49f5-aeae-f1d6a34369d1/Output-Variables-isDualBom.wev" autogeneratedOrigin="22c6b22c-c92a-40aa-9343-e366f13bbd05"><![CDATA[%dw 2.0
+
+type auto_690cecee_6002_49f5_aeae_f1d6a34369d1_Output_Variables_isDualBom = Boolean
+
+]]></types:shape>
+    </types:type>
+    <types:type name="article_item_bom" format="json">
+      <types:shape format="weave" example="examples/bom_item_7506.json"><![CDATA[%dw 2.0
+
+type article_item_bom = {|
+  assembly_item: Array<{|    assembly_item_id: Number {"typeId": "int"},     assembly_item_type_code: String,     assembly_item_type: String,     assembly_item_number: String,     assembly_item_status_code: String,     assembly_item_status_meaning: String,     inventory_org_id: Number {"typeId": "int"},     inventory_org_code: String,     operating_unit_org_id: Number {"typeId": "int"},     operating_unit_org_code: String,     components: Array<{|      component_item_id: Number {"typeId": "int"},       component_item_type_code: String,       component_item_type: String,       component_item_number: String,       component_item_status_code: String,       component_item_status_meaning: String,       sequence_number: Number {"typeId": "int"},       quantity: Number {"typeId": "int"}    |}>
+  |}>
+|} {"example": "{\\\"assembly_item\\\":[{\\\"assembly_item_id\\\":7506,\\\"assembly_item_type_code\\\":\\\"SA\\\",\\\"assembly_item_type\\\":\\\"Subassembly\\\",\\\"assembly_item_number\\\":\\\"704.101.0\\\",\\\"assembly_item_status_code\\\":\\\"Active\\\",\\\"assembly_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"inventory_org_id\\\":81,\\\"inventory_org_code\\\":\\\"EHQ\\\",\\\"operating_unit_org_id\\\":81,\\\"operating_unit_org_code\\\":\\\"EHQ\\\",\\\"components\\\":[{\\\"component_item_id\\\":44197,\\\"component_item_type_code\\\":\\\"P\\\",\\\"component_item_type\\\":\\\"Procured part\\\",\\\"component_item_number\\\":\\\"0440.800.3\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":1,\\\"quantity\\\":1},{\\\"component_item_id\\\":70043,\\\"component_item_type_code\\\":\\\"P\\\",\\\"component_item_type\\\":\\\"Procured part\\\",\\\"component_item_number\\\":\\\"0512.110.6\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":2,\\\"quantity\\\":1},{\\\"component_item_id\\\":32164,\\\"component_item_type_code\\\":\\\"P\\\",\\\"component_item_type\\\":\\\"Procured part\\\",\\\"component_item_number\\\":\\\"0519.055.1\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":3,\\\"quantity\\\":1},{\\\"component_item_id\\\":69802,\\\"component_item_type_code\\\":\\\"SA\\\",\\\"component_item_type\\\":\\\"Subassembly\\\",\\\"component_item_number\\\":\\\"0519058.0\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":4,\\\"quantity\\\":1},{\\\"component_item_id\\\":21777,\\\"component_item_type_code\\\":\\\"P\\\",\\\"component_item_type\\\":\\\"Procured part\\\",\\\"component_item_number\\\":\\\"1900.1002519\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":5,\\\"quantity\\\":1},{\\\"component_item_id\\\":57874,\\\"component_item_type_code\\\":\\\"P\\\",\\\"component_item_type\\\":\\\"Procured part\\\",\\\"component_item_number\\\":\\\"1900.1003017\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":6,\\\"quantity\\\":1},{\\\"component_item_id\\\":18240,\\\"component_item_type_code\\\":\\\"P\\\",\\\"component_item_type\\\":\\\"Procured part\\\",\\\"component_item_number\\\":\\\"704.600.1\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":7,\\\"quantity\\\":1},{\\\"component_item_id\\\":32835,\\\"component_item_type_code\\\":\\\"P\\\",\\\"component_item_type\\\":\\\"Procured part\\\",\\\"component_item_number\\\":\\\"704.950.5\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":8,\\\"quantity\\\":1},{\\\"component_item_id\\\":22276,\\\"component_item_type_code\\\":\\\"DOC\\\",\\\"component_item_type\\\":\\\"Document\\\",\\\"component_item_number\\\":\\\"2-9026155\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":9,\\\"quantity\\\":1},{\\\"component_item_id\\\":69585,\\\"component_item_type_code\\\":\\\"DOC\\\",\\\"component_item_type\\\":\\\"Document\\\",\\\"component_item_number\\\":\\\"19003005752\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":10,\\\"quantity\\\":1},{\\\"component_item_id\\\":70884,\\\"component_item_type_code\\\":\\\"DOC\\\",\\\"component_item_type\\\":\\\"Document\\\",\\\"component_item_number\\\":\\\"X49031646\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":11,\\\"quantity\\\":1},{\\\"component_item_id\\\":666911,\\\"component_item_type_code\\\":\\\"EQ\\\",\\\"component_item_type\\\":\\\"Equipment\\\",\\\"component_item_number\\\":\\\"0460.0000\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":12,\\\"quantity\\\":1},{\\\"component_item_id\\\":2157060,\\\"component_item_type_code\\\":\\\"DOC\\\",\\\"component_item_type\\\":\\\"Document\\\",\\\"component_item_number\\\":\\\"19003080927\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":13,\\\"quantity\\\":1},{\\\"component_item_id\\\":40915,\\\"component_item_type_code\\\":\\\"EQ\\\",\\\"component_item_type\\\":\\\"Equipment\\\",\\\"component_item_number\\\":\\\"516930126\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":14,\\\"quantity\\\":1},{\\\"component_item_id\\\":51342,\\\"component_item_type_code\\\":\\\"EQ\\\",\\\"component_item_type\\\":\\\"Equipment\\\",\\\"component_item_number\\\":\\\"536930127\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":15,\\\"quantity\\\":1},{\\\"component_item_id\\\":28775,\\\"component_item_type_code\\\":\\\"EQ\\\",\\\"component_item_type\\\":\\\"Equipment\\\",\\\"component_item_number\\\":\\\"526926048.1\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":16,\\\"quantity\\\":1},{\\\"component_item_id\\\":32908,\\\"component_item_type_code\\\":\\\"EQ\\\",\\\"component_item_type\\\":\\\"Equipment\\\",\\\"component_item_number\\\":\\\"516928472.1\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":17,\\\"quantity\\\":1},{\\\"component_item_id\\\":39952,\\\"component_item_type_code\\\":\\\"EQ\\\",\\\"component_item_type\\\":\\\"Equipment\\\",\\\"component_item_number\\\":\\\"546926284.1\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":18,\\\"quantity\\\":1},{\\\"component_item_id\\\":31369,\\\"component_item_type_code\\\":\\\"DOC\\\",\\\"component_item_type\\\":\\\"Document\\\",\\\"component_item_number\\\":\\\"P41101851\\\",\\\"component_item_status_code\\\":\\\"Active\\\",\\\"component_item_status_meaning\\\":\\\"All functions enabled\\\",\\\"sequence_number\\\":19,\\\"quantity\\\":1}]}]}"}
+
+]]></types:shape>
+    </types:type>
   </types:catalog>
   <types:enrichment select="#3e6d6aa9-6e6a-4814-8974-8c5757884fc9">
     <types:processor-declaration>
@@ -1329,6 +1406,67 @@ type auto_f52b9878_4ce7_4711_aeb1_9c66c66aca26_Output_Variables_bomArticleItem =
           <types:variable name="bomArticleItem" type="auto_f52b9878-4ce7-4711-aeb1-9c66c66aca26_Output-Variables-bomArticleItem"/>
         </types:variables>
       </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#98bcabb0-7d47-4e91-a3f8-4baa89458d56">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="ebs_object"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#b6b99a38-3a52-45ed-a010-3a0230a3f890">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="ebs_object"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#ac6bef93-6670-4304-83ad-7db9127f5027">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="article_item"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#a00ad7a0-bc90-42c0-a2b5-4b80d464b723">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="article_item"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#690cecee-6002-49f5-aeae-f1d6a34369d1">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:variables>
+          <types:variable name="orgToUse" type="auto_690cecee-6002-49f5-aeae-f1d6a34369d1_Input-Variables-orgToUse"/>
+          <types:variable name="isDualBom" type="auto_690cecee-6002-49f5-aeae-f1d6a34369d1_Input-Variables-isDualBom"/>
+        </types:variables>
+      </types:input-event>
+      <types:output-event>
+        <types:variables>
+          <types:variable name="orgToUse" type="auto_690cecee-6002-49f5-aeae-f1d6a34369d1_Output-Variables-orgToUse"/>
+          <types:variable name="isDualBom" type="auto_690cecee-6002-49f5-aeae-f1d6a34369d1_Output-Variables-isDualBom"/>
+        </types:variables>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#4d251901-0dc3-4ba3-b509-0a71306eb199">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="article_item_bom"/>
+        </types:message>
+      </types:input-event>
     </types:processor-declaration>
   </types:enrichment>
 </types:mule>

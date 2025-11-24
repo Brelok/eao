@@ -1,0 +1,53 @@
+{
+"item":[
+{
+"inventory_org_id":181
+,"inventory_org_code":"ESC"
+,"operating_unit_org_id":86
+,"operating_unit_org_code":"ESA"
+,"item_id":19005
+,"item_number":"229032067.3"
+,"item_description":"Vorsatzgehaeuse schwarz BR84"
+,"item_type_code":"P"
+,"item_type":"Procured part"
+,"customs_tariff_number":"85389091"
+,"shelf_life_days":5000
+,"primary_uom_code":"ea"
+,"item_status_code":"Active"
+,"inventory_item_flag":"Y"
+,"revision_qty_control_code":2
+,"revision_qty_control":"Not Revision Controlled"
+,"stock_enabled_flag":"Y"
+,"reservable_type_code":1
+,"reservable_type":"Reservable"
+,"mtl_transactions_enabled_flag":"Y"
+,"lot_expiration_shelf_life_code":2
+,"lot_expiration_shelf_life":"Shelf Life Days"
+,"lot_control_code":2
+,"lot_control":"Full Control"
+,"locator_control_code":1
+,"locator_control":"No Control"
+,"serial_number_control_code":1
+,"serial_number_control":"No Control"
+,"bom_item_type_code":4
+,"bom_item_type":"Standard"
+,"purchasing_item_flag":"Y"
+,"purchasing_enabled_flag":"Y"
+,"bom_enabled_flag":"Y"
+,"customer_order_flag":"Y"
+,"internal_order_flag":"Y"
+,"customer_order_enabled_flag":"Y"
+,"internal_order_enabled_flag":"Y"
+,"shippable_item_flag":"Y"
+,"so_transactions_flag":"Y"
+,"returnable_flag":"Y"
+,"invoiceable_item_flag":"Y"
+,"invoice_enabled_flag":"Y"
+,"recipe_enabled_flag":"Y"
+,"planning_make_buy_code":"Buy"
+,"product_type":"SC"
+,"series":"184"
+,"function":"-"
+}
+]
+}

@@ -3,6 +3,9 @@
     "3e6d6aa9-6e6a-4814-8974-8c5757884fc9": {
       "attributes": "sample_data/httprequestattributes.dwl"
     },
-    "aa170b57-2e19-4982-a839-2e3d54443d58": {}
+    "aa170b57-2e19-4982-a839-2e3d54443d58": {},
+    "98bcabb0-7d47-4e91-a3f8-4baa89458d56": {
+      "payload": "sample_data/event.dwl"
+    }
   }
 }

@@ -8,10 +8,14 @@ var itemTypeMappings = {
     "KIT": "3",
     "PH": "4"
 }
+//setup earlier -> "Decide Org to use"
+var org = (vars.orgToUse default "EHQ")
 
-var filteredItem = vars.ArticleItem.item filter ($.inventory_org_code == "EHQ" and not (itemTypeMappings[$.item_type_code] == null))
+//change here, use var org during filter
+var filteredItem = (vars.ArticleItem.item default []) filter ($.inventory_org_code == org and not (itemTypeMappings[$.item_type_code] == null))
 
-var assembly_item = vars.bomArticleItem.assembly_item filter ($.inventory_org_code == "EHQ")
+//change here, use var org during filter
+var assembly_item = (vars.bomArticleItem.assembly_item default []) filter ($.inventory_org_code == org)
 
 fun getLastProductionDate(statusCode) =
     if (statusCode == "Inactive") "2000.01.01" else "2999.12.31"

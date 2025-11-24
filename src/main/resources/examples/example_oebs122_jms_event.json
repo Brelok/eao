@@ -1,22 +1,24 @@
 {
-  "sendDate": "2022-03-30T17:30:02",
-  "errorMessage": null,
-  "receiveDate": "2022-03-30T17:31:25",
+  "sendDate": " '2025-11-18 10:26:20.0'",
+  "errorMessage": " APPS_NE.WF_PARAMETER_LIST_T(APPS_NE.WF_PARAMETER_T('ERP_ID'",
+  "receiveDate": " '2025-11-18 10:26:48.0'",
   "toAgent": null,
   "priority": 50,
-  "eventData": "<default><event_name>oracle.apps.ar.hz.OrgCustBO.update</event_name><event_key>oracle.apps.ar.hz.OrgCustBO.update271706</event_key></default>",
-  "errorSubscription": "\ufffd\u0000G\ufffd\ufffd \u0003\ufffd\ufffdT\u0000\u001b!\ufffd&\u0010",
-  "eventKey": "oracle.apps.ar.hz.OrgCustBO.update271706",
-  "eventName": "oracle.apps.ar.hz.OrgCustBO.update",
+  "eventData": "<default><event_name>eao.formatwup.customer</event_name><event_key>8094609</event_key></default>",
+  "eventKey": "8094612",
+  "errorSubscription": "\u001d\u0007|\ufffdx\ufffd\u001e\u0012\ufffdc(\u0001\ufffd\n\u001cF",
   "fromAgent": {
-    "system": "EAOT16.PRIMUS-SOLUTIONS.DE",
+    "system": "EAOT16.PROD.IS.EAO.COM",
     "name": "WF_BPEL_QAGENT"
   },
   "parameterList": {
-    "CDH_EVENT_ID": "271706",
-    "Q_CORRELATION_ID": "oracle.apps.ar.hz.OrgCustBO.update",
+    "ERP_ID": "39898",
+    "ERP_INVENTORY_ORG_ID": "86",
+    "ERP_NUMBER": "129032113.1",
+    "ERP_ORG_ID": "NULL",
     "#CURRENT_PHASE": "100"
   },
+  "eventName": "eao.formatwup.item",
   "correlationId": null,
   "errorStack": null
 }
