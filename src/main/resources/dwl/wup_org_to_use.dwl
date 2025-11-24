@@ -2,7 +2,7 @@
 output application/json
 
 fun bomForOrg(orgCode) =
-    (payload.assembly_item default [])
+    (vars.bomArticleItem.assembly_item default [])
         filter ((a) -> a.inventory_org_code == orgCode)
 
 fun hasValidBom(boms) =

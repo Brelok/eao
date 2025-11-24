@@ -33,7 +33,7 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
 				<ee:set-variable resource="dwl/wup_has_any_item.dwl" variableName="hasAnyItem" />
 			</ee:variables>
 		</ee:transform>
-		    <!-- [STUDIO:"wup-send-to-aggregated-data"]<flow-ref doc:name="wup-send-to-aggregated-data" doc:id="42f26383-97f5-4ca4-8bda-7b2720555b36" name="wup-send-to-aggregated-data" target="eaoAggregatedOutput"/> [STUDIO] -->
+		    <flow-ref doc:name="wup-send-to-aggregated-data" doc:id="42f26383-97f5-4ca4-8bda-7b2720555b36" name="wup-send-to-aggregated-data" target="eaoAggregatedOutput"/>
 		<flow-ref doc:name="wup-determine-processing-case" doc:id="a7110583-af8e-419f-a8c3-e5088853e566" name="wup-determine-processing-case"/>
 		<choice>
         <when expression="#[vars.processingCase == 'WITH_BOM']">
@@ -70,8 +70,6 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
 				<ee:set-variable resource="dwl/wup_processing_case.dwl" variableName="processingCase" />
 			</ee:variables>
 		</ee:transform>
-		<logger level="INFO" doc:name="TODO choice EHQ/ESY" doc:id="7fabd71e-c1e2-4e78-86fc-5ccba44d3b66" />
-		<logger level="INFO" doc:name="TODO flag isDualBom" doc:id="7aab23d5-3863-4637-86a0-f443206411c0" />
 	</sub-flow>
 	<sub-flow name="wup-process-with-bom" doc:id="5056f21b-cf31-4c56-8ca1-5a959a96737d" >
 						<logger level="DEBUG" doc:name="With BOM_debug" doc:id="922290d3-3dd8-4a79-bbd0-0e1280b2f7e2" message="With BOM" />
@@ -98,8 +96,12 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
 
 		<choice doc:name="Check send email" doc:id="bab108b2-e686-4464-97d5-10a8b9de9ae6" >
 			<when expression="#[vars.isDualBom]">
+				<logger level="INFO" doc:name="Logger email" doc:id="6347e232-f930-44da-bbee-ba5079a12138" message="The emal will be send, is dualBOM."/>
 				<flow-ref doc:name="wup-send-alert-email" doc:id="22c6b22c-c92a-40aa-9343-e366f13bbd05" name="wup-send-alert-email"/>
 			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger no email" doc:id="ed015901-93c9-4c33-b0d3-3d6d2e23d423" message="No need to send an email, org = #[vars.orgToUse]"/>
+			</otherwise>
 		</choice>
 		<ee:transform doc:name="Transform to XML with BOM" doc:id="b819eb42-4276-4c02-a2b8-bff16ec09d21">
 					<ee:message>
