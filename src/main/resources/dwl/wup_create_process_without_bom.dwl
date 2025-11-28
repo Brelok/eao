@@ -1,4 +1,5 @@
 %dw 2.0
+import modules::functions
 output application/xml
 
 fun getLastProductionDate(statusCode) =
@@ -10,7 +11,8 @@ var itemTypeMappings = {
     "KIT": "2",
     "PH": "4"
 }
-var filteredItem = vars.ArticleItem.item filter ($.inventory_org_code == "EHQ" and not (itemTypeMappings[$.item_type_code] == null))
+//add filter about internalMovements at the end
+var filteredItem = vars.ArticleItem.item filter ($.inventory_org_code == "EHQ" and not (itemTypeMappings[$.item_type_code] == null)) filter ((item) -> !functions::isInternalMovement(item))
 
 fun mapItemType(itemType: String): String =
     if (itemTypeMappings[itemType] != null) itemTypeMappings[itemType] else "0" 

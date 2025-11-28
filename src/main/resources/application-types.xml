@@ -1469,4 +1469,22 @@ type article_item_bom = {|
       </types:input-event>
     </types:processor-declaration>
   </types:enrichment>
+  <types:enrichment select="#4b07be67-c542-414e-aab9-fc337f81e059">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="ebs_object"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#7712d76d-7334-4473-841f-77ff826423ff">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="article_item"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
 </types:mule>

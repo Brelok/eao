@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub"
-	xmlns:smb="http://www.mulesoft.org/schema/mule/smb"
-	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:outlook365="http://www.mulesoft.org/schema/mule/outlook365" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub"
+	xmlns:smb="http://www.mulesoft.org/schema/mule/smb" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/smb http://www.mulesoft.org/schema/mule/smb/current/mule-smb.xsd
 http://www.mulesoft.org/schema/mule/cloudhub http://www.mulesoft.org/schema/mule/cloudhub/current/mule-cloudhub.xsd
-http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mule/outlook365/current/mule-outlook365.xsd">
 	<flow name="wup-Item" doc:id="bfba0c70-d621-4465-90ea-72a4ae73ab7f" initialState="started">
 		<logger level="INFO" doc:name="Flow is started" doc:id="83df690e-02c0-4f35-b374-ac703cd38d92" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "item request started",&#10;	"action": "item request",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]'/>
+		<logger level="INFO"
+        message='Filter enabled: #[p("internal.movements.filter.enabled") default false], flag.values=#[p("internal.movements.flag.values") default ""]' doc:name="internalMovements"/>
 		<until-successful maxRetries="3" doc:name="Until Successful" doc:id="fb6c46a3-9d6d-4a3c-af92-c7fdf5b8e3b5" millisBetweenRetries="30000">
 			<ee:transform doc:name="set query params" doc:id="b6b99a38-3a52-45ed-a010-3a0230a3f890" >
 				<ee:message >
@@ -93,7 +96,6 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
 				<ee:set-variable resource="dwl/wup_is_dual_bom.dwl" variableName="isDualBom" />
     </ee:variables>
 </ee:transform>
-
 		<choice doc:name="Check send email" doc:id="bab108b2-e686-4464-97d5-10a8b9de9ae6" >
 			<when expression="#[vars.isDualBom]">
 				<logger level="INFO" doc:name="Logger email" doc:id="6347e232-f930-44da-bbee-ba5079a12138" message="The emal will be send, is dualBOM."/>
@@ -179,7 +181,6 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
 						</ee:transform>
 						<set-variable value="#[uuid()]" doc:name="Generate UUID for foreignkey message into vars.uuid" doc:id="a110c83c-bb77-42f5-aeca-d24b37133b57" variableName="uuid" />
 						<smb:file-write doc:name="File Write" doc:id="58fd2b11-402d-494e-bfb0-80b222ead250" config-ref="SMB_Connector_Config" fileName='#[vars.uuid ++ ".xml"]' dirName="${soap.dmItem}" />
-		<logger level="INFO" doc:name="TODO logic" doc:id="cd07023e-25d0-4900-9e84-a0bf88ffd4ae" />
 					
 	</sub-flow>
 	<sub-flow name="wup-process-without-bom" doc:id="8d8d631b-547e-4923-853e-5eda4ef5a06c" >
@@ -191,7 +192,6 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
 				</ee:transform>
 				<set-variable value="#[uuid()]" doc:name="Generate UUID for foreignkey message into vars.uuid" doc:id="39ba66f0-fde7-44f0-84b1-b0f4e6f58956" variableName="uuid" />
 				<smb:file-write doc:name="File Write" doc:id="b6595eed-9a48-4e5b-99c1-49393e7c849f" dirName="${soap.dmItem}" fileName='#[vars.uuid ++ ".xml"]' config-ref="SMB_Connector_Config" />
-		<logger level="INFO" doc:name="TODO logic" doc:id="13585a43-12e2-4b8f-8b02-49c01698bc3a" />
 			
 	</sub-flow>
 	<sub-flow name="wup-send-to-aggregated-data" doc:id="68adb61f-dbc3-477d-85cf-b44e7e9d39f6" >
@@ -216,6 +216,24 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
 				</try>
 	</sub-flow>
 	<sub-flow name="wup-send-alert-email" doc:id="690cecee-6002-49f5-aeae-f1d6a34369d1" >
-		<logger level="INFO" doc:name="TODO send email " doc:id="c76ecc09-807e-4ac4-8019-92baf26b64c1" />
+		<try doc:name="Try" doc:id="4ef9b9df-d4d7-4e16-8069-ba0de8a1ff5b" >
+		
+			<ee:transform doc:name="Prepare payload" doc:id="7712d76d-7334-4473-841f-77ff826423ff">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable resource="dwl/wup_payload_email.dwl" variableName="payloadEmail" />
+			</ee:variables>
+		</ee:transform>
+			<outlook365:send-mail doc:name="Send mail about dualBom" doc:id="41d786ca-4dfd-49b5-90d8-66240316790d" config-ref="Outlook365_Outlook365_Config" userId="#[p('m365.user-id')]" >
+				<outlook365:message ><![CDATA[#[vars.payloadEmail]]]></outlook365:message>
+			</outlook365:send-mail>
+			<logger level="INFO" doc:name="Email ok" doc:id="58157cd6-d88c-4c85-b1e2-3385b71eeb83" message="Email has been sent to #[p('m365.emailTest')]"/>
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="04f5548e-9c24-4602-a07a-2b3635c2914f" >
+					<logger level="ERROR" doc:name="ERROR: email not send" doc:id="f556e209-50b2-476f-bbb7-99ace4dff445" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "ERROR: Email not send",&#10;	"action": "sending email", &#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]' />
+				</on-error-continue>
+			</error-handler>
+		</try>
 	</sub-flow>
 </mule>

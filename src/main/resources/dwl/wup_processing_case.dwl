@@ -8,9 +8,9 @@ var bomEnabled = vars.bom_enabled_flag default ""
 ---
 if (!hasAnyItem)
   "SKIP"
+else if (bomEnabled == "Y" and planning != "Buy")
+    "WITH_BOM"
 else if (planning == "Buy")
-  "BUY"
-else if (bomEnabled == "Y")
-  "WITH_BOM"
+    "BUY"
 else
   "WITHOUT_BOM"

@@ -1,5 +1,6 @@
 %dw 2.0
-output application/xml
+import modules::functions
+output application/json
 
 var itemTypeMappings = {
     "P": "1",
@@ -11,8 +12,8 @@ var itemTypeMappings = {
 //setup earlier -> "Decide Org to use"
 var org = (vars.orgToUse default "EHQ")
 
-//change here, use var org during filter
-var filteredItem = (vars.ArticleItem.item default []) filter ($.inventory_org_code == org and not (itemTypeMappings[$.item_type_code] == null))
+//change here, use var org during filter and add extra filter at the end (internalMovements)
+var filteredItem = (vars.ArticleItem.item default []) filter ($.inventory_org_code == org and not (itemTypeMappings[$.item_type_code] == null)) filter ((item) -> !functions::isInternalMovement(item)) 
 
 //change here, use var org during filter
 var assembly_item = (vars.bomArticleItem.assembly_item default []) filter ($.inventory_org_code == org)
@@ -56,7 +57,8 @@ fun transformRecord(record) =
     } else null
 
 ---
-{
-    root: (filteredItem map (record) -> 
-        transformRecord(record)) filter ($ != null)
-}
+//{
+//    root: (filteredItem map (record) -> 
+//        transformRecord(record)) filter ($ != null)
+//}
+filteredItem
