@@ -14,7 +14,7 @@ var itemTypeMappings = {
 }
 
 //add filter about internalMovements at the end
-var filteredItems = vars.ArticleItem.item filter ($.inventory_org_code == "EHQ" and itemTypeMappings[$.item_type_code] != null) filter ((item) -> !functions::isInternalMovement(item)) 
+var filteredItems = vars.ArticleItem.item filter ($.inventory_org_code == "EHQ" and itemTypeMappings[$.item_type_code] != null) filter ((item) -> !functions::isInternalMovementItem(item)) 
 
 ---
 {

@@ -12,7 +12,7 @@ var itemTypeMappings = {
     "PH": "4"
 }
 //add filter about internalMovements at the end
-var filteredItem = vars.ArticleItem.item filter ($.inventory_org_code == "EHQ" and not (itemTypeMappings[$.item_type_code] == null)) filter ((item) -> !functions::isInternalMovement(item))
+var filteredItem = vars.ArticleItem.item filter ($.inventory_org_code == "EHQ" and not (itemTypeMappings[$.item_type_code] == null)) filter ((item) -> !functions::isInternalMovementItem(item))
 
 fun mapItemType(itemType: String): String =
     if (itemTypeMappings[itemType] != null) itemTypeMappings[itemType] else "0" 

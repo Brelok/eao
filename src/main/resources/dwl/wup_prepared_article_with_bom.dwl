@@ -13,7 +13,7 @@ var itemTypeMappings = {
 var org = (vars.orgToUse default "EHQ")
 
 //change here, use var org during filter and add extra filter at the end (internalMovements)
-var filteredItem = (vars.ArticleItem.item default []) filter ($.inventory_org_code == org and not (itemTypeMappings[$.item_type_code] == null)) filter ((item) -> !functions::isInternalMovement(item)) 
+var filteredItem = (vars.ArticleItem.item default []) filter ($.inventory_org_code == org and not (itemTypeMappings[$.item_type_code] == null)) filter ((item) -> !functions::isInternalMovementItem(item)) 
 
 //change here, use var org during filter
 var assembly_item = (vars.bomArticleItem.assembly_item default []) filter ($.inventory_org_code == org)
