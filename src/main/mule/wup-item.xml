@@ -105,6 +105,12 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 				<logger level="INFO" doc:name="Logger no email" doc:id="ed015901-93c9-4c33-b0d3-3d6d2e23d423" message="No need to send an email, org = #[vars.orgToUse]"/>
 			</otherwise>
 		</choice>
+		<choice doc:name="Case 3: No BOM with components in EHQ/ESY" doc:id="4eee8224-a5f7-4d86-a20e-a532ec1298a9" >
+			<when expression='#[vars.orgToUse == "NONE"]'>
+				<logger level="INFO" doc:name="Logger ORG is NONE" doc:id="4da9e95d-c5dc-45d9-b10c-a472200197c0" message="Item #[vars.ArticleItem.item[0].item_number] has no BOM with components in EHQ nor ESY. Fallback to trading goods from EHQ."/>
+				<flow-ref doc:name="wup-process-buy" doc:id="7b55a2d1-afd6-451f-b52d-11c34accf08d" name="wup-process-buy"/>
+			</when>
+		</choice>
 		<ee:transform doc:name="Transform to XML with BOM" doc:id="b819eb42-4276-4c02-a2b8-bff16ec09d21">
 					<ee:message>
 					</ee:message>
@@ -184,7 +190,8 @@ vars.preparedArticleWithBom[0] ++ {"root": "testActiveSuper"}]]></ee:set-variabl
 	</sub-flow>
 	<sub-flow name="wup-process-buy" doc:id="93181171-6913-4588-a5e8-9256b9ccfc87" >
 	<logger level="DEBUG" doc:name="BUY item" doc:id="02aecf70-6f60-4c1e-8f66-2880eca7b5bb" message="BUY item" />
-						<ee:transform doc:name="Transform to XML without BOM" doc:id="511529b7-2c57-48f7-885d-2ab4f9aa89c2" >
+						<logger level="INFO" doc:name="Details" doc:id="ce8947fa-7c14-4b84-b983-935d3fa98b19" message="Processing item #[vars.ArticleItem.item[0].item_number] as Trading Goods (EHQ only). Case: #[vars.processingCase] orgToUseItem=EHQ'"/>
+		<ee:transform doc:name="Transform to XML without BOM" doc:id="511529b7-2c57-48f7-885d-2ab4f9aa89c2" >
 							<ee:message >
 				<ee:set-payload resource="dwl/wup_create_process_buy.dwl" />
 							</ee:message>

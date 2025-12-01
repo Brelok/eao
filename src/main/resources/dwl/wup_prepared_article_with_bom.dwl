@@ -1,4 +1,6 @@
 %dw 2.0
+/*Modify org, we are using variable that we created earlier and based on this we're modifying two functions
+*/
 import modules::functions
 output application/json
 
@@ -23,9 +25,7 @@ fun getLastProductionDate(statusCode) =
 
 fun getComponents(record) =
     if ((assembly_item filter ((aItem) -> aItem.assembly_item_id == record.item_id)) != []) 
-        (assembly_item[0].components 
-         filter ((item) -> ["P","SA","FG","KIT","PH"] contains item.component_item_type_code) 
-         filter ((item) -> item.component_item_status_code != "Inactive") 
+		(functions::filterBomComponents(assembly_item[0].components)
          map ((component) -> {
              MaterialID: component.component_item_number,
              Quantity: component.quantity,

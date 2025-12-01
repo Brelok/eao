@@ -6,10 +6,7 @@
 output application/java
 import modules::functions
 var components = (vars.bomOfBomArticleItem.assembly_item[0].components default [])
-var filteredComponents = components
-        filter ((c) -> ["P","SA","FG","KIT","PH"] contains (c.component_item_type_code default ""))
-        filter ((c) -> c.component_item_status_code != "Inactive")
-        filter ((c) -> not functions::isInternalMovementComponent(c))
+var filteredComponents = functions::filterBomComponents(components)
 ---
 {
     MaterialID: vars.currentMaterialID,

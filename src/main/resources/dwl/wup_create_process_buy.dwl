@@ -1,6 +1,15 @@
 %dw 2.0
+/*
+ * Using in both cases:
+ * 1) planning_make_buy_Code == "Buy"
+ * 	item is Trading Goods type in OEBS, regarding business rules always EHQ
+ * 2) Case 3 (no BOM with components in EHQ or ESY)
+ * 	item treated also as Trading Good
+ */
 import modules::functions
 output application/xml
+
+var org = "EHQ"   // Buy and Case 3 logic → always EHQ
 
 fun getLastProductionDate(statusCode) =
     if (statusCode == "Inactive") "2000.01.01" else "2999.12.31"
@@ -14,7 +23,7 @@ var itemTypeMappings = {
 }
 
 //add filter about internalMovements at the end
-var filteredItems = vars.ArticleItem.item filter ($.inventory_org_code == "EHQ" and itemTypeMappings[$.item_type_code] != null) filter ((item) -> !functions::isInternalMovementItem(item)) 
+var filteredItems = vars.ArticleItem.item filter ($.inventory_org_code == org and itemTypeMappings[$.item_type_code] != null) filter ((item) -> !functions::isInternalMovementItem(item)) 
 
 ---
 {
