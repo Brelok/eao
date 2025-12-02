@@ -36,8 +36,14 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 				<ee:set-variable resource="dwl/wup_has_any_item.dwl" variableName="hasAnyItem" />
 			</ee:variables>
 		</ee:transform>
-		    <!-- [STUDIO:"wup-send-to-aggregated-data"]<flow-ref doc:name="wup-send-to-aggregated-data" doc:id="42f26383-97f5-4ca4-8bda-7b2720555b36" name="wup-send-to-aggregated-data" target="eaoAggregatedOutput"/> [STUDIO] -->
-		<flow-ref doc:name="wup-determine-processing-case" doc:id="a7110583-af8e-419f-a8c3-e5088853e566" name="wup-determine-processing-case"/>
+		    <flow-ref doc:name="wup-send-to-aggregated-data" doc:id="42f26383-97f5-4ca4-8bda-7b2720555b36" name="wup-send-to-aggregated-data" target="eaoAggregatedOutput"/>
+		<ee:transform doc:name="Set processing case" doc:id="dba0e5af-91f1-4a99-b10e-6db186c3ddbb">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable resource="dwl/wup_processing_case.dwl" variableName="processingCase" />
+			</ee:variables>
+		</ee:transform>
 		<choice>
         <when expression="#[vars.processingCase == 'WITH_BOM']">
             <flow-ref name="wup-process-with-bom" doc:name="wup-process-with-bom"/>
@@ -60,20 +66,6 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 			</on-error-propagate>
 		</error-handler>
 	</flow>
-	<sub-flow name="wup-determine-processing-case" doc:id="f52b9878-4ce7-4711-aeb1-9c66c66aca26">
-	  <!-- Przykład – na razie tylko EHQ, później rozbudujesz o ESY -->
-
-    <!-- Tu docelowo możesz też ustawić:
-         vars.orgToUse (EHQ/ESY)
-         vars.isDualBom (true/false) po analizie obu orgów -->
-		<ee:transform doc:name="Set processing case" doc:id="dba0e5af-91f1-4a99-b10e-6db186c3ddbb" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable resource="dwl/wup_processing_case.dwl" variableName="processingCase" />
-			</ee:variables>
-		</ee:transform>
-	</sub-flow>
 	<sub-flow name="wup-process-with-bom" doc:id="5056f21b-cf31-4c56-8ca1-5a959a96737d" >
 						<logger level="DEBUG" doc:name="With BOM_debug" doc:id="922290d3-3dd8-4a79-bbd0-0e1280b2f7e2" message="With BOM" />
 					<until-successful maxRetries="3" doc:name="Until Successful" doc:id="2c9c4ab5-744a-42db-b34a-9af26312b3c5" millisBetweenRetries="30000">
@@ -98,11 +90,11 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 </ee:transform>
 		<choice doc:name="Check send email" doc:id="bab108b2-e686-4464-97d5-10a8b9de9ae6" >
 			<when expression="#[vars.isDualBom]">
-				<logger level="INFO" doc:name="Logger email" doc:id="6347e232-f930-44da-bbee-ba5079a12138" message="The emal will be send, is dualBOM."/>
+				<logger level="DEBUG" doc:name="Logger email" doc:id="6347e232-f930-44da-bbee-ba5079a12138" message="The emal will be send, is dualBOM."/>
 				<flow-ref doc:name="wup-send-alert-email" doc:id="22c6b22c-c92a-40aa-9343-e366f13bbd05" name="wup-send-alert-email"/>
 			</when>
 			<otherwise >
-				<logger level="INFO" doc:name="Logger no email" doc:id="ed015901-93c9-4c33-b0d3-3d6d2e23d423" message="No need to send an email, org = #[vars.orgToUse]"/>
+				<logger level="DEBUG" doc:name="Logger no email" doc:id="ed015901-93c9-4c33-b0d3-3d6d2e23d423" message="No need to send an email, org = #[vars.orgToUse]"/>
 			</otherwise>
 		</choice>
 		<choice doc:name="Case 3: No BOM with components in EHQ/ESY" doc:id="4eee8224-a5f7-4d86-a20e-a532ec1298a9" >
@@ -110,45 +102,35 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 				<logger level="INFO" doc:name="Logger ORG is NONE" doc:id="4da9e95d-c5dc-45d9-b10c-a472200197c0" message="Item #[vars.ArticleItem.item[0].item_number] has no BOM with components in EHQ nor ESY. Fallback to trading goods from EHQ."/>
 				<flow-ref doc:name="wup-process-buy" doc:id="7b55a2d1-afd6-451f-b52d-11c34accf08d" name="wup-process-buy"/>
 			</when>
-		</choice>
-		<ee:transform doc:name="Transform to XML with BOM" doc:id="b819eb42-4276-4c02-a2b8-bff16ec09d21">
+			<otherwise >
+				<ee:transform doc:name="Transform to XML with BOM" doc:id="b819eb42-4276-4c02-a2b8-bff16ec09d21">
 					<ee:message>
 					</ee:message>
-							<ee:variables >
+							<ee:variables>
 				<ee:set-variable resource="dwl/wup_prepared_article_with_bom.dwl" variableName="preparedArticleWithBom" />
 							</ee:variables>
 				</ee:transform>
-				<ee:transform doc:name="MOCK add root" doc:id="992127d8-8a1c-4935-83f6-db3f73ec186d" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="preparedArticleWithBom" ><![CDATA[%dw 2.0
-output application/json
----
-vars.preparedArticleWithBom[0] ++ {"root": "testActiveSuper"}]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<choice doc:name="Choice" doc:id="b135a445-dec1-4fcd-bc59-85f2e1305838">
+				<choice doc:name="Choice" doc:id="b135a445-dec1-4fcd-bc59-85f2e1305838">
 							<when expression="#[vars.preparedArticleWithBom.root != null]">
-								<ee:transform doc:name="Get MaterialIDs from payload" doc:id="291c35a6-951b-4b5f-a197-7295f781890a" >
+								<ee:transform doc:name="Get MaterialIDs from payload" doc:id="291c35a6-951b-4b5f-a197-7295f781890a">
 									<ee:message />
-									<ee:variables >
+									<ee:variables>
 						<ee:set-variable resource="dwl/wup_material_ids.dwl" variableName="materialIDs" />
 									</ee:variables>
 								</ee:transform>
-								<choice doc:name="Choice" doc:id="776c8d25-faeb-4431-8840-412d32804695" >
+								<choice doc:name="Choice" doc:id="776c8d25-faeb-4431-8840-412d32804695">
 									<when expression="#[vars.materialIDs != null]">
 										<set-variable value="#[payload]" doc:name="originalPayload" doc:id="4b07be67-c542-414e-aab9-fc337f81e059" variableName="originalPayload" />
 										<set-variable value="#[[]]" doc:name="Init results" doc:id="4b0cfe57-d0c6-4b6f-844a-b78ae5aedf78" variableName="results" />
-										<foreach doc:name="For Each" doc:id="1a6fb33d-d986-423b-9051-23740e3d419d" collection="#[vars.materialIDs]" >
+										<foreach doc:name="For Each" doc:id="1a6fb33d-d986-423b-9051-23740e3d419d" collection="#[vars.materialIDs]">
 											<set-variable value="#[payload.MaterialID]" doc:name="currentMaterialID" doc:id="9c1015c2-4cc7-44a2-aea9-d4adb14eef91" variableName="currentMaterialID" />
-											<choice doc:name="Choice" doc:id="501b7b60-63b6-4c22-99a0-fbbe5f197ea6" >
-												<when expression='#[["SA", "FG"] contains payload.MaterialType]' >
+											<choice doc:name="Choice" doc:id="501b7b60-63b6-4c22-99a0-fbbe5f197ea6">
+												<when expression='#[["SA", "FG"] contains payload.MaterialType]'>
 													<until-successful maxRetries="3" doc:name="Until Successful" doc:id="4ec61d4d-2346-4112-a688-875c8dc69984" millisBetweenRetries="30000">
-														<ee:transform doc:name="set query params" doc:id="49870952-108e-4d79-bd3e-4a327eaba569" >
-											<ee:message >
+														<ee:transform doc:name="set query params" doc:id="49870952-108e-4d79-bd3e-4a327eaba569">
+											<ee:message>
 											</ee:message>
-											<ee:variables >
+											<ee:variables>
 												<ee:set-variable resource="dwl/wup_query_params_for_bom-items_2.dwl" variableName="queryParams" />
 											</ee:variables>
 										</ee:transform>
@@ -157,15 +139,15 @@ vars.preparedArticleWithBom[0] ++ {"root": "testActiveSuper"}]]></ee:set-variabl
 														<http:query-params><![CDATA[#[vars.queryParams]]]></http:query-params>
 													</http:request>
 													</until-successful>
-									<ee:transform doc:name="Count BOM components" doc:id="00c5663e-39bd-4a80-8e66-5b7c3c788f3b" >
-														<ee:message >
+									<ee:transform doc:name="Count BOM components" doc:id="00c5663e-39bd-4a80-8e66-5b7c3c788f3b">
+														<ee:message>
 											<ee:set-payload resource="dwl/wup_count_bom_components.dwl" />
 														</ee:message>
 													</ee:transform>
 												</when>
-												<otherwise >
-													<ee:transform doc:name="materialID without BOM" doc:id="572b06af-6916-4ef9-b39b-e024d53bb892" >
-														<ee:message >
+												<otherwise>
+													<ee:transform doc:name="materialID without BOM" doc:id="572b06af-6916-4ef9-b39b-e024d53bb892">
+														<ee:message>
 											<ee:set-payload resource="dwl/wup_material_without_bom.dwl" />
 														</ee:message>
 													</ee:transform>
@@ -179,14 +161,16 @@ vars.preparedArticleWithBom[0] ++ {"root": "testActiveSuper"}]]></ee:set-variabl
 									</ee:message>
 								</ee:transform>
 										<set-variable value="#[uuid()]" doc:name="Generate UUID for foreignkey message into vars.uuid" doc:id="b569dad8-6852-4be1-a754-027c905972a9" variableName="uuid" />
-										<smb:file-write doc:name="File Write" doc:id="54e5bdfc-597c-49cf-9f49-fb31d5f1515f" fileName='#[vars.uuid ++ ".xml"]' dirName="${soap.dmItem}" config-ref="SMB_Connector_Config" />
+								<flow-ref doc:name="wup-output-dispatcher" doc:id="6c70001e-1f88-4f94-9c0e-9ce01eeb3f59" name="wup-output-dispatcher" />
 									</when>
-									<otherwise >
+									<otherwise>
 										<logger level="INFO" doc:name="Logger" doc:id="6fa45731-aaef-46a9-88c7-90446da886ae" message="#['Item number ' ++ vars.ArticleItem.item[0].item_number ++ ' not written into XML because no valid BOM item!']" />
 									</otherwise>
 								</choice>
 							</when>
 				</choice>
+			</otherwise>
+		</choice>
 	</sub-flow>
 	<sub-flow name="wup-process-buy" doc:id="93181171-6913-4588-a5e8-9256b9ccfc87" >
 	<logger level="DEBUG" doc:name="BUY item" doc:id="02aecf70-6f60-4c1e-8f66-2880eca7b5bb" message="BUY item" />
@@ -197,7 +181,7 @@ vars.preparedArticleWithBom[0] ++ {"root": "testActiveSuper"}]]></ee:set-variabl
 							</ee:message>
 						</ee:transform>
 						<set-variable value="#[uuid()]" doc:name="Generate UUID for foreignkey message into vars.uuid" doc:id="a110c83c-bb77-42f5-aeca-d24b37133b57" variableName="uuid" />
-						<smb:file-write doc:name="File Write" doc:id="58fd2b11-402d-494e-bfb0-80b222ead250" config-ref="SMB_Connector_Config" fileName='#[vars.uuid ++ ".xml"]' dirName="${soap.dmItem}" />
+		<flow-ref doc:name="wup-output-dispatcher" doc:id="d1bc6ff2-00c6-4f66-a9fe-cae1aa547896" name="wup-output-dispatcher" />
 					
 	</sub-flow>
 	<sub-flow name="wup-process-without-bom" doc:id="8d8d631b-547e-4923-853e-5eda4ef5a06c" >
@@ -208,8 +192,18 @@ vars.preparedArticleWithBom[0] ++ {"root": "testActiveSuper"}]]></ee:set-variabl
 					</ee:message>
 				</ee:transform>
 				<set-variable value="#[uuid()]" doc:name="Generate UUID for foreignkey message into vars.uuid" doc:id="39ba66f0-fde7-44f0-84b1-b0f4e6f58956" variableName="uuid" />
-				<smb:file-write doc:name="File Write" doc:id="b6595eed-9a48-4e5b-99c1-49393e7c849f" dirName="${soap.dmItem}" fileName='#[vars.uuid ++ ".xml"]' config-ref="SMB_Connector_Config" />
+		<flow-ref doc:name="wup-output-dispatcher" doc:id="272de530-3318-40cd-9f4a-235ef9aecdf8" name="wup-output-dispatcher"/>
 			
+	</sub-flow>
+	<sub-flow name="wup-output-dispatcher" doc:id="822dda77-712c-4b0b-89d2-f890db9f96bf" >
+		<choice doc:name="Choice" doc:id="9c1ee25a-51ed-4af0-bce6-21ee7f7ab9ea" >
+			<when expression="#[payload == null or sizeOf(payload.root default []) == 0]">
+				<logger level="DEBUG" doc:name="No File Write" doc:id="4518c377-14e5-47cc-9aa4-11d028e0aff2" message="File wasn't send to SMB. " />
+			</when>
+			<otherwise >
+				<smb:file-write doc:name="File Write" doc:id="b6595eed-9a48-4e5b-99c1-49393e7c849f" dirName="${soap.dmItem}" fileName='#[vars.uuid ++ ".xml"]' config-ref="SMB_Connector_Config" />
+			</otherwise>
+		</choice>
 	</sub-flow>
 	<sub-flow name="wup-send-to-aggregated-data" doc:id="68adb61f-dbc3-477d-85cf-b44e7e9d39f6" >
 	<try doc:name="Try" doc:id="123adae6-63a1-424a-8f5d-5399b4652ef0" >
@@ -253,4 +247,5 @@ vars.preparedArticleWithBom[0] ++ {"root": "testActiveSuper"}]]></ee:set-variabl
 			</error-handler>
 		</try>
 	</sub-flow>
+	
 </mule>

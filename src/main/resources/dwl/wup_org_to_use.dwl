@@ -16,7 +16,7 @@ var ehqHasBom = hasBomWithComponents("EHQ")
 var esyHasBom = hasBomWithComponents("ESY")
 
 ---
-if (ehqHasBom and not esyHasBom) "EHQ"         // Case 1
-else if (not ehqHasBom and esyHasBom) "ESY"    // Case 2
+if (ehqHasBom and (not esyHasBom)) "EHQ"         // Case 1
+else if ((not ehqHasBom) and esyHasBom) "ESY"    // Case 2
 else if (ehqHasBom and esyHasBom) "ESY"        // Case 4 – ESY preferred
 else "NONE"                                    // Case 3 – no BOM from component

@@ -19,6 +19,7 @@
 		<tags/>
 		<categories>[]</categories>
 		<fields>[]</fields>
+		<munit.version>3.3.0</munit.version>
 	</properties>
 
 	<build>
@@ -47,22 +48,45 @@
 					<classifier>mule-application</classifier>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.mulesoft.munit.tools</groupId>
+				<artifactId>munit-maven-plugin</artifactId>
+				<version>${munit.version}</version>
+				<executions>
+					<execution>
+						<id>test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+							<goal>coverage-report</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<coverage>
+						<runCoverage>true</runCoverage>
+						<formats>
+							<format>html</format>
+						</formats>
+					</coverage>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
 	<dependencies>
-	 <!-- JAXB API (javax.*) -->
-	    <dependency>
-        <groupId>javax.xml.bind</groupId>
-        <artifactId>jaxb-api</artifactId>
-        <version>2.3.1</version>
-    </dependency>
-    <!-- Implementacja JAXB z klasą com.sun.xml.bind.v2.ContextFactory -->
-    <dependency>
-        <groupId>org.glassfish.jaxb</groupId>
-        <artifactId>jaxb-runtime</artifactId>
-        <version>2.3.3</version>
-    </dependency>
+		<!-- JAXB API (javax.*) -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<!-- Implementacja JAXB z klasą com.sun.xml.bind.v2.ContextFactory -->
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>2.3.3</version>
+		</dependency>
 		<dependency>
 			<groupId>com.mycompany</groupId>
 			<artifactId>aqapi</artifactId>
@@ -138,6 +162,12 @@
 			<artifactId>mule-secure-configuration-property-module</artifactId>
 			<version>1.2.7</version>
 			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.weave</groupId>
+			<artifactId>assertions</artifactId>
+			<version>1.2.1</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

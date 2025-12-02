@@ -57,8 +57,7 @@ fun transformRecord(record) =
     } else null
 
 ---
-//{
-//    root: (filteredItem map (record) -> 
-//        transformRecord(record)) filter ($ != null)
-//}
-filteredItem
+{
+    root: (filteredItem map (record) -> 
+        transformRecord(record)) filter ($ != null)
+}

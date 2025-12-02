@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="wup-item-test-suite.xml" />
+	<munit:before-test name="wup-item-test-suiteBefore_Test" doc:id="004fef59-3482-425f-b311-0b314d09a56a" >
+		<munit-tools:mock-when doc:name="Mock HTTP Request to eao-p-aggregated-data" doc:id="5acefda3-9cb9-44ca-b6f7-f88675b078ba" processor="http:request">
+			<munit-tools:with-attributes>
+				<munit-tools:with-attribute whereValue="Request to eao-p-aggregated-data" attributeName="doc:name" />
+			</munit-tools:with-attributes>
+		</munit-tools:mock-when>
+		<munit-tools:mock-when doc:name="Mock File Write" doc:id="215f9c2b-7930-4df8-98cb-62170e57137d" processor="smb:file-write">
+			<munit-tools:with-attributes>
+				<munit-tools:with-attribute whereValue="File Write" attributeName="doc:name" />
+				<munit-tools:with-attribute whereValue="b6595eed-9a48-4e5b-99c1-49393e7c849f" attributeName="doc:id" />
+			</munit-tools:with-attributes>
+		</munit-tools:mock-when>
+		<munit-tools:mock-when doc:name="Mock send email" doc:id="026a1993-2ca2-4b1a-ada1-39ee4c0e7e7a" processor="outlook365:send-mail">
+			<munit-tools:with-attributes>
+				<munit-tools:with-attribute whereValue="Send mail about dualBom" attributeName="doc:name" />
+			</munit-tools:with-attributes>
+		</munit-tools:mock-when>
+	</munit:before-test>
+	<munit:test name="wupItem-case1-bomEhqOnly" doc:id="dd014bf4-7851-451f-a17a-822573d7a706" description="Case 1: BOM only in EHQ, BOM from EHQ is transferred">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock HTTP Request ArticleItem" doc:id="acaa0178-cf07-4c56-bbe9-5ff63161406a" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request for Item" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="ArticleItem" attributeName="target" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="ArticleItem" value="#[readUrl('classpath://examples/article_item_EHQ_only.json', &quot;application/json&quot;)]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock HTTP Request bomArticleItem" doc:id="7663e548-d004-4732-9d80-51d954ef2c31" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request for BOM Item" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="bomArticleItem" attributeName="target" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="bomArticleItem" value="#[readUrl('classpath://examples/article_item_BOM_EHQ_only.json', &quot;application/json&quot;)]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock HTTP Request bomOfBomArticleItem" doc:id="20af3a08-3bf1-46aa-8999-18a800be9b03" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request for BOM Item" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="bomOfBomArticleItem" attributeName="target" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="bomOfBomArticleItem" value="#[readUrl('classpath://examples/article_item_BOM_of_BOM_EHQ_only.json', &quot;application/json&quot;)]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="ca041be2-e910-4591-a1cc-40ea2fdb4d33">
+				<munit:payload value="#[readUrl('classpath://examples/start_event.json')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to wup-Item" doc:id="2916a635-9066-4f75-97c3-c3251096ccd5" name="wup-Item"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert processingCase" doc:id="50a433e3-57cd-4670-b935-a4e4a77575d5" is="#[MunitTools::containsString('WITH_BOM')]" expression="#[vars.processingCase]"/>
+			<munit-tools:assert-that doc:name="Assert orgToUse" doc:id="1295dea9-98bb-4e53-8904-ee72fbbe4af5" expression="#[vars.orgToUse]" is="#[MunitTools::containsString('EHQ')]"/>
+			<munit-tools:verify-call doc:name="Verify call send mail" doc:id="840cf1b3-cfbf-48cf-ab35-d21e9ad030b8" processor="outlook365:send-mail" times="0">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Send mail about dualBom" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify TransformMessage materialID without BOM" doc:id="0324f15c-8c0c-4b1c-a576-fc310005eb59" processor="ee:transform" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="materialID without BOM" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify call file write" doc:id="c7223a46-f65a-43cf-82d5-61898d92dc03" processor="smb:file-write" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="File Write" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="b6595eed-9a48-4e5b-99c1-49393e7c849f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="wupItem-case2-bomEsyOnly" doc:id="a20fd707-2416-4df0-adcb-992a72e3ea52" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock HTTP Request ArticleItem" doc:id="13ce9f35-9037-47c7-929d-6fbdcf43e6c8" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request for Item" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="ArticleItem" attributeName="target" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="ArticleItem" value="#[readUrl('classpath://examples/article_item_ESY_only.json', &quot;application/json&quot;)]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock HTTP Request bomArticleItem" doc:id="f6315188-2c98-45f2-a5de-171a2ecf3d95" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request for BOM Item" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="bomArticleItem" attributeName="target" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="bomArticleItem" value="#[readUrl('classpath://examples/article_item_BOM_ESY_only.json', &quot;application/json&quot;)]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock HTTP Request bomOfBomArticleItem" doc:id="9577082b-e315-4275-bdec-6dfc09ecee8e" processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="Request for BOM Item" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="bomOfBomArticleItem" attributeName="target" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="bomOfBomArticleItem" value="#[readUrl('classpath://examples/article_item_BOM_of_BOM_ESY_only.json', &quot;application/json&quot;)]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="1fa9db80-1834-4152-a224-702a74d604be">
+				<munit:payload value="#[readUrl('classpath://examples/start_event.json')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to wup-Item" doc:id="914fcf2c-f279-4ce3-a9d6-e2a4e76da372" name="wup-Item" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert processingCase" doc:id="070f5639-1455-4b50-88aa-9f73de5c1139" expression="#[vars.processingCase]" is="#[MunitTools::containsString('WITH_BOM')]" />
+			<munit-tools:assert-that doc:name="Assert orgToUse" doc:id="438d40da-8bc9-4a48-bc86-ef1ecffac23c" expression="#[vars.orgToUse]" is="#[MunitTools::containsString('ESY')]" />
+			<munit-tools:verify-call doc:name="Verify call send mail" doc:id="5a93d850-f811-4977-8950-1602ff14a6d8" processor="outlook365:send-mail" times="0" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Send mail about dualBom" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify call file write" doc:id="3a55b3d9-75e8-4c25-a537-a717f3d27d90" processor="smb:file-write" times="1" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="File Write" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="b6595eed-9a48-4e5b-99c1-49393e7c849f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="wupItem-case3-noBomComponents" doc:id="70679ebd-5c53-49f4-8f48-4b2632fd97f0" >
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock HTTP Request ArticleItem" doc:id="d9e9b18a-9c89-4043-be93-2eed5f8898cd" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request for Item" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="ArticleItem" attributeName="target" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="ArticleItem" value="#[readUrl('classpath://examples/article_item_NONE.json', &quot;application/json&quot;)]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock HTTP Request bomArticleItem" doc:id="1da7b285-15e0-4161-b3f1-609788460222" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request for BOM Item" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="bomArticleItem" attributeName="target" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="bomArticleItem" value="#[readUrl('classpath://examples/article_item_BOM_NONE.json', &quot;application/json&quot;)]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="a29c6bc8-a703-4041-9892-0b1e049cf42f">
+				<munit:payload value="#[readUrl('classpath://examples/start_event.json')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to wup-Item" doc:id="610a7ba0-9da4-4558-bd68-2a26d7d63a4d" name="wup-Item" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that doc:name="Assert processingCase" doc:id="e115bf81-a421-4fb4-a549-b85026d6d10b" expression="#[vars.processingCase]" is="#[MunitTools::containsString('WITH_BOM')]" />
+			<munit-tools:assert-that doc:name="Assert orgToUse" doc:id="e1e5583e-d681-4215-a454-c5fe81a79511" expression="#[vars.orgToUse]" is="#[MunitTools::containsString('NONE')]" />
+			<munit-tools:verify-call doc:name="Verify call send mail" doc:id="39157634-5bd7-4bc6-b48e-8d8fabaf02a2" processor="outlook365:send-mail" times="0" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Send mail about dualBom" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify call File Write" doc:id="46d2dd32-cb68-43aa-999a-c02f486b867b" processor="smb:file-write" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="File Write" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="b6595eed-9a48-4e5b-99c1-49393e7c849f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="wupItem-case4-dualBom" doc:id="40d5ee04-32d9-426c-b238-51473abfed7d" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock HTTP Request ArticleItem" doc:id="86edd55b-f497-4181-8baf-df023074e121" processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="Request for Item" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="ArticleItem" attributeName="target" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:variables>
+						<munit-tools:variable key="ArticleItem" value="#[readUrl('classpath://examples/article_item_ESY_EHQ.json', &quot;application/json&quot;)]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock HTTP Request bomArticleItem" doc:id="62963391-3804-4ffa-a41a-e886944e71f9" processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="Request for BOM Item" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="bomArticleItem" attributeName="target" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:variables>
+						<munit-tools:variable key="bomArticleItem" value="#[readUrl('classpath://examples/article_item_BOM_ESY_EHQ.json', &quot;application/json&quot;)]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock HTTP Request bomOfBomArticleItem" doc:id="1e4e6ca2-0ea7-461e-bcb5-5f0dbd99382e" processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="Request for BOM Item" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="bomOfBomArticleItem" attributeName="target" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="bomOfBomArticleItem" value="#[readUrl('classpath://examples/article_item_BOM_of_BOM_ESY_EHQ.json', &quot;application/json&quot;)]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock send email" doc:id="7b273ffa-480d-4e97-a46f-7c9fa03a12e0" processor="outlook365:send-mail">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Send mail about dualBom" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="41d786ca-4dfd-49b5-90d8-66240316790d" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="9e11c54a-69a8-4f37-b047-2d338a5a5ede">
+				<munit:payload value="#[readUrl('classpath://examples/start_event.json')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to wup-Item" doc:id="5f71da2c-dd20-4840-a202-2166b9d3b965" name="wup-Item" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert processingCase" doc:id="665decb7-1598-4190-bf2b-f1a5f7f47356" expression="#[vars.processingCase]" is="#[MunitTools::containsString('WITH_BOM')]" />
+			<munit-tools:assert-that doc:name="Assert orgToUse" doc:id="09fe4ac7-ae8a-4955-9ce6-4b4fe13397b9" expression="#[vars.orgToUse]" is="#[MunitTools::containsString('ESY')]" />
+			<munit-tools:verify-call doc:name="Verify call send mail" doc:id="cb4472ad-ef9e-46fd-bf19-e692b0f93157" processor="outlook365:send-mail" times="1">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="Send mail about dualBom" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify call File Write" doc:id="2b8009d1-e2d1-42d8-a7f7-74726193584f" processor="smb:file-write" times="1" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="File Write" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="b6595eed-9a48-4e5b-99c1-49393e7c849f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="wup-item-case-without-BOM" doc:id="f82d67fd-fae3-4e86-a3dd-2f8c28425446" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock HTTP Request ArticleItem" doc:id="07e93525-f4f3-4caf-ac8e-b95ada479ebc" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request for Item" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="ArticleItem" attributeName="target" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="ArticleItem" value="#[readUrl('classpath://examples/article_item_without_BOM.json', &quot;application/json&quot;)]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="e91c77e1-e62f-45d3-819d-7d57fc6e3bb0" >
+				<munit:payload value="#[readUrl('classpath://examples/start_event.json')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to wup-Item" doc:id="7de156f2-d316-4431-9e4b-43756b41b8d5" name="wup-Item" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that doc:name="Assert processingCase" doc:id="639aad3a-4a54-438c-beab-494a3fd9bf6f" expression="#[vars.processingCase]" is="#[MunitTools::containsString('WITHOUT_BOM')]" />
+			<munit-tools:verify-call doc:name="Verify call send mail" doc:id="0aa9b1fe-764a-4fb9-9781-5b89b2af23fc" processor="outlook365:send-mail" times="0" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Send mail about dualBom" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify call File Write" doc:id="2862cb80-a4fc-4b6f-8f39-88b881dcb7db" processor="smb:file-write" times="1" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="File Write" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="b6595eed-9a48-4e5b-99c1-49393e7c849f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="wupItem-internalMovement-filtered" doc:id="03671534-3ca7-4083-951a-827e5a3fc938" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock HTTP Request ArticleItem" doc:id="6df79873-96ae-47a9-998e-fba2ec58afaa" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request for Item" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="ArticleItem" attributeName="target" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="ArticleItem" value="#[readUrl('classpath://examples/article_item_internal_movement.json', &quot;application/json&quot;)]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="69c7247a-14ab-49f7-a006-17494607915d">
+				<munit:payload value="#[readUrl('classpath://examples/start_event.json')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to wup-Item" doc:id="ba0b17bd-4af5-482d-87ad-7bc37ffa75bb" name="wup-Item" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call send email" doc:id="5e55995e-bae6-4b2e-9116-22900f3568c9" processor="outlook365:send-mail" times="0">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Send mail about dualBom" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify call File Write" doc:id="6c99ee9b-db26-49b7-80f9-894e50299ebb" processor="smb:file-write" times="0" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="File Write" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="b6595eed-9a48-4e5b-99c1-49393e7c849f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

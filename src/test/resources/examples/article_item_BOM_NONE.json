@@ -1,0 +1,17 @@
+{
+    "assembly_item": [
+        {
+            "assembly_item_id": 7506,
+            "assembly_item_type_code": "SA",
+            "assembly_item_type": "Subassembly",
+            "assembly_item_number": "704.101.0",
+            "assembly_item_status_code": "Active",
+            "assembly_item_status_meaning": "All functions enabled",
+            "inventory_org_id": 81,
+            "inventory_org_code": "EHQ",
+            "operating_unit_org_id": 81,
+            "operating_unit_org_code": "EHQ",
+            "components": []
+        }
+    ]
+}

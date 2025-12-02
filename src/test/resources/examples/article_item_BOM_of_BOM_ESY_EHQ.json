@@ -1,0 +1,13 @@
+{
+  "assembly_item": [
+    {
+      "inventory_org_code": "EHQ",
+      "assembly_item_id": "COMP1_ID",
+      "components": []
+    },    {
+      "inventory_org_code": "ESY",
+      "assembly_item_id": "COMP1_ID",
+      "components": []
+    }
+  ]
+}
