@@ -32,7 +32,6 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 			<ee:variables >
 				<ee:set-variable resource="dwl/wup_bom_enabled_flag.dwl" variableName="bom_enabled_flag" />
 				<ee:set-variable resource="dwl/wup_planning_make_buy_code.dwl" variableName="planning_make_buy_code" />
-				<ee:set-variable resource="dwl/wup_filter_org_code.dwl" variableName="filterOrgCode" />
 				<ee:set-variable resource="dwl/wup_has_any_item.dwl" variableName="hasAnyItem" />
 			</ee:variables>
 		</ee:transform>
@@ -68,20 +67,44 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 	</flow>
 	<sub-flow name="wup-process-with-bom" doc:id="5056f21b-cf31-4c56-8ca1-5a959a96737d" >
 						<logger level="DEBUG" doc:name="With BOM_debug" doc:id="922290d3-3dd8-4a79-bbd0-0e1280b2f7e2" message="With BOM" />
-					<until-successful maxRetries="3" doc:name="Until Successful" doc:id="2c9c4ab5-744a-42db-b34a-9af26312b3c5" millisBetweenRetries="30000">
-							<ee:transform doc:name="set query params" doc:id="a00ad7a0-bc90-42c0-a2b5-4b80d464b723" >
-				<ee:message >
+					<ee:transform doc:name="set query params list" doc:id="a00ad7a0-bc90-42c0-a2b5-4b80d464b723">
+				<ee:message>
 				</ee:message>
-				<ee:variables >
-					<ee:set-variable resource="dwl/wup_query_params_for_bom-items.dwl" variableName="queryParams" />
+				<ee:variables>
+					<ee:set-variable resource="dwl/wup_bom_query_params_by_org.dwl" variableName="bomQueryParamsList" />
 				</ee:variables>
 			</ee:transform>
-			<http:request method="GET" doc:name="Request for BOM Item" doc:id="48077f20-89a2-4838-80b4-8b97355bd32d" config-ref="HTTP_Request_configuration_OEBS_WUP" path="${config.path_itemBom}" target="bomArticleItem">
+		<set-variable value='#[{"assembly_item": []}]' doc:name="initial bomArticleItemCombined" doc:id="960ab091-77e8-4c0a-85da-1ee9c3805ca9" variableName="bomArticleItemCombined" />
+		<foreach doc:name="Fetch BOM for all orgs" doc:id="7bf836e0-2223-455a-974a-f46e2d3bbe2e" collection="#[vars.bomQueryParamsList]">
+				<ee:transform doc:name="Current BOM query params" doc:id="4ba5ae97-b885-4e83-924d-93daff5e17f4">
+					<ee:message>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="queryParams"><![CDATA[payload]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			<until-successful maxRetries="3" doc:name="Until Successful" doc:id="2c9c4ab5-744a-42db-b34a-9af26312b3c5" millisBetweenRetries="30000">
+			<http:request method="GET" doc:name="Request for BOM Item" doc:id="48077f20-89a2-4838-80b4-8b97355bd32d" config-ref="HTTP_Request_configuration_OEBS_WUP" path="${config.path_itemBom}" target="singleBomResponse">
 								<http:body><![CDATA[#[{}]]]></http:body>
 								<http:query-params><![CDATA[#[vars.queryParams]]]></http:query-params>
 						</http:request>
 					</until-successful>
-<ee:transform doc:name="Decide orgToUse (EHQ/ESY)" doc:id="4d251901-0dc3-4ba3-b509-0a71306eb199">
+			<ee:transform doc:name="Merge BOM assembly_item" doc:id="be946d94-2334-4462-9658-db1ce0c62152" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable resource="dwl/wup_bom_article_item_combined.dwl" variableName="bomArticleItemCombined" />
+				</ee:variables>
+			</ee:transform>
+			</foreach>
+<ee:transform doc:name="bomArticleItem" doc:id="6dcd2f29-ead0-43eb-8e92-fae308eef64e" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable resource="dwl/wup_bom_article_item.dwl" variableName="bomArticleItem" />
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="Decide orgToUse (EHQ/ESY)" doc:id="4d251901-0dc3-4ba3-b509-0a71306eb199">
     <ee:message />
     <ee:variables>
 				<ee:set-variable resource="dwl/wup_org_to_use.dwl" variableName="orgToUse" />

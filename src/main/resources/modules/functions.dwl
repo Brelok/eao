@@ -22,12 +22,12 @@ fun isInternalMovementComponent(component) =
     
 // if BOM component is "important" for FORMAT-WUP
 fun isValidBomComponent(comp) =
-    ["P","SA","FG","KIT","PH"] contains (comp.component_item_type_code default "") and
-    (comp.component_item_status_code default "") != "Inactive" and
+    (["P","SA","FG","KIT","PH"] contains (comp.component_item_type_code[0] default "")) and
+    ((comp.component_item_status_code default "") != "Inactive") and
     not isInternalMovementComponent(comp)
 
 // common filter to all places where we are processing BOM
 fun filterBomComponents(components) =
     (components default [])
-        filter isValidBomComponent
+        filter isValidBomComponent($)
         
