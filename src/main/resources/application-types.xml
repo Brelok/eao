@@ -1379,15 +1379,6 @@ type: string]]></types:shape>
       </types:input-event>
     </types:processor-declaration>
   </types:enrichment>
-  <types:enrichment select="#ac6bef93-6670-4304-83ad-7db9127f5027">
-    <types:processor-declaration>
-      <types:input-event>
-        <types:message>
-          <types:payload type="article_item"/>
-        </types:message>
-      </types:input-event>
-    </types:processor-declaration>
-  </types:enrichment>
   <types:enrichment select="#a00ad7a0-bc90-42c0-a2b5-4b80d464b723">
     <types:processor-declaration>
       <types:input-event>

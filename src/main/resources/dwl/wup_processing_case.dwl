@@ -1,16 +1,21 @@
 %dw 2.0
-output application/json
+output application/java
 
-var hasAnyItem = vars.hasAnyItem default false
-var planning = vars.planning_make_buy_code default ""
-var bomEnabled = vars.bom_enabled_flag default ""
+var items = (vars.ArticleItem.item default [])
+
+var hasAnyItem = !isEmpty(items)
+
+var hasBomFlag = !isEmpty(items filter (it) -> (it.bom_enabled_flag default "") == "Y")
+
+var hasBuyFlag = !isEmpty(items filter (it) -> (it.planning_make_buy_code default "") == "Buy")
 
 ---
-if (!hasAnyItem)
+if (not hasAnyItem)
   "SKIP"
-else if (bomEnabled == "Y" and planning != "Buy")
-    "WITH_BOM"
-else if (planning == "Buy")
-    "BUY"
+else if (hasBomFlag)
+  // ALWAYS firstly we are going to BOM, to check EHQ/ESY
+  "WITH_BOM"
+else if (hasBuyFlag)
+  "BUY"
 else
   "WITHOUT_BOM"

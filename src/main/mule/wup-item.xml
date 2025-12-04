@@ -26,16 +26,7 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 			<http:query-params><![CDATA[#[vars.queryParams]]]></http:query-params>
 		</http:request>
 		</until-successful>
-		<ee:transform doc:name="set flags" doc:id="ac6bef93-6670-4304-83ad-7db9127f5027" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable resource="dwl/wup_bom_enabled_flag.dwl" variableName="bom_enabled_flag" />
-				<ee:set-variable resource="dwl/wup_planning_make_buy_code.dwl" variableName="planning_make_buy_code" />
-				<ee:set-variable resource="dwl/wup_has_any_item.dwl" variableName="hasAnyItem" />
-			</ee:variables>
-		</ee:transform>
-		    <flow-ref doc:name="wup-send-to-aggregated-data" doc:id="42f26383-97f5-4ca4-8bda-7b2720555b36" name="wup-send-to-aggregated-data" target="eaoAggregatedOutput"/>
+		    <!-- [STUDIO:"wup-send-to-aggregated-data"]<flow-ref doc:name="wup-send-to-aggregated-data" doc:id="42f26383-97f5-4ca4-8bda-7b2720555b36" name="wup-send-to-aggregated-data" target="eaoAggregatedOutput"/> [STUDIO] -->
 		<ee:transform doc:name="Set processing case" doc:id="dba0e5af-91f1-4a99-b10e-6db186c3ddbb">
 			<ee:message>
 			</ee:message>
@@ -67,7 +58,8 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 	</flow>
 	<sub-flow name="wup-process-with-bom" doc:id="5056f21b-cf31-4c56-8ca1-5a959a96737d" >
 						<logger level="DEBUG" doc:name="With BOM_debug" doc:id="922290d3-3dd8-4a79-bbd0-0e1280b2f7e2" message="With BOM" />
-					<ee:transform doc:name="set query params list" doc:id="a00ad7a0-bc90-42c0-a2b5-4b80d464b723">
+					<logger level="INFO" doc:name="QUESTIONS" doc:id="770a256a-069d-4a73-ab27-cc2876310889" message="how many item we can have in article item? if we need filter byEHQ, ESY org in articleitem?"/>
+		<ee:transform doc:name="set query params list" doc:id="a00ad7a0-bc90-42c0-a2b5-4b80d464b723">
 				<ee:message>
 				</ee:message>
 				<ee:variables>

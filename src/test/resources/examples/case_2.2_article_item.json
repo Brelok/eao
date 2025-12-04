@@ -1,0 +1,16 @@
+{
+  "item": [
+    {
+      "item_id": "2335075",
+      "item_number": "72-01284.2",
+      "item_description": "Bedienpanel 1 Taste - bestueckt",
+      "inventory_org_code": "EHQ",
+      "operating_unit_org_code": "EHQ",
+      "inventory_org_id": "2",
+      "bom_enabled_flag": "Y",
+      "planning_make_buy_code": "Buy",
+      "item_status_code": "Active",
+      "item_type_code": "P"
+    }
+  ]
+}
