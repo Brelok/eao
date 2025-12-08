@@ -1,19 +1,20 @@
 %dw 2.0
-output application/json skipNullOn = "everywhere"
 var items = (vars.ArticleItem.item default [])
+output application/json  skipNullOn="everywhere"
+
+var item_id = items.item_id[0]
+var item_number = items.item_number[0]
+
 ---
-flatten(items
-    // we take only EHQ and ESY
-    filter ((it) -> ["EHQ", "ESY"] contains ((it.inventory_org_code default "") as String))
-    map (it) -> [{
-        ERP_ITEM_ID:           it.item_id,
-        ERP_ITEM_NUMBER:       it.item_number,
-        ERP_INVENTORY_ORG_ID:  it.inventory_org_id,
-        ERP_INVENTORY_ORG_CODE: "EHQ"
-    },
-    {
-        ERP_ITEM_ID:           it.item_id,
-        ERP_ITEM_NUMBER:       it.item_number,
-        ERP_INVENTORY_ORG_ID:  it.inventory_org_id,
-        ERP_INVENTORY_ORG_CODE: "ESY"
-    }])
+[{
+  ERP_ITEM_ID: item_id,
+  ERP_ITEM_NUMBER: item_number,
+  ERP_INVENTORY_ORG_ID: "81",
+  ERP_INVENTORY_ORG_CODE: "EHQ"
+},
+{
+  ERP_ITEM_ID: item_id,
+  ERP_ITEM_NUMBER: item_number,
+  ERP_INVENTORY_ORG_ID: "261",
+  ERP_INVENTORY_ORG_CODE: "ESY"
+}]

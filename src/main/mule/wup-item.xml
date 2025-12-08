@@ -13,20 +13,20 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 		<logger level="INFO" doc:name="Flow is started" doc:id="83df690e-02c0-4f35-b374-ac703cd38d92" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "item request started",&#10;	"action": "item request",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]'/>
 		<logger level="INFO"
         message='Filter enabled: #[p("internal.movements.filter.enabled") default false], flag.values=#[p("internal.movements.flag.values") default ""]' doc:name="internalMovements"/>
-		<until-successful maxRetries="3" doc:name="Until Successful" doc:id="fb6c46a3-9d6d-4a3c-af92-c7fdf5b8e3b5" millisBetweenRetries="30000">
-			<ee:transform doc:name="set query params" doc:id="b6b99a38-3a52-45ed-a010-3a0230a3f890" >
-				<ee:message >
-				</ee:message>
-				<ee:variables >
-					<ee:set-variable resource="dwl/wup_query_params_for_article_item.dwl" variableName="queryParams" />
-				</ee:variables>
-			</ee:transform>
-			<http:request method="GET" doc:name="Request for Item" doc:id="e4e07381-c497-4bac-9c7f-3e9be94d2726" config-ref="HTTP_Request_configuration_OEBS_WUP" path="${config.path_item}" target="ArticleItem">
-			<http:body><![CDATA[#[{}]]]></http:body>
-			<http:query-params><![CDATA[#[vars.queryParams]]]></http:query-params>
-		</http:request>
-		</until-successful>
-		    <!-- [STUDIO:"wup-send-to-aggregated-data"]<flow-ref doc:name="wup-send-to-aggregated-data" doc:id="42f26383-97f5-4ca4-8bda-7b2720555b36" name="wup-send-to-aggregated-data" target="eaoAggregatedOutput"/> [STUDIO] -->
+		<ee:transform doc:name="set ERP_ORG_ID" doc:id="ad14a5e5-9998-4967-b337-443a2348026d">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable resource="dwl/wup_erp_org_id.dwl" variableName="erp_org_id" />
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="wup-load-article" doc:id="aded96aa-bc7b-4adc-8f58-de3c4bacaf2a" name="wup-load-article"/>
+		<choice doc:name="Check if EHQ or ESY" doc:id="311f7a46-427f-4771-8c6a-4ceca200c3e8" >
+			<when expression='#[vars.erp_org_id != "81" and vars.erp_org_id != "261"]'>
+				<logger level="DEBUG" doc:name="Logger" doc:id="4affa31d-eead-4f8b-983c-3e7ad9ab9835" message="No EHQ or ESY org, payload will be processed only for aggregated data. "/>
+				<flow-ref doc:name="wup-send-to-aggregated-data" doc:id="42f26383-97f5-4ca4-8bda-7b2720555b36" name="wup-send-to-aggregated-data" target="eaoAggregatedOutput"/>
+			</when>
+		</choice>
 		<ee:transform doc:name="Set processing case" doc:id="dba0e5af-91f1-4a99-b10e-6db186c3ddbb">
 			<ee:message>
 			</ee:message>
@@ -41,9 +41,6 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
         <when expression="#[vars.processingCase == 'BUY']">
             <flow-ref name="wup-process-buy" doc:name="wup-process-buy"/>
         </when>
-        <when expression="#[vars.processingCase == 'WITHOUT_BOM']">
-            <flow-ref name="wup-process-without-bom" doc:name="wup-process-without-bom"/>
-        </when>
         <otherwise>
             <logger level="INFO" message='[wup-Item] Skipping processing for item: #[payload.parameterList.ERP_ID], case: #[vars.processingCase]' />
         </otherwise>
@@ -51,14 +48,27 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 		<logger level="INFO" doc:name="Item finished" doc:id="d3a6b2e7-bdc4-4417-aab2-cbf3de56f30e" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "item request finished",&#10;	"action": "item request",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]' />
 		<error-handler >
 			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="b5974ff5-fbce-4ddd-a042-69d04a412271" >
-				<logger level="ERROR" doc:name="ERROR: item request has error" doc:id="e7d7bd09-8185-4357-bffe-44b88378f293" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "item request has error",&#10;	"action": "item request to oebs",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]' />
+				<logger level="ERROR" doc:name="ERROR: item request has error" doc:id="e7d7bd09-8185-4357-bffe-44b88378f293" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "item request has error",&#10;	"action": "item request to oebs",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload,&#10;	"test":error&#10;}]' />
 				<cloudhub:create-notification domain="eao-oracle-salesforce-prod" doc:name="Create Notification" doc:id="9ec398f0-8da0-494c-841d-e57844876d0f" priority="INFO" config-ref="CloudHub_Config"/>
 			</on-error-propagate>
 		</error-handler>
 	</flow>
-	<sub-flow name="wup-process-with-bom" doc:id="5056f21b-cf31-4c56-8ca1-5a959a96737d" >
-						<logger level="DEBUG" doc:name="With BOM_debug" doc:id="922290d3-3dd8-4a79-bbd0-0e1280b2f7e2" message="With BOM" />
-					<logger level="INFO" doc:name="QUESTIONS" doc:id="770a256a-069d-4a73-ab27-cc2876310889" message="how many item we can have in article item? if we need filter byEHQ, ESY org in articleitem?"/>
+	<sub-flow name="wup-load-article" doc:id="20d2dfc4-98d9-4c04-ab88-9b72ae72a7d8" >
+		<until-successful maxRetries="3" doc:name="Until Successful" doc:id="fb6c46a3-9d6d-4a3c-af92-c7fdf5b8e3b5" millisBetweenRetries="30000">
+			<ee:transform doc:name="set query params" doc:id="b6b99a38-3a52-45ed-a010-3a0230a3f890">
+				<ee:message>
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable resource="dwl/wup_query_params_for_article_item.dwl" variableName="queryParams" />
+				</ee:variables>
+			</ee:transform>
+			<http:request method="GET" doc:name="Request for Item" doc:id="e4e07381-c497-4bac-9c7f-3e9be94d2726" config-ref="HTTP_Request_configuration_OEBS_WUP" path="${config.path_item}" target="ArticleItem">
+			<http:body><![CDATA[#[{}]]]></http:body>
+			<http:query-params><![CDATA[#[vars.queryParams]]]></http:query-params>
+		</http:request>
+		</until-successful>
+	</sub-flow>
+	<sub-flow name="wup-load-bom" doc:id="aa1dcac6-45ef-43a0-a6e4-1237c7525af0" >
 		<ee:transform doc:name="set query params list" doc:id="a00ad7a0-bc90-42c0-a2b5-4b80d464b723">
 				<ee:message>
 				</ee:message>
@@ -81,21 +91,25 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 								<http:query-params><![CDATA[#[vars.queryParams]]]></http:query-params>
 						</http:request>
 					</until-successful>
-			<ee:transform doc:name="Merge BOM assembly_item" doc:id="be946d94-2334-4462-9658-db1ce0c62152" >
-				<ee:message >
+			<ee:transform doc:name="Merge BOM assembly_item" doc:id="be946d94-2334-4462-9658-db1ce0c62152">
+				<ee:message>
 				</ee:message>
-				<ee:variables >
+				<ee:variables>
 					<ee:set-variable resource="dwl/wup_bom_article_item_combined.dwl" variableName="bomArticleItemCombined" />
 				</ee:variables>
 			</ee:transform>
 			</foreach>
-<ee:transform doc:name="bomArticleItem" doc:id="6dcd2f29-ead0-43eb-8e92-fae308eef64e" >
-			<ee:message >
+		<ee:transform doc:name="bomArticleItem" doc:id="6dcd2f29-ead0-43eb-8e92-fae308eef64e">
+			<ee:message>
 			</ee:message>
-			<ee:variables >
+			<ee:variables>
 				<ee:set-variable resource="dwl/wup_bom_article_item.dwl" variableName="bomArticleItem" />
 			</ee:variables>
 		</ee:transform>
+	</sub-flow>
+	<sub-flow name="wup-process-with-bom" doc:id="5056f21b-cf31-4c56-8ca1-5a959a96737d" >
+						<logger level="DEBUG" doc:name="With BOM_debug" doc:id="922290d3-3dd8-4a79-bbd0-0e1280b2f7e2" message="With BOM" />
+		<flow-ref doc:name="wup-load-bom" doc:id="e2dc3ffa-a754-466f-9edf-c76fcf4ab26c" name="wup-load-bom"/>
 		<ee:transform doc:name="Decide orgToUse (EHQ/ESY)" doc:id="4d251901-0dc3-4ba3-b509-0a71306eb199">
     <ee:message />
     <ee:variables>
@@ -112,12 +126,6 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 				<logger level="DEBUG" doc:name="Logger no email" doc:id="ed015901-93c9-4c33-b0d3-3d6d2e23d423" message="No need to send an email, org = #[vars.orgToUse]"/>
 			</otherwise>
 		</choice>
-		<choice doc:name="Case 3: No BOM with components in EHQ/ESY" doc:id="4eee8224-a5f7-4d86-a20e-a532ec1298a9" >
-			<when expression='#[vars.orgToUse == "NONE"]'>
-				<logger level="INFO" doc:name="Logger ORG is NONE" doc:id="4da9e95d-c5dc-45d9-b10c-a472200197c0" message="Item #[vars.ArticleItem.item[0].item_number] has no BOM with components in EHQ nor ESY. Fallback to trading goods from EHQ."/>
-				<flow-ref doc:name="wup-process-buy" doc:id="7b55a2d1-afd6-451f-b52d-11c34accf08d" name="wup-process-buy"/>
-			</when>
-			<otherwise >
 				<ee:transform doc:name="Transform to XML with BOM" doc:id="b819eb42-4276-4c02-a2b8-bff16ec09d21">
 					<ee:message>
 					</ee:message>
@@ -180,39 +188,102 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 									</when>
 									<otherwise>
 										<logger level="INFO" doc:name="Logger" doc:id="6fa45731-aaef-46a9-88c7-90446da886ae" message="#['Item number ' ++ vars.ArticleItem.item[0].item_number ++ ' not written into XML because no valid BOM item!']" />
+						<flow-ref doc:name="wup-process-buy" doc:id="b2be675a-678b-40fe-b4b6-8d23d564ea8d" name="wup-process-buy"/>
 									</otherwise>
 								</choice>
 							</when>
 				</choice>
-			</otherwise>
-		</choice>
 	</sub-flow>
 	<sub-flow name="wup-process-buy" doc:id="93181171-6913-4588-a5e8-9256b9ccfc87" >
 	<logger level="DEBUG" doc:name="BUY item" doc:id="02aecf70-6f60-4c1e-8f66-2880eca7b5bb" message="BUY item" />
-						<logger level="INFO" doc:name="Details" doc:id="ce8947fa-7c14-4b84-b983-935d3fa98b19" message="Processing item #[vars.ArticleItem.item[0].item_number] as Trading Goods (EHQ only). Case: #[vars.processingCase] orgToUseItem=EHQ'"/>
-		<ee:transform doc:name="Transform to XML without BOM" doc:id="511529b7-2c57-48f7-885d-2ab4f9aa89c2" >
+						<choice doc:name="Check processing case" doc:id="a96b6ee1-7a46-4b03-9e36-bcce88ab6c6e" >
+			<when expression='#[(vars.processingCase as String default "") == "WITH_BOM"]'>
+				<choice doc:name="Check if EHQ exists in ArticleItem" doc:id="5ef9a67f-3be1-494a-87e3-74e8dadccf12" >
+					<when expression='#[((vars.ArticleItem.item filter $.inventory_org_code == "EHQ").planning_make_buy_code[0] as String default "") == "Buy"]'>
+						<logger level="INFO" doc:name="Details" doc:id="b1d03ab9-4e8a-488c-982f-80a914c794ba" message="Processing item #[vars.ArticleItem.item[0].item_number] as Trading Goods. Case: #[vars.processingCase] orgToUseItem=EHQ" />
+						<ee:transform doc:name="Transform EHQ to XML without BOM" doc:id="9a15443a-6bb5-468d-bb06-637fc8f076e6" >
 							<ee:message >
-				<ee:set-payload resource="dwl/wup_create_process_buy.dwl" />
+								<ee:set-payload resource="dwl/wup_create_process_buy_EHQ.dwl" />
 							</ee:message>
 						</ee:transform>
-						<set-variable value="#[uuid()]" doc:name="Generate UUID for foreignkey message into vars.uuid" doc:id="a110c83c-bb77-42f5-aeca-d24b37133b57" variableName="uuid" />
+					</when>
+					<otherwise >
+						<logger level="INFO" doc:name="Details" doc:id="a170b43b-363c-416f-9bbf-09f443e7fb6b" message="Processing item #[vars.ArticleItem.item[0].item_number] as Trading Goods. Case: #[vars.processingCase] orgToUseItem=ESY" />
+						<ee:transform doc:name="Transform ESY to XML without BOM" doc:id="41c78d36-5e70-4a1b-aeaf-c92951c14115" >
+							<ee:message >
+								<ee:set-payload ><![CDATA[%dw 2.0
+/*
+* case 2 -> EHQ not exists in ArticleItem
+ */
+import modules::functions
+output application/xml
+
+var org = "ESY"  
+
+fun getLastProductionDate(statusCode) =
+    if (statusCode == "Inactive") "2000.01.01" else "2999.12.31"
+    
+var itemTypeMappings = {
+    "P": "1",
+    "SA": "1",
+    "FG": "1",
+    "KIT": "1",
+    "PH": "1"
+}
+
+//add filter about internalMovements at the end
+var filteredItems = vars.ArticleItem.item filter ($.inventory_org_code == org and itemTypeMappings[$.item_type_code] != null) filter ((item) -> !functions::isInternalMovementItem(item)) 
+
+---
+{
+    root: {
+        (filteredItems map (item) -> {
+            Article: {
+                ArticleID: item.item_number,
+                Name: item.item_description,
+                Type: itemTypeMappings[item.item_type_code],
+                SubType: "",
+                TariffNo: item.customs_tariff_number,
+                NonPrefOrigin: item.country_of_origin,
+                Unit: item.primary_uom_code,
+                LastProductionDate: getLastProductionDate(item.item_status_code)
+            }
+        })
+    }
+}]]></ee:set-payload>
+							</ee:message>
+						</ee:transform>
+					</otherwise>
+				</choice>
+				<flow-ref doc:name="wup-send-alert-email" doc:id="f7d0b587-9e37-4e0b-a681-7554a2a6c261" name="wup-send-alert-email"/>
+			</when>
+			<otherwise>
+				<logger level="INFO" doc:name="Details" doc:id="ce8947fa-7c14-4b84-b983-935d3fa98b19" message="Processing item #[vars.ArticleItem.item[0].item_number] as Trading Goods. Case: #[vars.processingCase] orgToUseItem=EHQ" />
+				<ee:transform doc:name="Transform EHQ to XML without BOM" doc:id="511529b7-2c57-48f7-885d-2ab4f9aa89c2">
+							<ee:message>
+						<ee:set-payload resource="dwl/wup_create_process_buy_EHQ.dwl" />
+							</ee:message>
+						</ee:transform>
+			</otherwise>
+		</choice>
+		<set-variable value="#[uuid()]" doc:name="Generate UUID for foreignkey message into vars.uuid" doc:id="a110c83c-bb77-42f5-aeca-d24b37133b57" variableName="uuid" />
 		<flow-ref doc:name="wup-output-dispatcher" doc:id="d1bc6ff2-00c6-4f66-a9fe-cae1aa547896" name="wup-output-dispatcher" />
 					
 	</sub-flow>
-	<sub-flow name="wup-process-without-bom" doc:id="8d8d631b-547e-4923-853e-5eda4ef5a06c" >
+	<!-- [STUDIO:"wup-process-without-bom"]<sub-flow name="wup-process-without-bom" doc:id="8d8d631b-547e-4923-853e-5eda4ef5a06c" >
 	<logger level="DEBUG" doc:name="Without BOM" doc:id="3d0d6e3e-b27d-4399-a4d1-40d0100811a0" message="without BOM" />
 						<ee:transform doc:name="Transform to xml without bom" doc:id="8c52e0f1-388d-49e0-a2b4-4b99344fb6e1">
 					<ee:message>
 				<ee:set-payload resource="dwl/wup_create_process_without_bom.dwl" />
 					</ee:message>
 				</ee:transform>
-				<set-variable value="#[uuid()]" doc:name="Generate UUID for foreignkey message into vars.uuid" doc:id="39ba66f0-fde7-44f0-84b1-b0f4e6f58956" variableName="uuid" />
+				<set-variable value="#[uuid()&#93;" doc:name="Generate UUID for foreignkey message into vars.uuid" doc:id="39ba66f0-fde7-44f0-84b1-b0f4e6f58956" variableName="uuid" />
 		<flow-ref doc:name="wup-output-dispatcher" doc:id="272de530-3318-40cd-9f4a-235ef9aecdf8" name="wup-output-dispatcher"/>
 			
-	</sub-flow>
+	</sub-flow> [STUDIO] -->
 	<sub-flow name="wup-output-dispatcher" doc:id="822dda77-712c-4b0b-89d2-f890db9f96bf" >
 		<choice doc:name="Choice" doc:id="9c1ee25a-51ed-4af0-bce6-21ee7f7ab9ea" >
-			<when expression="#[payload == null or sizeOf(payload.root default []) == 0]">
+			<when expression="#[payload == null or sizeOf(payload.root.Article default []) == 0]">
 				<logger level="DEBUG" doc:name="No File Write" doc:id="4518c377-14e5-47cc-9aa4-11d028e0aff2" message="File wasn't send to SMB. " />
 			</when>
 			<otherwise >
@@ -222,18 +293,28 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 	</sub-flow>
 	<sub-flow name="wup-send-to-aggregated-data" doc:id="68adb61f-dbc3-477d-85cf-b44e7e9d39f6" >
 	<try doc:name="Try" doc:id="123adae6-63a1-424a-8f5d-5399b4652ef0" >
-					<ee:transform doc:name="set headers" doc:id="8f7f2f2d-0d47-4cb5-b081-d1af21a7a13f" >
-				<ee:message >
+			<set-variable value="#[payload]" doc:name="Set originalPayload" doc:id="05f2bc3f-b08f-4a9d-b549-be4ac366f99d" variableName="originalPayload"/>
+			<foreach doc:name="For Each" doc:id="65237916-feea-45ef-85fa-e642e3721dfc" collection="#[vars.ArticleItem.item]">
+				<choice doc:name="Choice" doc:id="a12c7873-4e97-4895-9571-f6042cd1145b">
+				<when expression='#[(payload.inventory_org_id as String default "") == (vars.originalPayload.parameterList.ERP_INVENTORY_ORG_ID as String default "")]'>
+						<ee:transform doc:name="set headers" doc:id="8f7f2f2d-0d47-4cb5-b081-d1af21a7a13f">
+				<ee:message>
 				</ee:message>
-				<ee:variables >
+				<ee:variables>
 					<ee:set-variable resource="dwl/wup_headers_eao_aggregated_data.dwl" variableName="headers" />
 				</ee:variables>
 			</ee:transform>
-			<http:request method="POST" doc:name="Request to eao-p-aggregated-data" doc:id="eb97c39d-5fbb-46ad-b259-9896bd6f5643" config-ref="HTTP_Request_config_aggregatedData" path="${aggregateddata.pathitem}" responseTimeout="60000" target="eaoAggregatedData">
+						<http:request method="POST" doc:name="Request to eao-p-aggregated-data" doc:id="eb97c39d-5fbb-46ad-b259-9896bd6f5643" config-ref="HTTP_Request_config_aggregatedData" path="${aggregateddata.pathitem}" responseTimeout="60000" target="eaoAggregatedData">
 			<http:body><![CDATA[#[vars.ArticleItem.item]]]></http:body>
 			<http:headers><![CDATA[#[vars.headers]]]></http:headers>
 		</http:request>
-					<logger level="INFO" doc:name="Request sent to aggregated data" doc:id="21bbe3aa-9423-4c25-873c-6ad4c1eff889" message="Item sent to aggregated data" />
+						<logger level="INFO" doc:name="Request sent to aggregated data" doc:id="21bbe3aa-9423-4c25-873c-6ad4c1eff889" message="Item sent to aggregated data" />
+					</when>
+					<otherwise >
+						<logger level="INFO" doc:name="Request not sent to aggregated data" doc:id="b3451887-acca-47b3-9033-3af532dc6ca2" message="Item not sent to aggregated data" />
+					</otherwise>
+			</choice>
+			</foreach>
 					<error-handler >
 						<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="28d63bfb-7cc0-4afb-8eca-f0e10d85abbf" >
 							<logger level="ERROR" doc:name="ERROR: item request has error" doc:id="ed1d9525-c5d3-43e9-bc98-50a9b02ed933" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "ERROR: Item NOT sent to aggregated data",&#10;	"action": "item request to oebs", //ask, "item request to aggregated data"&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]' />
@@ -244,17 +325,29 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 	<sub-flow name="wup-send-alert-email" doc:id="690cecee-6002-49f5-aeae-f1d6a34369d1" >
 		<try doc:name="Try" doc:id="4ef9b9df-d4d7-4e16-8069-ba0de8a1ff5b" >
 		
-			<ee:transform doc:name="Prepare payload" doc:id="7712d76d-7334-4473-841f-77ff826423ff">
+			<choice doc:name="Choice" doc:id="69161fda-29f3-49df-99f1-15dd7f9b6e1d" >
+				<when expression="#[vars.isDualBom]">
+					<ee:transform doc:name="Prepare payload" doc:id="7712d76d-7334-4473-841f-77ff826423ff">
 			<ee:message>
 			</ee:message>
 			<ee:variables>
 				<ee:set-variable resource="dwl/wup_payload_email.dwl" variableName="payloadEmail" />
 			</ee:variables>
 		</ee:transform>
-			<outlook365:send-mail doc:name="Send mail about dualBom" doc:id="41d786ca-4dfd-49b5-90d8-66240316790d" config-ref="Outlook365_Outlook365_Config" userId="#[p('m365.user-id')]" >
-				<outlook365:message ><![CDATA[#[vars.payloadEmail]]]></outlook365:message>
+				</when>
+				<otherwise >
+					<ee:transform doc:name="Prepare payload" doc:id="74f7e78a-4284-441a-84fe-d344c2b69332">
+						<ee:message />
+						<ee:variables>
+							<ee:set-variable resource="dwl/wup_payload_email_WITH_BOM.dwl" variableName="payloadEmail" />
+						</ee:variables>
+					</ee:transform>
+				</otherwise>
+			</choice>
+			<outlook365:send-mail doc:name="" doc:id="41d786ca-4dfd-49b5-90d8-66240316790d" config-ref="Outlook365_Outlook365_Config" userId="#[p('m365.user-id')]">
+				<outlook365:message><![CDATA[#[vars.payloadEmail]]]></outlook365:message>
 			</outlook365:send-mail>
-			<logger level="INFO" doc:name="Email ok" doc:id="58157cd6-d88c-4c85-b1e2-3385b71eeb83" message="Email has been sent to #[p('m365.emailTest')]"/>
+			<logger level="INFO" doc:name="Email ok" doc:id="58157cd6-d88c-4c85-b1e2-3385b71eeb83" message="Email has been sent to #[p('m365.emailTest')]" />
 			<error-handler >
 				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="04f5548e-9c24-4602-a07a-2b3635c2914f" >
 					<logger level="ERROR" doc:name="ERROR: email not send" doc:id="f556e209-50b2-476f-bbb7-99ace4dff445" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "ERROR: Email not send",&#10;	"action": "sending email", &#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": payload&#10;}]' />

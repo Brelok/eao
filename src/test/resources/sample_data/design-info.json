@@ -6,6 +6,9 @@
     "aa170b57-2e19-4982-a839-2e3d54443d58": {},
     "98bcabb0-7d47-4e91-a3f8-4baa89458d56": {
       "payload": "sample_data/event.dwl"
+    },
+    "ad14a5e5-9998-4967-b337-443a2348026d": {
+      "payload": "sample_data/defaultbooleantype.dwl"
     }
   }
 }

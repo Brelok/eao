@@ -1,0 +1,16 @@
+{
+    "item": [
+        {
+            "inventory_org_id": 156,
+            "inventory_org_code": "ESY",
+            "operating_unit_org_id": 81,
+            "operating_unit_org_code": "ESY"
+        },
+                {
+            "inventory_org_id": 157,
+            "inventory_org_code": "ESY",
+            "operating_unit_org_id": 81,
+            "operating_unit_org_code": "ESY"
+        }
+    ]
+}
