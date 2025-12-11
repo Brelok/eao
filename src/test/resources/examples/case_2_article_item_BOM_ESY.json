@@ -1,0 +1,128 @@
+{
+  "assembly_item": [
+    {
+      "assembly_item_id": 2335075,
+      "assembly_item_type_code": "P",
+      "assembly_item_type": "Procured part",
+      "assembly_item_number": "72-01284.2",
+      "assembly_item_status_code": "Active",
+      "assembly_item_status_meaning": "All functions enabled",
+      "inventory_org_id": 261,
+      "inventory_org_code": "ESY",
+      "operating_unit_org_id": 261,
+      "operating_unit_org_code": "ESY",
+      "components": [
+        {
+          "component_item_id": 2356356,
+          "component_item_type_code": "P",
+          "component_item_type": "Procured part",
+          "component_item_number": "I000000167",
+          "component_item_status_code": "Active",
+          "component_item_status_meaning": "All functions enabled",
+          "sequence_number": 1,
+          "quantity": 1
+        },
+        {
+          "component_item_id": 53760,
+          "component_item_type_code": "SA",
+          "component_item_type": "Subassembly",
+          "component_item_number": "84-1201.7",
+          "component_item_status_code": "Active",
+          "component_item_status_meaning": "All functions enabled",
+          "sequence_number": 2,
+          "quantity": 1
+        },
+        {
+          "component_item_id": 19225,
+          "component_item_type_code": "SA",
+          "component_item_type": "Subassembly",
+          "component_item_number": "84-8510.0040",
+          "component_item_status_code": "Active",
+          "component_item_status_meaning": "All functions enabled",
+          "sequence_number": 3,
+          "quantity": 1
+        },
+        {
+          "component_item_id": 2358023,
+          "component_item_type_code": "P",
+          "component_item_type": "Procured part",
+          "component_item_number": "411205",
+          "component_item_status_code": "Active",
+          "component_item_status_meaning": "All functions enabled",
+          "sequence_number": 4,
+          "quantity": 1
+        },
+        {
+          "component_item_id": 2356601,
+          "component_item_type_code": "P",
+          "component_item_type": "Procured part",
+          "component_item_number": "700004",
+          "component_item_status_code": "Active",
+          "component_item_status_meaning": "All functions enabled",
+          "sequence_number": 5,
+          "quantity": 0.001
+        },
+        {
+          "component_item_id": 2354322,
+          "component_item_type_code": "DOC",
+          "component_item_type": "Document",
+          "component_item_number": "DOC-003142",
+          "component_item_status_code": "Active",
+          "component_item_status_meaning": "All functions enabled",
+          "sequence_number": 6,
+          "quantity": 1
+        },
+        {
+          "component_item_id": 29820,
+          "component_item_type_code": "DOC",
+          "component_item_type": "Document",
+          "component_item_number": "P40531353",
+          "component_item_status_code": "Active",
+          "component_item_status_meaning": "All functions enabled",
+          "sequence_number": 7,
+          "quantity": 1
+        },
+        {
+          "component_item_id": 2352026,
+          "component_item_type_code": "DOC",
+          "component_item_type": "Document",
+          "component_item_number": "D000002850",
+          "component_item_status_code": "Active",
+          "component_item_status_meaning": "All functions enabled",
+          "sequence_number": 8,
+          "quantity": 1
+        },
+        {
+          "component_item_id": 2352027,
+          "component_item_type_code": "DOC",
+          "component_item_type": "Document",
+          "component_item_number": "D000002853",
+          "component_item_status_code": "Active",
+          "component_item_status_meaning": "All functions enabled",
+          "sequence_number": 9,
+          "quantity": 1
+        },
+        {
+          "component_item_id": 2352028,
+          "component_item_type_code": "DOC",
+          "component_item_type": "Document",
+          "component_item_number": "D000002862",
+          "component_item_status_code": "Active",
+          "component_item_status_meaning": "All functions enabled",
+          "sequence_number": 10,
+          "quantity": 1
+        },
+        {
+          "component_item_id": 2352029,
+          "component_item_type_code": "DOC",
+          "component_item_type": "Document",
+          "component_item_number": "D000002863",
+          "component_item_status_code": "Active",
+          "component_item_status_meaning": "All functions enabled",
+          "sequence_number": 11,
+          "quantity": 1
+        }
+      ]
+    }
+  ]
+}

@@ -20,13 +20,15 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 				<ee:set-variable resource="dwl/wup_erp_org_id.dwl" variableName="erp_org_id" />
 			</ee:variables>
 		</ee:transform>
+		<ee:transform doc:name="is EHq or ESY" doc:id="9032b828-4311-40bd-9784-1129b7c3fda9" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="isEhqOrEsy" ><![CDATA[vars.erp_org_id == "81" or vars.erp_org_id == "261"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
 		<flow-ref doc:name="wup-load-article" doc:id="aded96aa-bc7b-4adc-8f58-de3c4bacaf2a" name="wup-load-article"/>
-		<choice doc:name="Check if EHQ or ESY" doc:id="311f7a46-427f-4771-8c6a-4ceca200c3e8" >
-			<when expression='#[vars.erp_org_id != "81" and vars.erp_org_id != "261"]'>
-				<logger level="DEBUG" doc:name="Logger" doc:id="4affa31d-eead-4f8b-983c-3e7ad9ab9835" message="No EHQ or ESY org, payload will be processed only for aggregated data. "/>
-				<flow-ref doc:name="wup-send-to-aggregated-data" doc:id="42f26383-97f5-4ca4-8bda-7b2720555b36" name="wup-send-to-aggregated-data" target="eaoAggregatedOutput"/>
-			</when>
-		</choice>
+		<flow-ref doc:name="wup-send-to-aggregated-data" doc:id="42f26383-97f5-4ca4-8bda-7b2720555b36" name="wup-send-to-aggregated-data" target="eaoAggregatedOutput" />
 		<ee:transform doc:name="Set processing case" doc:id="dba0e5af-91f1-4a99-b10e-6db186c3ddbb">
 			<ee:message>
 			</ee:message>
@@ -54,7 +56,48 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 		</error-handler>
 	</flow>
 	<sub-flow name="wup-load-article" doc:id="20d2dfc4-98d9-4c04-ab88-9b72ae72a7d8" >
-		<until-successful maxRetries="3" doc:name="Until Successful" doc:id="fb6c46a3-9d6d-4a3c-af92-c7fdf5b8e3b5" millisBetweenRetries="30000">
+		<choice doc:name="Check EHQ or ESY" doc:id="40f1ad9c-8eac-4463-8d52-3497d39d06c2" >
+			<when expression="#[vars.isEhqOrEsy]">
+				<ee:transform doc:name="set query params list" doc:id="a766b3cd-1da2-4c65-93c4-a551c7ce6d64" >
+					<ee:message >
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable resource="dwl/wup_query_params_list_for_article_item.dwl" variableName="artictleQueryParamList" />
+					</ee:variables>
+				</ee:transform>
+				<set-variable value='#[{"item": []}]' doc:name="initial articleItemCombined" doc:id="3f377f99-bad2-4b6d-8e73-c1e9cade2548" variableName="articleItemCombined"/>
+				<foreach doc:name="Fetch ArticleItem for EHQ and ESY" doc:id="8ad25927-bfba-425a-aef3-68c838d7ec2f" collection="#[vars.artictleQueryParamList]">
+					<ee:transform doc:name="current query params" doc:id="d9f0ee49-97fc-4bb1-80bf-0b12a63c0363" >
+						<ee:message >
+						</ee:message>
+						<ee:variables >
+							<ee:set-variable variableName="queryParams" ><![CDATA[payload]]></ee:set-variable>
+						</ee:variables>
+					</ee:transform>
+					<until-successful maxRetries="3" doc:name="Until Successful" doc:id="3b372844-ca6a-4205-96d1-284d7c9deed5" millisBetweenRetries="30000">
+						<http:request method="GET" doc:name="Request for Item" doc:id="ea35391d-abb5-44ac-bf36-46ef878713d3" config-ref="HTTP_Request_configuration_OEBS_WUP" path="${config.path_item}" target="singleArticleItem">
+						<http:body><![CDATA[#[{}]]]></http:body>
+						<http:query-params><![CDATA[#[vars.queryParams]]]></http:query-params>
+					</http:request>
+					</until-successful>
+					<ee:transform doc:name="merge ArticleItem" doc:id="695f1707-2c2d-42df-99d9-76a44cc0ce0a" >
+						<ee:message >
+						</ee:message>
+						<ee:variables >
+							<ee:set-variable resource="dwl/wup_article_item_combined.dwl" variableName="articleItemCombined" />
+						</ee:variables>
+					</ee:transform>
+				</foreach>
+				<ee:transform doc:name="set ArticleItem" doc:id="1085267e-dae8-4f00-b925-95b4a4d1b590" >
+					<ee:message >
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable resource="dwl/wup_article_item_combined_merged.dwl" variableName="ArticleItem" />
+					</ee:variables>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<until-successful maxRetries="3" doc:name="Until Successful" doc:id="fb6c46a3-9d6d-4a3c-af92-c7fdf5b8e3b5" millisBetweenRetries="30000">
 			<ee:transform doc:name="set query params" doc:id="b6b99a38-3a52-45ed-a010-3a0230a3f890">
 				<ee:message>
 				</ee:message>
@@ -67,6 +110,8 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 			<http:query-params><![CDATA[#[vars.queryParams]]]></http:query-params>
 		</http:request>
 		</until-successful>
+			</otherwise>
+		</choice>
 	</sub-flow>
 	<sub-flow name="wup-load-bom" doc:id="aa1dcac6-45ef-43a0-a6e4-1237c7525af0" >
 		<ee:transform doc:name="set query params list" doc:id="a00ad7a0-bc90-42c0-a2b5-4b80d464b723">

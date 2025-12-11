@@ -4,17 +4,6 @@
       "item_id": "1001",
       "item_number": "CASE1_ITEM",
       "item_description": "Case 1 – dual item, BOM only in EHQ",
-      "inventory_org_code": "EHQ",
-      "inventory_org_id": "81",
-      "bom_enabled_flag": "Y",
-      "planning_make_buy_code": "Make",
-      "item_status_code": "Active",
-      "item_type_code": "SA"
-    },
-    {
-      "item_id": "1001",
-      "item_number": "CASE1_ITEM",
-      "item_description": "Case 1 – dual item, BOM only in EHQ",
       "inventory_org_code": "ESY",
       "inventory_org_id": "261",
       "bom_enabled_flag": "Y",

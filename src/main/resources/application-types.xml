@@ -1686,4 +1686,22 @@ type auto_aa1dcac6_45ef_43a0_a6e4_1237c7525af0_Output_Variables_bomArticleItem =
       </types:output-event>
     </types:processor-declaration>
   </types:enrichment>
+  <types:enrichment select="#9032b828-4311-40bd-9784-1129b7c3fda9">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="ebs_object"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#a766b3cd-1da2-4c65-93c4-a551c7ce6d64">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="ebs_object"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
 </types:mule>

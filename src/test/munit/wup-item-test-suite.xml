@@ -37,76 +37,14 @@
 				</munit-tools:then-return>
 			</munit-tools:mock-when>
 	</munit:before-test>
-	<munit:test name="wupItem-case1-bomEhqOnly" doc:id="dd014bf4-7851-451f-a17a-822573d7a706" description="Case 1: BOM only in EHQ, BOM from EHQ is transferred">
-		<munit:behavior >
-			<munit-tools:mock-when doc:name="Mock HTTP Request ArticleItem" doc:id="acaa0178-cf07-4c56-bbe9-5ff63161406a" processor="http:request">
-				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="Request for Item" attributeName="doc:name" />
-					<munit-tools:with-attribute whereValue="ArticleItem" attributeName="target" />
-				</munit-tools:with-attributes>
-				<munit-tools:then-return >
-					<munit-tools:variables >
-						<munit-tools:variable key="ArticleItem" value="#[readUrl('classpath://examples/case_1_article_item.json', &quot;application/json&quot;)]" />
-					</munit-tools:variables>
-				</munit-tools:then-return>
-			</munit-tools:mock-when>
-			<munit-tools:mock-when doc:name="Mock HTTP Request bomArticleItem" doc:id="7663e548-d004-4732-9d80-51d954ef2c31" processor="http:request">
-				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="Request for BOM Item" attributeName="doc:name" />
-					<munit-tools:with-attribute whereValue="singleBomResponse" attributeName="target" />
-				</munit-tools:with-attributes>
-				<munit-tools:then-call flow="wupItem-case1-bomEhqOnly-mock-bom-article-item" />
-			</munit-tools:mock-when>
-		</munit:behavior>
-		<munit:execution >
-			<munit:set-event doc:name="Set Event" doc:id="ca041be2-e910-4591-a1cc-40ea2fdb4d33">
-				<munit:payload value="#[readUrl('classpath://examples/start_event.json')]" />
-			</munit:set-event>
-			<flow-ref doc:name="Flow-ref to wup-Item" doc:id="2916a635-9066-4f75-97c3-c3251096ccd5" name="wup-Item"/>
-		</munit:execution>
-		<munit:validation >
-			<munit-tools:assert-that doc:name="Assert processingCase" doc:id="50a433e3-57cd-4670-b935-a4e4a77575d5" is="#[MunitTools::containsString('WITH_BOM')]" expression="#[vars.processingCase]"/>
-			<munit-tools:assert-that doc:name="Assert orgToUse" doc:id="1295dea9-98bb-4e53-8904-ee72fbbe4af5" expression="#[vars.orgToUse]" is="#[MunitTools::containsString('EHQ')]"/>
-			<munit-tools:verify-call doc:name="Verify call send mail" doc:id="840cf1b3-cfbf-48cf-ab35-d21e9ad030b8" processor="outlook365:send-mail" times="0">
-				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="Send mail about dualBom" attributeName="doc:name" />
-				</munit-tools:with-attributes>
-			</munit-tools:verify-call>
-			<munit-tools:verify-call doc:name="Verify TransformMessage materialID without BOM" doc:id="0324f15c-8c0c-4b1c-a576-fc310005eb59" processor="ee:transform" times="1">
-				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="materialID without BOM" attributeName="doc:name" />
-				</munit-tools:with-attributes>
-			</munit-tools:verify-call>
-			<munit-tools:verify-call doc:name="Verify call file write" doc:id="c7223a46-f65a-43cf-82d5-61898d92dc03" processor="smb:file-write" times="1">
-				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="File Write" attributeName="doc:name" />
-					<munit-tools:with-attribute whereValue="b6595eed-9a48-4e5b-99c1-49393e7c849f" attributeName="doc:id" />
-				</munit-tools:with-attributes>
-			</munit-tools:verify-call>
-		</munit:validation>
-	</munit:test>
-	<flow name="wupItem-case1-bomEhqOnly-mock-bom-article-item" doc:id="0aedc30a-fa59-4e39-aeb1-ed3531c1f4b3" >
-		<choice doc:name="Choice" doc:id="977c62f0-58a8-4acb-a627-351b55e26e9c" >
-			<when expression='#[payload.ERP_INVENTORY_ORG_CODE == "EHQ"]'>
-				<set-variable value="#[readUrl('classpath://examples/case_1_article_item_BOM_EHQ_only.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="c83ed168-dfa6-4b3d-a5a7-5c21c38506fd" variableName="singleBomResponse"/>
-			</when>
-			<when expression='#[payload.ERP_INVENTORY_ORG_CODE == "ESY"]'>
-				<set-variable value="#[readUrl('classpath://examples/case_1_article_item_BOM_EHQ_only_ESY.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="d38f7560-900e-4862-89a7-17f5ad49a8aa" variableName="singleBomResponse" />
-			</when>
-		</choice>
-	</flow>
-	<munit:test name="wupItem-case2-bomEsyOnly" doc:id="7f347d94-0bf4-4757-9fd0-c079c840f81e" >
+	<munit:test name="wupItem-case1-articleItemEHQ-bomEHQ" doc:id="7f347d94-0bf4-4757-9fd0-c079c840f81e" >
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock HTTP Request ArticleItem" doc:id="8310ecd2-985c-4633-a12c-31358f0b1de2" processor="http:request" >
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="Request for Item" attributeName="doc:name" />
 					<munit-tools:with-attribute whereValue="ArticleItem" attributeName="target" />
 				</munit-tools:with-attributes>
-				<munit-tools:then-return >
-					<munit-tools:variables >
-						<munit-tools:variable key="ArticleItem" value="#[readUrl('classpath://examples/case_2_article_item.json', &quot;application/json&quot;)]" />
-					</munit-tools:variables>
-				</munit-tools:then-return>
+				<munit-tools:then-call flow="wup-item-case1-fetch-article-item" />
 			</munit-tools:mock-when>
 			<munit-tools:mock-when doc:name="Mock HTTP Request bomArticleItem" doc:id="508c57c3-64d4-45b3-ac93-f1932e192b43" processor="http:request" >
 				<munit-tools:with-attributes >
@@ -114,7 +52,7 @@
 					<munit-tools:with-attribute whereValue="singleBomResponse" attributeName="target" />
 				</munit-tools:with-attributes>
 				
-				<munit-tools:then-call flow="wupItem-case2-bomEsyOnly-mock-bom-article-item" />
+				<munit-tools:then-call flow="wupItem-case1-fetch-bom" />
 			</munit-tools:mock-when>
 		</munit:behavior>
 		<munit:execution >
@@ -125,7 +63,7 @@
 		</munit:execution>
 		<munit:validation >
 			<munit-tools:assert-that doc:name="Assert processingCase" doc:id="aff68d0a-fe7e-4b04-b4cb-51c93e4dbd89" is="#[MunitTools::containsString('WITH_BOM')]" expression="#[vars.processingCase]" />
-			<munit-tools:assert-that doc:name="Assert orgToUse" doc:id="40a2b1a0-2ed2-43e6-95dc-a1595377c033" expression="#[vars.orgToUse]" is="#[MunitTools::containsString('ESY')]" />
+			<munit-tools:assert-that doc:name="Assert orgToUse" doc:id="40a2b1a0-2ed2-43e6-95dc-a1595377c033" expression="#[vars.orgToUse]" is="#[MunitTools::containsString('EHQ')]" />
 			<munit-tools:verify-call doc:name="Verify call send mail" doc:id="0305c776-fab9-47a5-b9e9-f4d181a72765" processor="outlook365:send-mail" times="0" >
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="Send mail about dualBom" attributeName="doc:name" />
@@ -133,63 +71,86 @@
 			</munit-tools:verify-call>
 		</munit:validation>
 	</munit:test>
-	<flow name="wupItem-case2-bomEsyOnly-mock-bom-article-item" doc:id="0c719ca9-1f03-4965-9946-562ab284f58b" >
-		<choice doc:name="Choice" doc:id="711c57ee-c429-4237-b7b6-33680cd89288" >
-			<when expression='#[payload.ERP_INVENTORY_ORG_CODE == "EHQ"]'>
-				<set-variable value="#[readUrl('classpath://examples/case_2.2_article_item_BOM_ESY_only_EHQ.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="9206cc71-0234-492e-b11f-7f039db1aa5f" variableName="singleBomResponse"/>
+	<flow name="wup-item-case1-fetch-article-item" doc:id="e78291b3-aa57-45a0-a15c-e1065ed59c1d" >
+		<choice doc:name="Choice" doc:id="3b8250f8-df6f-4591-b640-8833d0e6440f" >
+			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == "81"]' >
+				<set-variable value="#[readUrl('classpath://examples/case_1_article_item_EHQ.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="1d911888-a52c-4b2a-8e12-7de1d936f031" variableName="singleArticleItem" />
 			</when>
-			<when expression='#[payload.ERP_INVENTORY_ORG_CODE == "ESY"]'>
-				<set-variable value="#[readUrl('classpath://examples/case_2.2_article_item_BOM_ESY_only.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="e64f51fa-68a1-4f62-807b-0153c677b1ee" variableName="singleBomResponse"/>
+			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == "261"]' >
+				<set-variable value="#[readUrl('classpath://examples/case_1_article_item_ESY.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="cf684cfb-7804-4df4-a938-734d6415a2c4" variableName="singleArticleItem" />
 			</when>
 		</choice>
 	</flow>
-	<munit:test name="wupItem-case2.2-bomEsyOnlyEhqEmpty" doc:id="63c0227b-9ffd-4c77-9a83-0afedfc6314c" >
+	<flow name="wupItem-case1-fetch-bom" doc:id="0c719ca9-1f03-4965-9946-562ab284f58b" >
+		<choice doc:name="Choice" doc:id="711c57ee-c429-4237-b7b6-33680cd89288" >
+			<when expression='#[payload.ERP_INVENTORY_ORG_CODE == "EHQ"]'>
+				<set-variable value="#[readUrl('classpath://examples/case_1_article_item_BOM_EHQ.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="9206cc71-0234-492e-b11f-7f039db1aa5f" variableName="singleBomResponse"/>
+			</when>
+			<when expression='#[payload.ERP_INVENTORY_ORG_CODE == "ESY"]'>
+				<set-variable value="#[readUrl('classpath://examples/case_1_article_item_BOM_ESY.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="e64f51fa-68a1-4f62-807b-0153c677b1ee" variableName="singleBomResponse"/>
+			</when>
+		</choice>
+	</flow>
+	<munit:test name="wupItem-case2-articleItemEHQ-bomESY" doc:id="dd014bf4-7851-451f-a17a-822573d7a706" description="Case 1: BOM only in EHQ, BOM from EHQ is transferred">
 		<munit:behavior >
-			<munit-tools:mock-when doc:name="Mock HTTP Request ArticleItem" doc:id="bca0cf29-5541-41e5-8261-82e43d478cd0" processor="http:request" >
+			<munit-tools:mock-when doc:name="Mock HTTP Request ArticleItem" doc:id="acaa0178-cf07-4c56-bbe9-5ff63161406a" processor="http:request">
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="Request for Item" attributeName="doc:name" />
-					<munit-tools:with-attribute whereValue="ArticleItem" attributeName="target" />
+					<munit-tools:with-attribute whereValue="singleArticleItem" attributeName="target" />
 				</munit-tools:with-attributes>
-				<munit-tools:then-return >
-					<munit-tools:variables >
-						<munit-tools:variable key="ArticleItem" value="#[readUrl('classpath://examples/case_2.2_article_item.json', &quot;application/json&quot;)]" />
-					</munit-tools:variables>
-				</munit-tools:then-return>
+				<munit-tools:then-call flow="wup-item-case2-fetch-article-item" />
 			</munit-tools:mock-when>
-			<munit-tools:mock-when doc:name="Mock HTTP Request bomArticleItem" doc:id="0ecf5afe-8208-42ac-a466-2877ac2dbb1e" processor="http:request" >
+			<munit-tools:mock-when doc:name="Mock HTTP Request bomArticleItem" doc:id="7663e548-d004-4732-9d80-51d954ef2c31" processor="http:request">
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="Request for BOM Item" attributeName="doc:name" />
 					<munit-tools:with-attribute whereValue="singleBomResponse" attributeName="target" />
 				</munit-tools:with-attributes>
-				
-				<munit-tools:then-call flow="wupItem-case2-bomEsyOnly-mock-bom-article-item" />
+				<munit-tools:then-call flow="wupItem-case2-fetch-bom" />
 			</munit-tools:mock-when>
 		</munit:behavior>
 		<munit:execution >
-			<munit:set-event doc:name="Set Event" doc:id="5946d3ed-5564-4e13-ac6d-39cb087ef150" >
+			<munit:set-event doc:name="Set Event" doc:id="ca041be2-e910-4591-a1cc-40ea2fdb4d33">
 				<munit:payload value="#[readUrl('classpath://examples/start_event.json')]" />
 			</munit:set-event>
-			<flow-ref doc:name="Flow-ref to wup-Item" doc:id="a9e48b3d-5740-45ce-a6e1-d2f4c43822b3" name="wup-Item" />
+			<flow-ref doc:name="Flow-ref to wup-Item" doc:id="2916a635-9066-4f75-97c3-c3251096ccd5" name="wup-Item"/>
 		</munit:execution>
 		<munit:validation >
-			<munit-tools:assert-that doc:name="Assert processingCase" doc:id="2644f295-253e-492a-b41a-9caa6c956493" is="#[MunitTools::containsString('BUY')]" expression="#[vars.processingCase]" />
-			<munit-tools:verify-call doc:name="Verify call send mail" doc:id="2b36011d-530b-49ca-8156-2a522771995f" processor="outlook365:send-mail" times="0" >
+			<munit-tools:assert-that doc:name="Assert processingCase" doc:id="50a433e3-57cd-4670-b935-a4e4a77575d5" is="#[MunitTools::containsString('WITH_BOM')]" expression="#[vars.processingCase]"/>
+			<munit-tools:assert-that doc:name="Assert orgToUse" doc:id="1295dea9-98bb-4e53-8904-ee72fbbe4af5" expression="#[vars.orgToUse]" is="#[MunitTools::containsString('ESY')]"/>
+			<munit-tools:verify-call doc:name="Verify call send mail" doc:id="840cf1b3-cfbf-48cf-ab35-d21e9ad030b8" processor="outlook365:send-mail" times="0">
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="Send mail about dualBom" attributeName="doc:name" />
 				</munit-tools:with-attributes>
 			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify call file write" doc:id="c7223a46-f65a-43cf-82d5-61898d92dc03" processor="smb:file-write" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="File Write" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="b6595eed-9a48-4e5b-99c1-49393e7c849f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
 		</munit:validation>
 	</munit:test>
-	<flow name="wupItem-case2.2-bomEsyOnly-mock-bom-article-item" doc:id="5471593f-0a00-4a65-9a7b-6cddeb68bec0" >
-		<choice doc:name="Choice" doc:id="5b38531d-7c80-4a4c-a9bd-adb660bbca9e" >
-			<when expression='#[payload.ERP_INVENTORY_ORG_CODE == "EHQ"]'>
-				<set-variable value="#[readUrl('classpath://examples/case_2_article_item_BOM_ESY_only_EHQ.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="e7f5ec13-0b4e-4963-b760-844ce84a4aab" variableName="singleBomResponse"/>
+	<flow name="wup-item-case2-fetch-article-item" doc:id="076259fc-795b-4647-baf9-a4a84dab35b1">
+		<choice doc:name="Choice" doc:id="0717d8f9-05f8-4dae-a426-79da098ed77c">
+			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == "81"]'>
+				<set-variable value="#[readUrl('classpath://examples/case_2_article_item_EHQ.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="d93abc5a-347d-47fb-9944-a765396866aa" variableName="singleArticleItem" />
 			</when>
-			<when expression='#[payload.ERP_INVENTORY_ORG_CODE == "ESY"]'>
-				<set-variable value="#[readUrl('classpath://examples/case_2_article_item_BOM_ESY_only.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="fcba38f6-253b-436c-827e-fe25cd0699b5" variableName="singleBomResponse"/>
+			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == "261"]'>
+				<set-variable value="#[readUrl('classpath://examples/case_2_article_item_ESY.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="7a7ab288-8d6d-4a1d-bfce-541bf99ecedc" variableName="singleArticleItem" />
 			</when>
 		</choice>
 	</flow>
+	<flow name="wupItem-case2-fetch-bom" doc:id="0aedc30a-fa59-4e39-aeb1-ed3531c1f4b3" >
+		<choice doc:name="Choice" doc:id="977c62f0-58a8-4acb-a627-351b55e26e9c" >
+			<when expression='#[payload.ERP_INVENTORY_ORG_CODE == "EHQ"]'>
+				<set-variable value="#[readUrl('classpath://examples/case_2_article_item_BOM_EHQ.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="c83ed168-dfa6-4b3d-a5a7-5c21c38506fd" variableName="singleBomResponse"/>
+			</when>
+			<when expression='#[payload.ERP_INVENTORY_ORG_CODE == "ESY"]'>
+				<set-variable value="#[readUrl('classpath://examples/case_2_article_item_BOM_ESY.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="d38f7560-900e-4862-89a7-17f5ad49a8aa" variableName="singleBomResponse" />
+			</when>
+		</choice>
+	</flow>
+
 	<munit:test name="wupItem-case3-noBomComponents" doc:id="70679ebd-5c53-49f4-8f48-4b2632fd97f0">
 		<munit:behavior>
 			<munit-tools:mock-when doc:name="Mock HTTP Request ArticleItem" doc:id="d9e9b18a-9c89-4043-be93-2eed5f8898cd" processor="http:request" >
@@ -228,12 +189,17 @@
 					<munit-tools:with-attribute whereValue="41d786ca-4dfd-49b5-90d8-66240316790d" attributeName="doc:id" />
 				</munit-tools:with-attributes>
 			</munit-tools:verify-call>
-			<munit-tools:verify-call doc:name="Verify call Transform XML without BOM Components" doc:id="e384de33-99c7-4f3e-9302-552107578fe8" processor="ee:transform">
+			<munit-tools:verify-call doc:name="Verify call UUID in PROCESS-BUY path" doc:id="e1fe60b9-566c-4d8a-807a-886a6ab9d070" processor="set-variable" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="a110c83c-bb77-42f5-aeca-d24b37133b57" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify call Transform XML without BOM Components" doc:id="e384de33-99c7-4f3e-9302-552107578fe8" processor="ee:transform" atLeast="0">
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="41c78d36-5e70-4a1b-aeaf-c92951c14115" attributeName="doc:id" />
 				</munit-tools:with-attributes>
 			</munit-tools:verify-call>
-			<munit-tools:verify-call doc:name="Verify call File Write" doc:id="46d2dd32-cb68-43aa-999a-c02f486b867b" processor="smb:file-write" times="0">
+			<munit-tools:verify-call doc:name="Verify call File Write" doc:id="46d2dd32-cb68-43aa-999a-c02f486b867b" processor="smb:file-write" times="1">
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="File Write" attributeName="doc:name" />
 					<munit-tools:with-attribute whereValue="b6595eed-9a48-4e5b-99c1-49393e7c849f" attributeName="doc:id" />
@@ -248,11 +214,7 @@
 					<munit-tools:with-attribute whereValue="Request for Item" attributeName="doc:name" />
 					<munit-tools:with-attribute whereValue="ArticleItem" attributeName="target" />
 				</munit-tools:with-attributes>
-				<munit-tools:then-return >
-					<munit-tools:variables >
-						<munit-tools:variable key="ArticleItem" value="#[readUrl('classpath://examples/case_4_article_item.json', &quot;application/json&quot;)]" />
-					</munit-tools:variables>
-				</munit-tools:then-return>
+				<munit-tools:then-call flow="wup-item-case4-fetch-article-item" />
 			</munit-tools:mock-when>
 			<munit-tools:mock-when doc:name="Mock HTTP Request bomArticleItem" doc:id="30fdd8e0-0674-460a-b29a-f26d091457a7" processor="http:request">
 				<munit-tools:with-attributes>
@@ -260,7 +222,7 @@
 					<munit-tools:with-attribute whereValue="singleBomResponse" attributeName="target" />
 				</munit-tools:with-attributes>
 				
-				<munit-tools:then-call flow="wupItem-case4-dual-bom-mock-bom-article-item" />
+				<munit-tools:then-call flow="wupItem-case4-fetch-bom" />
 			</munit-tools:mock-when>
 		</munit:behavior>
 		<munit:execution >
@@ -277,7 +239,7 @@
 					<munit-tools:with-attribute whereValue="41d786ca-4dfd-49b5-90d8-66240316790d" attributeName="doc:id" />
 				</munit-tools:with-attributes>
 			</munit-tools:verify-call>
-			<munit-tools:verify-call doc:name="Verify call File Write" doc:id="2b8009d1-e2d1-42d8-a7f7-74726193584f" processor="smb:file-write" times="1" >
+			<munit-tools:verify-call doc:name="Verify call File Write" doc:id="2b8009d1-e2d1-42d8-a7f7-74726193584f" processor="smb:file-write" times="0" >
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="File Write" attributeName="doc:name" />
 					<munit-tools:with-attribute whereValue="b6595eed-9a48-4e5b-99c1-49393e7c849f" attributeName="doc:id" />
@@ -285,7 +247,17 @@
 			</munit-tools:verify-call>
 		</munit:validation>
 	</munit:test>
-	<flow name="wupItem-case4-dual-bom-mock-bom-article-item" doc:id="aa8473ce-c5d4-41e9-b3f4-a01183c2b211" >
+	<flow name="wup-item-case4-fetch-article-item" doc:id="7138f4a0-67fe-4dbc-8295-620b6f6f6143" >
+		<choice doc:name="Choice" doc:id="308620bb-5eb0-4472-8cff-2c46a34d9c82" >
+			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == "81"]' >
+				<set-variable value="#[readUrl('classpath://examples/case_4_article_item_EHQ.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="1df9938c-d670-4bf7-81b4-2f88a40f3459" variableName="singleArticleItem" />
+			</when>
+			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == "261"]' >
+				<set-variable value="#[readUrl('classpath://examples/case_4_article_item_ESY.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="1b995a20-e36e-4298-83e4-c4bb26df2ab3" variableName="singleArticleItem" />
+			</when>
+		</choice>
+	</flow>
+	<flow name="wupItem-case4-fetch-bom" doc:id="aa8473ce-c5d4-41e9-b3f4-a01183c2b211" >
 		<choice doc:name="Choice" doc:id="aa8640f5-cbff-44a7-a132-a62af11e121f" >
 			<when expression='#[payload.ERP_INVENTORY_ORG_CODE == "EHQ"]' >
 				<set-variable value="#[readUrl('classpath://examples/case_4_article_item_BOM_EHQ_dual_BOM.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="21d6830f-07f6-4714-b290-86dceff45719" variableName="singleBomResponse" />

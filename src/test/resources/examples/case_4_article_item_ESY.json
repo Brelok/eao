@@ -1,0 +1,15 @@
+{
+  "item": [
+    {
+      "item_id": "3001",
+      "item_number": "CASE4_ITEM",
+      "item_description": "Case 4 – dual BOM in EHQ & ESY",
+      "inventory_org_code": "ESY",
+      "inventory_org_id": "261",
+      "bom_enabled_flag": "Y",
+      "planning_make_buy_code": "Make",
+      "item_status_code": "Active",
+      "item_type_code": "SA"
+    }
+  ]
+}

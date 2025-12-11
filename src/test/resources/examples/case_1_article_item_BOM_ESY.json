@@ -1,9 +1,10 @@
 {
   "assembly_item": [
     {
-      "inventory_org_code": "EHQ",
+      "inventory_org_code": "ESY",
       "assembly_item_id": "2001",
-      "components": []
+      "components": [
+      ]
     }
   ]
 }
