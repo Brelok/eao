@@ -178,7 +178,7 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 				<ee:set-variable resource="dwl/wup_prepared_article_with_bom.dwl" variableName="preparedArticleWithBom" />
 							</ee:variables>
 				</ee:transform>
-				<choice doc:name="Choice" doc:id="b135a445-dec1-4fcd-bc59-85f2e1305838">
+		<choice doc:name="Choice" doc:id="b135a445-dec1-4fcd-bc59-85f2e1305838">
 							<when expression="#[vars.preparedArticleWithBom.root != null]">
 								<ee:transform doc:name="Get MaterialIDs from payload" doc:id="291c35a6-951b-4b5f-a197-7295f781890a">
 									<ee:message />
@@ -237,6 +237,9 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 									</otherwise>
 								</choice>
 							</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="b0424e20-a524-4eba-ad98-0c0d4e90b088" message="#['Item number ' ++ vars.ArticleItem.item[0].item_number ++ ' not written into XML because is empty!']"/>
+			</otherwise>
 				</choice>
 	</sub-flow>
 	<sub-flow name="wup-process-buy" doc:id="93181171-6913-4588-a5e8-9256b9ccfc87" >
