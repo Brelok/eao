@@ -2,7 +2,7 @@
 output application/json skipNullOn = "everywhere"
 var erpId = payload.parameterList.ERP_ID
 var erpNumber = payload.parameterList.ERP_NUMBER
-var erpInventoryOrgId = payload.parameterList.ERP_INVENTORY_ORG_ID
+var erpInventoryOrgId = payload.parameterList.ERP_INVENTORY_ORG_ID as Number
 var erpInventoryOrgCode = payload.parameterList.ERP_INVENTORY_ORG_CODE
 ---
 {

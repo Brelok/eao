@@ -73,10 +73,10 @@
 	</munit:test>
 	<flow name="wup-item-case1-fetch-article-item" doc:id="e78291b3-aa57-45a0-a15c-e1065ed59c1d" >
 		<choice doc:name="Choice" doc:id="3b8250f8-df6f-4591-b640-8833d0e6440f" >
-			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == "81"]' >
+			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == 81]' >
 				<set-variable value="#[readUrl('classpath://examples/case_1_article_item_EHQ.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="1d911888-a52c-4b2a-8e12-7de1d936f031" variableName="singleArticleItem" />
 			</when>
-			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == "261"]' >
+			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == 261]' >
 				<set-variable value="#[readUrl('classpath://examples/case_1_article_item_ESY.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="cf684cfb-7804-4df4-a938-734d6415a2c4" variableName="singleArticleItem" />
 			</when>
 		</choice>
@@ -132,10 +132,10 @@
 	</munit:test>
 	<flow name="wup-item-case2-fetch-article-item" doc:id="076259fc-795b-4647-baf9-a4a84dab35b1">
 		<choice doc:name="Choice" doc:id="0717d8f9-05f8-4dae-a426-79da098ed77c">
-			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == "81"]'>
+			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == 81]'>
 				<set-variable value="#[readUrl('classpath://examples/case_2_article_item_EHQ.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="d93abc5a-347d-47fb-9944-a765396866aa" variableName="singleArticleItem" />
 			</when>
-			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == "261"]'>
+			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == 261]'>
 				<set-variable value="#[readUrl('classpath://examples/case_2_article_item_ESY.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="7a7ab288-8d6d-4a1d-bfce-541bf99ecedc" variableName="singleArticleItem" />
 			</when>
 		</choice>
@@ -249,10 +249,10 @@
 	</munit:test>
 	<flow name="wup-item-case4-fetch-article-item" doc:id="7138f4a0-67fe-4dbc-8295-620b6f6f6143" >
 		<choice doc:name="Choice" doc:id="308620bb-5eb0-4472-8cff-2c46a34d9c82" >
-			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == "81"]' >
+			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == 81]' >
 				<set-variable value="#[readUrl('classpath://examples/case_4_article_item_EHQ.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="1df9938c-d670-4bf7-81b4-2f88a40f3459" variableName="singleArticleItem" />
 			</when>
-			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == "261"]' >
+			<when expression='#[vars.queryParams.ERP_INVENTORY_ORG_ID == 261]' >
 				<set-variable value="#[readUrl('classpath://examples/case_4_article_item_ESY.json', &quot;application/json&quot;)]" doc:name="Set Variable" doc:id="1b995a20-e36e-4298-83e4-c4bb26df2ab3" variableName="singleArticleItem" />
 			</when>
 		</choice>

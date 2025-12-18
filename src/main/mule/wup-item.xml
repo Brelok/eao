@@ -53,11 +53,6 @@ http://www.mulesoft.org/schema/mule/outlook365 http://www.mulesoft.org/schema/mu
 			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="b5974ff5-fbce-4ddd-a042-69d04a412271" >
 				<logger level="ERROR" doc:name="ERROR: item request has error" doc:id="e7d7bd09-8185-4357-bffe-44b88378f293" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"logMessage": "item request has error",&#10;	"action": "item request to oebs",&#10;	"flowName": flow.name,&#10;	"oebsJmsMessage": vars.originalPayload,&#10;}]' />
 				<cloudhub:create-notification domain="eao-oracle-salesforce-prod" doc:name="Create Notification" doc:id="9ec398f0-8da0-494c-841d-e57844876d0f" priority="INFO" config-ref="CloudHub_Config"/>
-				<ee:transform doc:name="error output" doc:id="93135403-371d-49d2-af6d-c0c3755e320d">
-					<ee:message>
-						<ee:set-payload resource="dwl/wup_error_output.dwl" />
-					</ee:message>
-				</ee:transform>
 			</on-error-propagate>
 		</error-handler>
 	</flow>
