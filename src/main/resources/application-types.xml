@@ -1548,15 +1548,6 @@ type auto_aa1dcac6_45ef_43a0_a6e4_1237c7525af0_Output_Variables_bomArticleItem =
       </types:input-event>
     </types:processor-declaration>
   </types:enrichment>
-  <types:enrichment select="#4b07be67-c542-414e-aab9-fc337f81e059">
-    <types:processor-declaration>
-      <types:input-event>
-        <types:message>
-          <types:payload type="ebs_object"/>
-        </types:message>
-      </types:input-event>
-    </types:processor-declaration>
-  </types:enrichment>
   <types:enrichment select="#7712d76d-7334-4473-841f-77ff826423ff">
     <types:processor-declaration>
       <types:input-event>
@@ -1649,15 +1640,6 @@ type auto_aa1dcac6_45ef_43a0_a6e4_1237c7525af0_Output_Variables_bomArticleItem =
       </types:input-event>
     </types:processor-declaration>
   </types:enrichment>
-  <types:enrichment select="#05f2bc3f-b08f-4a9d-b549-be4ac366f99d">
-    <types:processor-declaration>
-      <types:input-event>
-        <types:message>
-          <types:payload type="ebs_object"/>
-        </types:message>
-      </types:input-event>
-    </types:processor-declaration>
-  </types:enrichment>
   <types:enrichment select="#ad14a5e5-9998-4967-b337-443a2348026d">
     <types:processor-declaration>
       <types:input-event>
@@ -1696,6 +1678,15 @@ type auto_aa1dcac6_45ef_43a0_a6e4_1237c7525af0_Output_Variables_bomArticleItem =
     </types:processor-declaration>
   </types:enrichment>
   <types:enrichment select="#a766b3cd-1da2-4c65-93c4-a551c7ce6d64">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="ebs_object"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#55727fe3-7f0c-477e-9ddc-c0ee36557fa8">
     <types:processor-declaration>
       <types:input-event>
         <types:message>
